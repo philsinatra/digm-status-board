@@ -48,6 +48,12 @@
 			"border-left-color": ["/^(?!var\\(--).+/"],
 			"color": ["/^(?!var\\(--).+/"]
 		},
+		"declaration-property-value-no-unknown": [
+			true,
+			{
+				"ignoreProperties": { "grid-area": "/.+/" }
+			}
+		],
 		"font-family-no-missing-generic-family-keyword": null,
 		"import-notation": "string",
 		"value-keyword-case": [

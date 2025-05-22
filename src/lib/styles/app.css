@@ -41,7 +41,6 @@
 *::before,
 *::after {
 	box-sizing: inherit;
-	grid-area: 1 / 1 / 1 / 1;
 	min-width: 0;
 	text-box: trim-both caps alphabetic;
 }

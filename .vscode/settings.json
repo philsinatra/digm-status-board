@@ -15,13 +15,12 @@
 		"roboto",
 		"segoe",
 		"smcp",
+		"spritesheet",
 		"srgb",
 		"svelte",
-		"sveltekit"
+		"sveltekit",
+		"willink"
 	],
-	"files.associations": {
-		"*.css": "css"
-	},
 	"stylelint.validate": ["css", "svelte"],
 	"stylelint.configFile": ".stylelintrc.json",
 	"stylelint.enable": true
