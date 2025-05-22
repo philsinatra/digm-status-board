@@ -1,0 +1,152 @@
+@import 'normalize.css';
+@import './abstracts/_variables.css';
+
+@font-face {
+	font-display: swap;
+	font-family: Geist;
+	font-feature-settings: normal;
+	font-style: normal;
+	font-weight: 100 900;
+	src: url('/fonts/Geist.ttf') format('truetype');
+}
+
+:root {
+	box-sizing: border-box;
+	font-size: 100%;
+	interpolate-size: allow-keywords;
+	overflow-x: hidden;
+	scroll-behavior: smooth;
+	text-size-adjust: 100%;
+	text-spacing: trim-start allow-end trim-adjacent ideograph-alpha ideograph-numeric;
+	touch-action: manipulation;
+
+	@supports (font-kerning: normal) and (font-variant-ligatures: common-ligatures contextual) and
+		(font-variant-numeric: oldstyle-nums proportional-nums) {
+		font-feature-settings: normal;
+		font-kerning: normal;
+		font-variant-ligatures: common-ligatures contextual;
+		font-variant-numeric: oldstyle-nums proportional-nums;
+	}
+
+	/* @media (prefers-color-scheme: dark) {} */
+
+	/* @media (prefers-color-scheme: dark) {
+		html {
+			color-scheme: dark;
+		}
+	} */
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: inherit;
+	grid-area: 1 / 1 / 1 / 1;
+	min-width: 0;
+	text-box: trim-both caps alphabetic;
+}
+
+html:has(dialog[open]) {
+	overflow: hidden;
+}
+
+body {
+	backface-visibility: hidden;
+	font-family: var(--font-family);
+	font-kerning: normal;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	min-height: 100dvh;
+	-webkit-overflow-scrolling: touch;
+	text-rendering: optimizelegibility;
+	text-size-adjust: none;
+	-webkit-touch-callout: none;
+
+	@supports (-webkit-touch-callout: none) {
+		min-height: -webkit-fill-available;
+	}
+}
+
+/*
+header, main, article, section, aside, footer, div {
+  display: contents;
+}
+*/
+
+a {
+	text-underline-offset: 2px;
+	white-space: nowrap;
+
+	&:not(:is(:hover, :focus)) {
+		text-decoration-color: color-mix(in srgb, currentcolor, transparent 75%);
+	}
+}
+
+/* Enable hover only on non-touch devices  */
+
+/* @media (hover: hover) and (pointer: fine) {
+	a:hover {
+	}
+} */
+
+abbr {
+	font-feature-settings: 'kern', 'liga', 'clig', 'calt', 'c2sc', 'smcp';
+}
+
+@supports (font-variant-caps: all-small-caps) {
+	abbr {
+		font-feature-settings: normal;
+		font-variant-caps: all-small-caps;
+	}
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	text-wrap: balance;
+}
+
+p {
+	text-wrap: pretty;
+}
+
+i,
+em {
+	font-style: italic;
+}
+
+img,
+object,
+video {
+	height: auto;
+	width: 100%;
+}
+
+small {
+	display: inline-block;
+	font-size: 80%;
+	line-height: 1.1;
+}
+
+.no-break {
+	hyphens: none;
+}
+
+.numbers {
+	letter-spacing: 0.01em;
+}
+
+svg use {
+	pointer-events: none;
+}
+
+.visually-hidden {
+	clip: rect(1px, 1px, 1px, 1px);
+	height: 1px;
+	overflow: hidden;
+	position: absolute;
+	width: 1px;
+}

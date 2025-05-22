@@ -1,0 +1,28 @@
+{
+	"cSpell.ignoreWords": [
+		"backface",
+		"calt",
+		"clig",
+		"currentcolor",
+		"digm",
+		"drexel",
+		"grayscale",
+		"liga",
+		"nowrap",
+		"nums",
+		"oldstyle",
+		"optimizelegibility",
+		"roboto",
+		"segoe",
+		"smcp",
+		"srgb",
+		"svelte",
+		"sveltekit"
+	],
+	"files.associations": {
+		"*.css": "css"
+	},
+	"stylelint.validate": ["css", "svelte"],
+	"stylelint.configFile": ".stylelintrc.json",
+	"stylelint.enable": true
+}

@@ -1,0 +1,71 @@
+:root {
+	/* #region Colors */
+	--color-drexel-blue: #07294d;
+	--color-drexel-blue-dark: #069;
+	--color-drexel-blue-light: #6cace4;
+	--color-drexel-green-dark: #949300;
+	--color-drexel-green-light: #b7bf10;
+	--color-drexel-gold: #ffc600;
+	--color-drexel-red-dark: #971b2f;
+	--color-drexel-red-light: #d14124;
+	--color-drexel-orange-dark: #de7c00;
+	--color-drexel-orange-light: #ff8f1c;
+	--color-drexel-cool-gray: #333;
+	--color-drexel-warm-gray: #bfb8af;
+	--color-drexel-neutral-green: #bac5b9;
+	--color-drexel-neutral-gray: #d0d3d4;
+	/* #endregion */
+
+	/* #region Typography */
+	--font-family: Geist, system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
+	--font-size: max(1.375rem, 2.225vw);
+	--font-size-xxxx-small: max(0.875rem, 50%);
+	--font-size-xxx-small: max(0.9375rem, 60%);
+	--font-size-xx-small: max(1rem, 65%);
+	--font-size-x-small: max(1.0625rem, 75%);
+	--font-size-small: 85%;
+	--font-size-medium: 120%;
+	--font-size-large: 140%;
+	--font-size-x-large: 160%;
+	--font-size-xx-large: 200%;
+	--letter-spacing-loose: -0.0175em;
+	--letter-spacing: -0.025em;
+	--letter-spacing-tight: -0.0338em;
+	--letter-spacing-x-tight: -0.0412em;
+	--line-height: 1.4;
+	/* #endregion */
+
+	/* #region Spacing */
+	--space-neutral: 1.4em;
+	--space-small: 0.5em;
+	--space-medium: 1em;
+	--space-large: 2em;
+	--space-x-large: 3em;
+	--space-xx-large: 4em;
+	--space-xxx-large: 5em;
+	/* #endregion */
+
+	/* #region Timing */
+	--duration-75: 75ms;
+	--duration-100: 100ms;
+	--duration-150: 150ms;
+	--duration-200: 200ms;
+	--duration-300: 300ms;
+	--duration-500: 500ms;
+	--duration-700: 700ms;
+	--duration-1000: 1000ms;
+	--duration-short: var(--duration-100);
+	--duration-medium: var(--duration-300);
+	--duration-long: var(--duration-500);
+	--duration-extra-long: var(--duration-1000);
+	--transition: var(--duration-short) ease;
+	--transition-slow: var(--duration-200) ease;
+	/* #endregion */
+
+	@media (width >= 1024px) {
+		--font-size-medium: 125%;
+		--font-size-large: 175%;
+		--font-size-x-large: 200%;
+		--font-size-xx-large: 300%;
+	}
+}
