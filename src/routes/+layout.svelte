@@ -26,6 +26,7 @@
 			'footer footer';
 		grid-template-columns: repeat(2, 1fr);
 		margin: var(--space-medium);
+		position: relative;
 
 		@media screen and (width >= 540px) {
 			grid-template-areas:
