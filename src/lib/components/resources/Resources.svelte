@@ -1,5 +1,5 @@
 <section id="resources">
-	<div class="resources"></div>
+	<div class="resources">resources</div>
 </section>
 
 <style>

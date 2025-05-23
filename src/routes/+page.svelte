@@ -25,10 +25,13 @@
 <Quote />
 <Reel />
 <Events />
-<Alumni />
 <Faculty />
-<Resources />
-<Footer />
+
+{#if (innerWidth.current ?? 0) < 1920}
+	<Alumni />
+	<Resources />
+	<Footer />
+{/if}
 
 {#if (innerWidth.current ?? 0) >= 1920}
 	<Today />

@@ -1,5 +1,5 @@
 <section id="countdown">
-	<div class="countdown"></div>
+	<div class="countdown">countdown</div>
 </section>
 
 <style>

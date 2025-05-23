@@ -1,25 +1,70 @@
+<script lang="ts">
+	// TODO: Debug video loop
+	import { innerWidth } from 'svelte/reactivity/window';
+	import { reels } from '$lib/data/reels.json';
+
+	let current_video_index = $state(0);
+	let is_large_screen = $state(false);
+	let video_element: HTMLVideoElement | undefined = $state();
+	let current_reel = $derived(reels[current_video_index]);
+
+	function check_screen_size() {
+		is_large_screen = (innerWidth.current ?? 0) >= 1920;
+	}
+
+	function handle_video_end() {
+		current_video_index = (current_video_index + 1) % reels.length;
+
+		if (is_large_screen && video_element) {
+			setTimeout(() => {
+				video_element?.play().catch(console.error);
+			}, 100);
+		}
+	}
+
+	$effect(() => {
+		check_screen_size();
+
+		const handle_resize = () => {
+			check_screen_size();
+		};
+
+		window.addEventListener('resize', handle_resize);
+
+		return () => {
+			window.removeEventListener('resize', handle_resize);
+		};
+	});
+</script>
+
 <section id="reel">
 	<div class="reel">
-		<video
-			muted
-			autoplay
-			loop
-			poster="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/BigBuckBunny.jpg"
-		>
-			<source
-				src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
-				type="video/mp4"
-			/>
-		</video>
+		{#key current_video_index}
+			<video
+				bind:this={video_element}
+				src={current_reel?.video}
+				poster={current_reel?.poster}
+				controls={!is_large_screen}
+				muted={is_large_screen}
+				autoplay={is_large_screen}
+				preload="auto"
+				onended={handle_video_end}
+			>
+			</video>
+		{/key}
 	</div>
 </section>
 
 <style>
 	#reel {
 		aspect-ratio: 16 / 9;
-		background-color: var(--color-drexel-red-dark);
+		background-color: var(--color-white);
 		border-radius: var(--radius);
 		grid-area: reel;
 		overflow: hidden;
+
+		@media screen and (width >= 1920px) {
+			aspect-ratio: unset;
+		}
 	}
 </style>

@@ -70,11 +70,14 @@
 			grid-auto-columns: 0;
 			grid-template-areas:
 				'brand brand brand brand brand faculty faculty faculty faculty countdown countdown countdown'
-				'today today weather weather weather faculty faculty faculty faculty countdown countdown countdown'
+				'today today . weather weather faculty faculty faculty faculty countdown countdown countdown'
 				'reel reel reel reel reel faculty faculty faculty faculty events events events'
 				'schedule schedule schedule schedule schedule schedule schedule schedule schedule events events events';
+			grid-template-rows: 100px 100px 437px 368px;
 			margin-inline: auto;
+			max-height: 1080px;
 			max-width: 1920px;
+			overflow: hidden;
 		}
 	}
 </style>

@@ -1,5 +1,5 @@
 <section id="events">
-	<div class="events"></div>
+	<div class="events">events</div>
 </section>
 
 <style>

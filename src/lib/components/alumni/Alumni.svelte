@@ -1,5 +1,5 @@
 <section id="alumni">
-	<div class="alumni"></div>
+	<div class="alumni">alumni</div>
 </section>
 
 <style>
