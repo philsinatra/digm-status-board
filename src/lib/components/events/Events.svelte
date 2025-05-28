@@ -4,7 +4,7 @@
 
 <style>
 	#events {
-		background-color: var(--color-drexel-gold);
+		background-color: var(--color-white);
 		border-radius: var(--radius);
 		grid-area: events;
 		min-height: 100px;

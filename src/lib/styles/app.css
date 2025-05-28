@@ -51,6 +51,7 @@ html:has(dialog[open]) {
 
 body {
 	backface-visibility: hidden;
+	background-color: var(--color-neutral-100);
 	font-family: var(--font-family);
 	font-kerning: normal;
 	-webkit-font-smoothing: antialiased;

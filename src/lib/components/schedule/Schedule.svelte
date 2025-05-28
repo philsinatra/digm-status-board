@@ -4,7 +4,7 @@
 
 <style>
 	#schedule {
-		background-color: var(--color-drexel-blue);
+		background-color: var(--color-white);
 		border-radius: var(--radius);
 		grid-area: schedule;
 		min-height: 430px;

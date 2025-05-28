@@ -4,7 +4,7 @@
 
 <style>
 	#countdown {
-		background-color: var(--color-drexel-orange-light);
+		background-color: var(--color-white);
 		border-radius: var(--radius);
 		grid-area: countdown;
 		min-height: 300px;

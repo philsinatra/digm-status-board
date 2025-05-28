@@ -1,8 +1,6 @@
 <script lang="ts">
 	import { innerWidth } from 'svelte/reactivity/window';
 	import faculty from '$lib/data/faculty.json';
-
-	$inspect(innerWidth.current);
 </script>
 
 <section id="faculty">
@@ -14,10 +12,10 @@
 		<table>
 			{#if (innerWidth.current ?? 0) >= 1920}
 				<colgroup>
-					<col style="width: 115px" />
-					<col style="width: 200px" />
-					<col style="width: 80px" />
-					<col style="width: 132px" />
+					<col style="width: 114px" />
+					<col style="width: 205px" />
+					<col style="width: 78px" />
+					<col style="width: 131px" />
 				</colgroup>
 			{/if}
 			<thead>
