@@ -7,8 +7,8 @@
 		author: string;
 	};
 
-	const animation_duration = 500; // Value matches CSS animation variable
-	const initial_delay = 300_000; // Also controls the time between quote cycles
+	const animation_duration = 500; // Duration of animation (matches --duration-long CSS variable)
+	const initial_delay = 180_000; // 3 minutes between quote cycles
 	const visible_duration = 10_000; // How long the quote is visible
 
 	let current_quote: Quote | null = $state(null);
@@ -22,27 +22,28 @@
 	}
 
 	function animate_quote_cycle() {
-		// Step 1: Wait 2 seconds before starting
+		// Step 1: Wait for initial delay before starting
 		setTimeout(() => {
 			// Step 2: Update the quote while off-screen and animate in
 			current_quote = get_random_quote();
 			is_animating_in = true;
 			is_visible = true;
 
-			// Step 3: Wait 2 seconds (pause with quote visible) after animation in completes (500ms)
+			// Step 3: Wait for animation in to complete + visible duration
+			// animation_duration for the animation to complete + visible_duration for display time
 			setTimeout(() => {
 				// Step 4: Animate out
 				is_animating_out = true;
+				is_animating_in = false;
 
-				// Step 5: Wait for animation out to complete (500ms), then reset states
+				// Step 5: Wait for animation out to complete, then reset states
 				setTimeout(() => {
 					is_visible = false;
-					is_animating_in = false;
 					is_animating_out = false;
 
 					// Step 6: Start the cycle again
 					animate_quote_cycle();
-				}, animation_duration);
+				}, animation_duration + 100); // Add a small buffer to ensure animation completes
 			}, visible_duration + animation_duration);
 		}, initial_delay);
 	}
