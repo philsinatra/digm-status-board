@@ -33,8 +33,9 @@
 				'brand brand'
 				'weather weather'
 				'schedule schedule'
-				'countdown quote'
+				'countdown countdown'
 				'reel reel'
+				'quote quote'
 				'events events'
 				'alumni alumni'
 				'faculty faculty'
@@ -48,7 +49,8 @@
 			grid-template-areas:
 				'brand brand brand brand weather weather weather weather'
 				'schedule schedule schedule schedule schedule schedule schedule schedule'
-				'reel reel reel reel reel countdown countdown countdown'
+				'countdown countdown countdown countdown countdown countdown countdown countdown'
+				'reel reel reel reel reel reel reel reel'
 				'events events events events alumni alumni alumni alumni'
 				'faculty faculty faculty faculty faculty faculty faculty faculty'
 				'resources resources resources resources resources resources resources resources'
@@ -60,7 +62,8 @@
 			grid-template-areas:
 				'brand brand brand brand brand brand weather weather weather weather weather weather'
 				'schedule schedule schedule schedule schedule schedule schedule schedule schedule schedule schedule schedule'
-				'reel reel reel reel reel reel reel reel  countdown countdown countdown countdown'
+				'reel reel reel reel reel reel reel reel reel reel reel reel'
+				'countdown countdown countdown countdown countdown countdown countdown countdown countdown countdown countdown countdown'
 				'events events events events alumni alumni alumni alumni resources resources resources resources'
 				'faculty faculty faculty faculty faculty faculty faculty faculty faculty faculty faculty faculty'
 				'footer footer footer footer footer footer footer footer footer footer footer footer';

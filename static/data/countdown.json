@@ -1,0 +1,20 @@
+{
+	"countdown": [
+		{ "date_time": "2025-06-07T23:59:59.999Z", "title": "Summer Classes End" },
+		{ "date_time": "2025-06-09T23:59:59.999Z", "title": "Term Examinations Begin" },
+		{ "date_time": "2025-06-09T23:59:59.999Z", "title": "University Commencement" },
+		{ "date_time": "2025-06-09T23:59:59.999Z", "title": "Term Examinations End" },
+		{ "date_time": "2025-06-20T23:59:59.999Z", "title": "Last day of Spring Co-op" },
+		{ "date_time": "2025-06-23T00:00:00.000Z", "title": "Summer Classes and Co-op Begin" },
+		{ "date_time": "2025-06-30T00:00:00.000Z", "title": "First day to Withdraw from a course" },
+		{ "date_time": "2025-06-30T00:00:00.000Z", "title": "First day to Withdraw from a Co-op" },
+		{ "date_time": "2025-07-04T00:00:00.000Z", "title": "Independence Day (University Holiday)" },
+		{ "date_time": "2025-07-26T00:00:00.000Z", "title": "Summer Classes End (Part of Term A)" },
+		{ "date_time": "2025-07-28T00:00:00.000Z", "title": "Summer Classes Begin (Part of Term B)" },
+		{ "date_time": "2025-08-30T00:00:00.000Z", "title": "Summer Classes End (Part of Term B)" },
+		{ "date_time": "2025-09-01T00:00:00.000Z", "title": "Labor Day (University Holiday)" },
+		{ "date_time": "2025-09-02T00:00:00.000Z", "title": "Term Examinations Begin" },
+		{ "date_time": "2025-09-06T00:00:00.000Z", "title": "Term Examinations End" },
+		{ "date_time": "2025-09-19T00:00:00.000Z", "title": "Last day of Summer Co-op" }
+	]
+}

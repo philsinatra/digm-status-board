@@ -26,7 +26,7 @@
 	--color-neutral-900: #171717;
 	--color-black: #010101;
 	--color-white: #fff;
-	--color-table-head: #afafaf;
+	--color-table-head: var(--color-neutral-300);
 	--color-table-alt: var(--color-neutral-200);
 	/* #endregion */
 

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import '$lib/styles/components/_tables.css';
 	import { innerWidth } from 'svelte/reactivity/window';
 	import faculty from '$lib/data/faculty.json';
 </script>
@@ -23,11 +24,6 @@
 					{#if (innerWidth.current ?? 0) < 665}
 						<th>Name</th>
 						<th>Office</th>
-					{:else if (innerWidth.current ?? 0) < 1920}
-						<th>Name</th>
-						<th>Title</th>
-						<th>Office</th>
-						<th>Email</th>
 					{:else}
 						<th>Name</th>
 						<th>Title</th>
@@ -79,22 +75,9 @@
 		}
 
 		table {
-			background-color: var(--color-white);
-			border-collapse: collapse;
-			border-spacing: 0;
-			color: var(--color-black);
-			width: 100%;
-
 			thead {
-				tr {
-					text-align: left;
-				}
-
 				@media screen and (width < 1920px) {
 					tr {
-						background-color: var(--color-table-head);
-						border: none;
-						color: var(--color-drexel-blue);
 						height: 38px;
 					}
 				}
@@ -108,48 +91,10 @@
 				}
 			}
 
-			tbody {
-				border: 1px solid var(--color-drexel-neutral-gray);
-			}
-
-			tr:nth-child(even) {
-				background-color: var(--color-table-alt);
-			}
-
-			th,
-			td {
-				border: 0;
-				padding: var(--space-small);
-			}
-
-			td {
-				border-right: 1px solid var(--color-drexel-neutral-gray);
-				font-size: var(--font-size-small);
-			}
-
-			a {
-				color: var(--color-drexel-blue-dark);
-				font-weight: 700;
-				line-height: var(--line-height);
-				text-decoration: none;
-
-				@media (hover: hover) and (pointer: fine) {
-					&:hover {
-						color: var(--color-drexel-blue);
-						text-decoration: underline;
-						transition: color var(--transition);
-					}
-				}
-			}
-
 			@media screen and (width >= 1920px) {
 				border-radius: var(--radius);
 				display: table;
 				justify-self: stretch;
-
-				/* height: 668px; */
-
-				/* overflow: hidden; */
 				table-layout: fixed;
 				width: 100%;
 			}
