@@ -1,19 +1,52 @@
 <script lang="ts">
 	// TODO: Debug video loop
+	import { writable, type Writable } from 'svelte/store';
 	import { innerWidth } from 'svelte/reactivity/window';
-	import { reels } from '$lib/data/reels.json';
+	import type { Reel } from '$lib/types';
+
+	const { data_source = 'static/data/reels.json' } = $props();
+	const reel_data: Writable<Reel[]> = writable([]);
+
+	$effect(() => {
+		const source = new EventSource(
+			`/api/data-stream?data_source=${encodeURIComponent(data_source)}`
+		);
+
+		source.onopen = () => {
+			console.log('EventSource connection opened for reels');
+		};
+
+		source.onmessage = (event) => {
+			console.log('Received SSE message:', event.data);
+			try {
+				const new_data = JSON.parse(event.data);
+				reel_data.set(new_data);
+			} catch (error) {
+				console.error('Error parsing SSE data:', error);
+			}
+		};
+
+		source.onerror = (error) => {
+			console.error('SSE EventSource error {reels}:', error);
+			source.close();
+		};
+
+		return () => {
+			source.close();
+		};
+	});
 
 	let current_video_index = $state(0);
 	let is_large_screen = $state(false);
 	let video_element: HTMLVideoElement | undefined = $state();
-	let current_reel = $derived(reels[current_video_index]);
+	let current_reel = $derived($reel_data[current_video_index]);
 
 	function check_screen_size() {
 		is_large_screen = (innerWidth.current ?? 0) >= 1920;
 	}
 
 	function handle_video_end() {
-		current_video_index = (current_video_index + 1) % reels.length;
+		current_video_index = (current_video_index + 1) % $reel_data.length;
 
 		if (is_large_screen && video_element) {
 			setTimeout(() => {

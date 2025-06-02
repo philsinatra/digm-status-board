@@ -1,12 +1,10 @@
 <script lang="ts">
 	import { fade } from 'svelte/transition';
-	import quote_list from '$lib/data/quotes.json';
+	import { writable, type Writable } from 'svelte/store';
+	import type { Quote } from '$lib/types';
 
-	type Quote = {
-		quote: string;
-		author: string;
-	};
-
+	const { data_source = 'static/data/quotes.json' } = $props();
+	const quote_data: Writable<Quote[]> = writable([]);
 	const animation_duration = 500; // Duration of animation (matches --duration-long CSS variable)
 	const initial_delay = 180_000; // 3 minutes between quote cycles
 	const visible_duration = 10_000; // How long the quote is visible
@@ -16,9 +14,38 @@
 	let is_animating_out = $state(false);
 	let is_visible = $state(false);
 
+	$effect(() => {
+		const source = new EventSource(
+			`/api/data-stream?data_source=${encodeURIComponent(data_source)}`
+		);
+
+		source.onopen = () => {
+			console.log('EventSource connection opened for quotes');
+		};
+
+		source.onmessage = (event) => {
+			console.log('Received SSE message:', event.data);
+			try {
+				const new_data = JSON.parse(event.data);
+				quote_data.set(new_data);
+			} catch (error) {
+				console.error('Error parsing SSE data:', error);
+			}
+		};
+
+		source.onerror = (error) => {
+			console.error('SSE EventSource error {quotes}:', error);
+			source.close();
+		};
+
+		return () => {
+			source.close();
+		};
+	});
+
 	function get_random_quote(): Quote {
-		const random_index = Math.floor(Math.random() * quote_list.length);
-		return quote_list[random_index] ?? { quote: '', author: '' };
+		const random_index = Math.floor(Math.random() * $quote_data.length);
+		return $quote_data[random_index] ?? { quote: '', author: '' };
 	}
 
 	function animate_quote_cycle() {

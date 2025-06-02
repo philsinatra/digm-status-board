@@ -1,7 +1,40 @@
 <script lang="ts">
 	import '$lib/styles/components/_tables.css';
 	import { innerWidth } from 'svelte/reactivity/window';
-	import faculty from '$lib/data/faculty.json';
+	import { writable, type Writable } from 'svelte/store';
+	import type { FacultyItem } from '$lib/types';
+
+	const { data_source = 'static/data/faculty.json' } = $props();
+	const faculty_data: Writable<FacultyItem[]> = writable([]);
+
+	$effect(() => {
+		const source = new EventSource(
+			`/api/data-stream?data_source=${encodeURIComponent(data_source)}`
+		);
+
+		source.onopen = () => {
+			console.log('EventSource connection opened for faculty');
+		};
+
+		source.onmessage = (event) => {
+			console.log('Received SSE message:', event.data);
+			try {
+				const new_data = JSON.parse(event.data);
+				faculty_data.set(new_data);
+			} catch (error) {
+				console.error('Error parsing SSE data:', error);
+			}
+		};
+
+		source.onerror = (error) => {
+			console.error('SSE EventSource error {faculty}:', error);
+			source.close();
+		};
+
+		return () => {
+			source.close();
+		};
+	});
 </script>
 
 <section id="faculty">
@@ -33,7 +66,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				{#each faculty as { name, title, office, email }}
+				{#each $faculty_data as { name, title, office, email }}
 					<tr>
 						{#if (innerWidth.current ?? 0) < 665}
 							<td><a href="mailto:{email}">{name}</a><br />{title}</td>

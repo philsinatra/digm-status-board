@@ -3,13 +3,9 @@
 	import { innerWidth } from 'svelte/reactivity/window';
 	import { get_days_until, get_simple_date } from '$lib/scripts/utils';
 	import { writable, type Writable } from 'svelte/store';
+	import type { CountdownItem } from '$lib/types';
 
-	type CountdownItem = {
-		date_time: string;
-		title: string;
-	};
-
-	const { dataSource = 'static/data/countdown.json' } = $props();
+	const { data_source = 'static/data/countdown.json' } = $props();
 	const countdown_data: Writable<CountdownItem[]> = writable([]);
 	const current_time = $state<Date>(new Date());
 
@@ -35,9 +31,9 @@
 	});
 
 	$effect(() => {
-		console.log('Setting up EventSource for countdown with data source:', dataSource);
+		console.log('Setting up EventSource for countdown with data source:', data_source);
 		const source = new EventSource(
-			`/api/data-stream?data_source=${encodeURIComponent(dataSource)}`
+			`/api/data-stream?data_source=${encodeURIComponent(data_source)}`
 		);
 
 		source.onopen = () => {
