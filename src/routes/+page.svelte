@@ -13,6 +13,18 @@
 	import Schedule from '$lib/components/schedule/Schedule.svelte';
 	import Today from '$lib/components/today/Today.svelte';
 	import Weather from '$lib/components/weather/Weather.svelte';
+
+	type Props = {
+		data: {
+			posts: any[];
+			success: boolean;
+			total_posts: number;
+			current_page: number;
+			total_pages: number;
+		};
+	};
+
+	let { data }: Props = $props();
 </script>
 
 <Brand />
@@ -29,7 +41,7 @@
 	<AnimatedQuote />
 {/if}
 <Reel />
-<Events />
+<Events event_data={data} />
 <Faculty />
 
 {#if (innerWidth.current ?? 0) < 1920}

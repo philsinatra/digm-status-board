@@ -36,3 +36,20 @@ npm run build
 You can preview the production build with `npm run preview`.
 
 > To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+
+## Events Scroll Animation
+
+If the scrolling feels janky, remove the scroll snapping for the return to item[0]:
+
+```ts
+function scroll_to_next_event() {
+  if (!event_data?.posts?.length || !events_container) return;
+
+  current_index = current_index >= event_data.posts.length - 1 ? 0 : current_index + 1;
+  const event_element = events_container.children[current_index] as HTMLElement;
+  if (!event_element) return;
+
+  const scroll_position = current_index === 0 ? 0 : event_element.offsetLeft;
+  events_container.scrollTo({ left: scroll_position, behavior: 'smooth' });
+}
+```
