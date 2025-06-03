@@ -38,3 +38,21 @@ export function get_days_until(date: Date) {
 export function truncate_string(str: string, max_length: number = 370) {
 	return str.length > max_length ? `${str.substring(0, max_length)}...` : str;
 }
+
+/**
+ * Shuffles an array of any type using the Fisher-Yates algorithm
+ * @param array The array to shuffle
+ * @returns A new array with the same elements in a random order
+ */
+export function shuffle_array<T>(array: T[]): T[] {
+	const new_array = [...array];
+	for (let i = new_array.length - 1; i > 0; i--) {
+		const j = Math.floor(Math.random() * (i + 1));
+		if (new_array[i] !== undefined && new_array[j] !== undefined) {
+			if (new_array[i] !== undefined && new_array[j] !== undefined) {
+				[new_array[i]!, new_array[j]!] = [new_array[j]!, new_array[i]!];
+			}
+		}
+	}
+	return new_array;
+}

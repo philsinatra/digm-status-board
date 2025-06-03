@@ -19,7 +19,7 @@
 			'countdown countdown'
 			'quote quote'
 			'reel reel'
-			'events events'
+			'marquee marquee'
 			'alumni alumni'
 			'faculty faculty'
 			'resources resources'
@@ -36,7 +36,7 @@
 				'countdown countdown'
 				'reel reel'
 				'quote quote'
-				'events events'
+				'marquee marquee'
 				'alumni alumni'
 				'faculty faculty'
 				'resources resources'
@@ -51,7 +51,7 @@
 				'schedule schedule schedule schedule schedule schedule schedule schedule'
 				'countdown countdown countdown countdown countdown countdown countdown countdown'
 				'reel reel reel reel reel reel reel reel'
-				'events events events events alumni alumni alumni alumni'
+				'marquee marquee marquee marquee alumni alumni alumni alumni'
 				'faculty faculty faculty faculty faculty faculty faculty faculty'
 				'resources resources resources resources resources resources resources resources'
 				'footer footer footer footer footer footer footer footer';
@@ -64,7 +64,7 @@
 				'schedule schedule schedule schedule schedule schedule schedule schedule schedule schedule schedule schedule'
 				'reel reel reel reel reel reel reel reel reel reel reel reel'
 				'countdown countdown countdown countdown countdown countdown countdown countdown countdown countdown countdown countdown'
-				'events events events events alumni alumni alumni alumni resources resources resources resources'
+				'marquee marquee marquee marquee alumni alumni alumni alumni resources resources resources resources'
 				'faculty faculty faculty faculty faculty faculty faculty faculty faculty faculty faculty faculty'
 				'footer footer footer footer footer footer footer footer footer footer footer footer';
 			grid-template-columns: repeat(12, 1fr);
@@ -75,8 +75,8 @@
 			grid-template-areas:
 				'brand brand brand brand brand faculty faculty faculty faculty countdown countdown countdown'
 				'today today weather weather weather faculty faculty faculty faculty countdown countdown countdown'
-				'reel reel reel reel reel faculty faculty faculty faculty events events events'
-				'schedule schedule schedule schedule schedule schedule schedule schedule schedule events events events';
+				'reel reel reel reel reel faculty faculty faculty faculty marquee marquee marquee'
+				'schedule schedule schedule schedule schedule schedule schedule schedule schedule marquee marquee marquee';
 			grid-template-rows: 100px 100px 437px 368px;
 			margin-inline: auto;
 			max-height: 1080px;
