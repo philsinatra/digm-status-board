@@ -154,13 +154,13 @@
 					}
 
 					.temperature {
-						font-size: 40cqh;
+						font-size: clamp(var(--font-size-medium), 25cqh, 40cqh);
 						font-weight: 800;
 						letter-spacing: var(--letter-spacing-tight);
 					}
 
 					.conditions {
-						font-size: clamp(var(--font-size-small), 4cqw, var(--font-size-medium));
+						font-size: clamp(var(--font-size-small), 20cqh, 30cqh);
 						font-weight: 600;
 						letter-spacing: var(--letter-spacing);
 					}

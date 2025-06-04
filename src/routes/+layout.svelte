@@ -38,6 +38,19 @@
 				'footer footer';
 		}
 
+		@media screen and (width >= 500px) {
+			grid-template-areas:
+				'brand brand weather'
+				'quote quote quote'
+				'schedule schedule schedule'
+				'countdown countdown countdown'
+				'reel reel reel'
+				'faculty faculty faculty'
+				'resources resources resources'
+				'footer footer footer';
+			grid-template-columns: repeat(3, 1fr);
+		}
+
 		@media screen and (width >= 768px) {
 			gap: var(--space-medium);
 			grid-auto-columns: 0;

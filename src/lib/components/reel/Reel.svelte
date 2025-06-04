@@ -1,7 +1,7 @@
 <script lang="ts">
 	// TODO: Debug video loop
-	import { writable, type Writable } from 'svelte/store';
 	import { innerWidth } from 'svelte/reactivity/window';
+	import { writable, type Writable } from 'svelte/store';
 	import type { Reel } from '$lib/types';
 
 	const { data_source = 'static/data/reels.json' } = $props();

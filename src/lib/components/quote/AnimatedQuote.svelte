@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { fade } from 'svelte/transition';
 	import { writable, type Writable } from 'svelte/store';
+	import { fade } from 'svelte/transition';
 	import type { Quote } from '$lib/types';
 
 	const { data_source = 'static/data/quotes.json' } = $props();
