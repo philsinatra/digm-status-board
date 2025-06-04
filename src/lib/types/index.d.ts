@@ -23,6 +23,12 @@ export type Reel = {
 	video: string;
 };
 
+export type ResourceLink = {
+	category: 'resources' | 'clubs';
+	href: string;
+	title: string;
+};
+
 // SECTION - Database
 export type DatabaseConfig = {
 	host: string;

@@ -1,11 +1,14 @@
 import { fileURLToPath } from 'node:url';
-import globals from 'globals';
+
 import { includeIgnoreFile } from '@eslint/compat';
 import js from '@eslint/js';
 import prettier from 'eslint-config-prettier';
+import importPlugin from 'eslint-plugin-import';
 import svelte from 'eslint-plugin-svelte';
-import svelteConfig from './svelte.config.js';
+import globals from 'globals';
 import ts from 'typescript-eslint';
+
+import svelteConfig from './svelte.config.js';
 
 const gitignore_path = fileURLToPath(new URL('./.gitignore', import.meta.url));
 
@@ -20,10 +23,47 @@ export default ts.config(
 		languageOptions: {
 			globals: { ...globals.browser, ...globals.node }
 		},
+		plugins: {
+			import: importPlugin
+		},
+		files: ['**/*.{js,ts,svelte}'],
 		rules: {
 			'no-undef': 'off',
 			camelcase: 'off',
 			'svelte/no-inspect': 'off',
+			'import/order': [
+				'error',
+				{
+					groups: [
+						'builtin', // Node.js built-in modules
+						'external', // Installed packages
+						'internal', // Path aliases
+						'parent', // Parent directories
+						'sibling', // Same directory
+						'index', // Index of same directory
+						'object', // Object-imports
+						'type' // Type-only imports
+					],
+					pathGroups: [
+						{
+							pattern: '$app/**',
+							group: 'external',
+							position: 'before'
+						},
+						{
+							pattern: '@/**',
+							group: 'internal',
+							position: 'after'
+						}
+					],
+					pathGroupsExcludedImportTypes: ['builtin'],
+					alphabetize: {
+						order: 'asc',
+						caseInsensitive: true
+					},
+					'newlines-between': 'never'
+				}
+			],
 			'@typescript-eslint/naming-convention': [
 				'error',
 				{
@@ -72,6 +112,45 @@ export default ts.config(
 				extraFileExtensions: ['.svelte'],
 				svelteConfig
 			}
+		}
+	},
+	{
+		files: ['**/*.js', '**/*.ts'],
+		rules: {
+			'import/order': [
+				'error',
+				{
+					// Same config as above
+					groups: [
+						'builtin',
+						'external',
+						'internal',
+						'parent',
+						'sibling',
+						'index',
+						'object',
+						'type'
+					],
+					pathGroups: [
+						{
+							pattern: '$app/**',
+							group: 'external',
+							position: 'before'
+						},
+						{
+							pattern: '@/**',
+							group: 'internal',
+							position: 'after'
+						}
+					],
+					pathGroupsExcludedImportTypes: ['builtin'],
+					alphabetize: {
+						order: 'asc',
+						caseInsensitive: true
+					},
+					'newlines-between': 'always'
+				}
+			]
 		}
 	}
 );

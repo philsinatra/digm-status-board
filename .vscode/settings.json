@@ -24,8 +24,15 @@
 		"tagname",
 		"willink"
 	],
+	"editor.codeActionsOnSave": {
+		"source.fixAll.eslint": "explicit",
+		"source.fixAll.stylelint": "explicit"
+	},
+	"eslint.format.enable": true,
+	"eslint.nodePath": "./node_modules/.bin/eslint",
 	"eslint.validate": ["javascript", "typescript", "svelte", "html", "json"],
-	"stylelint.validate": ["css", "svelte"],
+	"eslint.workingDirectories": ["./"],
 	"stylelint.configFile": ".stylelintrc.json",
-	"stylelint.enable": true
+	"stylelint.enable": true,
+	"stylelint.validate": ["css", "svelte"]
 }

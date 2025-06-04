@@ -1,8 +1,9 @@
+import fs from 'fs';
+
+import { error } from '@sveltejs/kit';
 import chokidar, { FSWatcher } from 'chokidar';
 
 import type { RequestEvent } from '@sveltejs/kit';
-import { error } from '@sveltejs/kit';
-import fs from 'fs';
 
 // Route that serves JSON data from a specified file
 /**

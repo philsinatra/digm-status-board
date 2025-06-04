@@ -98,3 +98,4 @@
 	<Marquee gallery_data={data} />
 	<Today />
 {/if}
+
