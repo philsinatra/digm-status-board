@@ -21,11 +21,13 @@
 
 	// Track current time for the current time indicator
 	let currentTime = new Date();
+
 	function getCurrentHourDecimal() {
 		const h = currentTime.getHours();
 		const m = currentTime.getMinutes();
 		return h + m / 60;
 	}
+
 	onMount(() => {
 		const interval = setInterval(() => {
 			currentTime = new Date();
@@ -38,7 +40,6 @@
 
 	const days = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
 
-	// scheduleHours and rooms declarations (runes reactivity)
 	const scheduleHours = $state<string[]>(
 		Array.from({ length: 15 }, (_, i) => {
 			const hour = 8 + i;
@@ -75,31 +76,10 @@
 		return 1;
 	}
 
-	// Helper for duration (number of columns to span)
-	function getDuration(start: number | null, end: number | null): number {
-		if (typeof start === 'number' && typeof end === 'number') {
-			const sh = Math.floor(start / 100);
-			const sm = start % 100;
-			const eh = Math.floor(end / 100);
-			const em = end % 100;
-			return eh + em / 60 - (sh + sm / 60);
-		}
-		return 1;
-	}
+
 
 	const selectedDayDefaultMap = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 	let selectedDayState = $state<string>(selectedDayDefaultMap[new Date().getDay()]);
-
-	// Helper functions for grid placement
-	function getDayColumn(day: string | null): number {
-		const daysA = ['M', 'T', 'W', 'R', 'F', 'S', 'U'];
-		return day ? daysA.indexOf(day[0]) + 2 : 1;
-	}
-	function getTimeRow(time: number | null): number {
-		if (!time) return 1;
-		const hour = Math.floor(time / 100);
-		return hour - 7 + 1;
-	}
 </script>
 
 <section id="schedule">
