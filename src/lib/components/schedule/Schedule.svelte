@@ -1,100 +1,172 @@
-<script>
+<script lang="ts">
 	import Card from '$lib/components/card/Card.svelte';
-	// import schedule from '../../../../static/data/schedule.json';
-
+	import { useEventSource } from '$lib/scripts/eventSource';
+	import type { ScheduleItem } from '$lib/types';
 	import { onMount } from 'svelte';
-const { schedule = 'static/data/schedule.json' } = $props();
-	let currentTime = new Date();
+	import { writable } from 'svelte/store';
 
+	const { data_source = 'static/data/schedule.json' } = $props();
+	const schedule_data = writable<ScheduleItem[]>([]);
+
+	$effect(() => {
+		useEventSource({
+			dataSource: data_source,
+			onMessage: (data) => {
+				return Array.isArray(data) ? data : [];
+			},
+			targetStore: schedule_data,
+			logPrefix: 'schedule'
+		});
+	});
+
+	// Track current time for the current time indicator
+	let currentTime = new Date();
 	function getCurrentHourDecimal() {
 		const h = currentTime.getHours();
 		const m = currentTime.getMinutes();
 		return h + m / 60;
 	}
-
 	onMount(() => {
 		const interval = setInterval(() => {
 			currentTime = new Date();
-		}, 60 * 1000); // update every minute
+		}, 60 * 1000);
 		return () => clearInterval(interval);
 	});
-
-	// Convert to grid column number (e.g., 8am = column 2)
 	function getCurrentTimeColumn() {
-		return getCurrentHourDecimal() - 7 + 1; // +1 offset for room label column
+		return getCurrentHourDecimal() - 7 + 1;
 	}
 
-	const days = ['MON', 'TUE', 'WED', 'THU', 'FRI'];
-	
-  const scheduleHours = Array.from({ length: 15 }, (_, i) => {
-		const hour = 8 + i;
-		const period = hour >= 12 ? 'PM' : 'AM';
-		const displayHour = hour % 12 === 0 ? 12 : hour % 12;
-		return `${displayHour.toString().padStart(2, '0')}:00 ${period}`;
+	const days = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
+
+	// scheduleHours and rooms declarations (runes reactivity)
+	const scheduleHours = $state<string[]>(
+		Array.from({ length: 15 }, (_, i) => {
+			const hour = 8 + i;
+			const period = hour >= 12 ? 'PM' : 'AM';
+			const displayHour = hour % 12 === 0 ? 12 : hour % 12;
+			return `${displayHour.toString().padStart(2, '0')}:00 ${period}`;
+		})
+	);
+	const rooms = $state<string[]>([]);
+
+	$effect(() => {
+		const uniqueRooms = Array.from(
+			new Set($schedule_data.map((item) => normalizeRoomCode(item.room_code)))
+		).filter((c) => c !== '' && c !== 'null' && c !== 'undefined');
+
+		// Shallow compare; only update if different to avoid infinite loop
+		if (JSON.stringify(rooms) !== JSON.stringify(uniqueRooms)) {
+			rooms.length = 0;
+			rooms.push(...uniqueRooms);
+		}
 	});
 
-	const rooms = Array.from(new Set(schedule.map((s) => s.roomCode)));
+	// Helper to normalize room codes as string
+	function normalizeRoomCode(code: string | number | null): string {
+		return code == null ? '' : String(code);
+	}
 
-	const getGridColumn = (time) => {
-		const hour = parseInt(time.split(':')[0], 10);
-		return hour - 7; // 8AM starts at column 1
-	};
+	// Helper for grid column based on time (number, e.g. 1800)
+	function getGridColumn(time: number | null): number {
+		if (typeof time === 'number') {
+			const hour = Math.floor(time / 100);
+			return hour - 7 + 1;
+		}
+		return 1;
+	}
 
-	const getDuration = (start, end) => {
-		const [sh, sm] = start.split(':').map(Number);
-		const [eh, em] = end.split(':').map(Number);
-		return eh + em / 60 - (sh + sm / 60);
-	};
+	// Helper for duration (number of columns to span)
+	function getDuration(start: number | null, end: number | null): number {
+		if (typeof start === 'number' && typeof end === 'number') {
+			const sh = Math.floor(start / 100);
+			const sm = start % 100;
+			const eh = Math.floor(end / 100);
+			const em = end % 100;
+			return eh + em / 60 - (sh + sm / 60);
+		}
+		return 1;
+	}
 
-	let selectedDay = 'THU';
+	const selectedDayDefaultMap = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+	let selectedDayState = $state<string>(selectedDayDefaultMap[new Date().getDay()]);
+
+	// Helper functions for grid placement
+	function getDayColumn(day: string | null): number {
+		const daysA = ['M', 'T', 'W', 'R', 'F', 'S', 'U'];
+		return day ? daysA.indexOf(day[0]) + 2 : 1;
+	}
+	function getTimeRow(time: number | null): number {
+		if (!time) return 1;
+		const hour = Math.floor(time / 100);
+		return hour - 7 + 1;
+	}
 </script>
 
 <section id="schedule">
 	<Card>
 		<nav slot="header" class="weekday-selector">
 			{#each days as d}
-				<button class:selected={d === selectedDay} on:click={() => (selectedDay = d)}>
+				<button class:selected={d === selectedDayState} onclick={() => (selectedDayState = d)}>
 					<span class="full">{d}</span>
-					<span class="short">{d[0]}</span>
+					<span class="short">{d === 'SUN' ? 'U' : d[0]}</span>
 				</button>
 			{/each}
 		</nav>
-		<div class="schedule-grid">
-			<!-- Top-left -->
-			<div class="grid-cell" style="grid-column: 1; grid-row: 1"></div>
-			<!-- Hour headers -->
-			{#each scheduleHours as hour, i}
-				<div class="schedule-column grid-cell--hours grid-cell" style="grid-column: {i + 2}; grid-row: 1">
-					{hour}
-				</div>
-			{/each}
-			{#each rooms as room, i}
-				<div class="schedule-row grid-cell--room grid-cell {i % 2 === 0 ? 'grid-cell--even' : 'grid-cell--odd'}" style="grid-column: 1; grid-row: {i + 2}">{room}</div>
-				{#each Array(15) as _, j}
-					<div class="grid-cell grid-cell--body {i % 2 === 0 ? 'grid-cell--even' : 'grid-cell--odd'}" style="grid-column: {j + 2}; grid-row: {i + 2}"></div>
-				{/each}
-			{/each}
-			{#each schedule as event}
-				{#if event.day === selectedDay}
-					<div
-						class="schedule-event event"
-						style="
-                grid-column: {getGridColumn(event.beginTime)} / span {Math.ceil(
-							getDuration(event.beginTime, event.endTime)
-						)};
-                grid-row: {rooms.indexOf(event.roomCode) + 2}
-              "
-					>
-						{`${event.subjCode} ${event.crseNumb} (${event.seqNumb}) (${event.courseTitle})`}
-					</div>
+		<div class="schedule-grid-wrapper">
+			<div class="schedule-grid">
+				<!-- Top-left -->
+				<div class="grid-cell" style="grid-column: 1; grid-row: 1"></div>
+				<!-- Hour headers -->
+				{#if scheduleHours && scheduleHours.length}
+					{#each scheduleHours as hour, i}
+						<div
+							class="schedule-column grid-cell--hours grid-cell"
+							style="grid-column: {i + 2}; grid-row: 1"
+						>
+							{hour}
+						</div>
+					{/each}
 				{/if}
-			{/each}
-			<div
-				class="schedule-current-time"
-				style="left: calc((100% / 15) * {getCurrentTimeColumn() - 1});"
-			></div>
+				{#if rooms && rooms.length}
+					{#each rooms as room, i}
+						<div
+							class="schedule-row grid-cell--room grid-cell {i % 2 === 0
+								? 'grid-cell--even'
+								: 'grid-cell--odd'}"
+							style="grid-column: 1; grid-row: {i + 2}"
+						>
+							URBN-{room}
+						</div>
+						{#each Array(15) as _, j}
+							<div
+								class="grid-cell grid-cell--body {i % 2 === 0
+									? 'grid-cell--even'
+									: 'grid-cell--odd'}"
+								style="grid-column: {j + 2}; grid-row: {i + 2}"
+							></div>
+						{/each}
+					{/each}
+				{/if}
+				{#each $schedule_data as item}
+					{#if item.day && selectedDayState && item.day[0] === selectedDayState[0]}
+						<div
+							class="schedule-event event"
+							style="
+							grid-column: {getGridColumn(item.begin_time)} / {getGridColumn(item.end_time)};
+							grid-row: {rooms.indexOf(normalizeRoomCode(item.room_code)) + 2};
+						"
+						>
+							{`${item.subj_code} ${item.crse_numb} (${item.all_instructors?.split(', ').reverse().join(' ')})`}
+						</div>
+					{/if}
+				{/each}
+				<div
+					class="schedule-current-time"
+					style="left: calc((100% / 15) * {getCurrentTimeColumn() - 2});"
+				></div>
+			</div>
 		</div>
-		<div slot="footer">Footer actions go here</div>
+		<div slot="footer"><button>Room Reservations</button></div>
 	</Card>
 </section>
 
@@ -105,9 +177,14 @@ const { schedule = 'static/data/schedule.json' } = $props();
 		overflow-x: auto;
 	}
 
+	.schedule-grid-wrapper {
+		-webkit-overflow-scrolling: touch;
+		overflow-x: auto;
+	}
+
 	.schedule-grid {
 		align-items: stretch;
-		border: 1px solid #ccc;
+		border: 1px solid #a1a1a1;
 		border-collapse: collapse;
 		display: grid;
 		grid-auto-rows: 60px;
@@ -116,11 +193,11 @@ const { schedule = 'static/data/schedule.json' } = $props();
 	}
 
 	.schedule-column {
-    align-items: center;
+		align-items: center;
 		color: var(--color-black);
-        display: flex;
+		display: flex;
 		font-size: 0.75rem;
-    justify-content: center;
+		justify-content: center;
 		text-align: center;
 	}
 
@@ -134,26 +211,36 @@ const { schedule = 'static/data/schedule.json' } = $props();
 	}
 
 	.grid-cell {
-		border: 1px solid #ccc;
+		border: 0.5px solid #a1a1a1;
 		box-sizing: border-box;
 		min-height: 0;
 		min-width: 0;
 	}
 
+	.grid-cell--even {
+		background-color: #f9f9f9;
+	}
 
-  .grid-cell--even {
-  background-color: #f9f9f9;
-}
+	.grid-cell--odd {
+		background-color: #d0d3d4;
+	}
 
-.grid-cell--odd {
-  background-color: #efefef;
-}
+	.grid-cell--room {
+		color: #000;
+		font-size: 12px;
+		font-style: normal;
+		font-weight: 500;
+		justify-content: center;
+		line-height: normal;
+		text-align: center;
+	}
 
 	.event {
 		background-color: #ffa726;
 		border-radius: 4px;
 		color: white;
 		font-size: 0.75rem;
+		margin: 8px 0;
 		overflow: hidden;
 		padding: 0.25rem;
 		text-overflow: ellipsis;
@@ -162,8 +249,8 @@ const { schedule = 'static/data/schedule.json' } = $props();
 	}
 
 	.weekday-selector {
-    display: flex;
-    gap: 1rem;
+		display: flex;
+		gap: 1rem;
 		padding: 1rem;
 	}
 
@@ -186,10 +273,6 @@ const { schedule = 'static/data/schedule.json' } = $props();
 		display: none;
 	}
 
-	.weekday-selector .full {
-		display: inline;
-	}
-
 	@media (width <= 768px) {
 		.weekday-selector .short {
 			display: inline;
@@ -204,6 +287,7 @@ const { schedule = 'static/data/schedule.json' } = $props();
 		.schedule-grid {
 			font-size: 0.6rem;
 			grid-auto-rows: 50px;
+			min-width: 900px;
 		}
 	}
 

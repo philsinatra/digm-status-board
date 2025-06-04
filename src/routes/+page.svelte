@@ -9,7 +9,7 @@
 	import Quote from '$lib/components/quote/Quote.svelte';
 	import Reel from '$lib/components/reel/Reel.svelte';
 	import Resources from '$lib/components/resources/Resources.svelte';
-	import Schedule from '$lib/components/schedule/Schedule2.svelte';
+	import Schedule from '$lib/components/schedule/Schedule.svelte';
 	import Today from '$lib/components/today/Today.svelte';
 	import Weather from '$lib/components/weather/Weather.svelte';
 	import { innerWidth } from 'svelte/reactivity/window';
