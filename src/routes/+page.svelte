@@ -1,18 +1,18 @@
 <script lang="ts">
+	import { invalidate } from '$app/navigation';
 	import { innerWidth } from 'svelte/reactivity/window';
-	import AnimatedQuote from '$lib/components/quote/AnimatedQuote.svelte';
 	import Brand from '$lib/components/brand/Brand.svelte';
 	import Countdown from '$lib/components/countdown/Countdown.svelte';
 	import Faculty from '$lib/components/faculty/Faculty.svelte';
 	import Footer from '$lib/components/footer/Footer.svelte';
 	import Marquee from '$lib/components/marquee/Marquee.svelte';
+	import AnimatedQuote from '$lib/components/quote/AnimatedQuote.svelte';
 	import Quote from '$lib/components/quote/Quote.svelte';
 	import Reel from '$lib/components/reel/Reel.svelte';
 	import Resources from '$lib/components/resources/Resources.svelte';
 	import Schedule from '$lib/components/schedule/Schedule.svelte';
 	import Today from '$lib/components/today/Today.svelte';
 	import Weather from '$lib/components/weather/Weather.svelte';
-	import { invalidate } from '$app/navigation';
 
 	type Props = {
 		data: {
@@ -98,4 +98,3 @@
 	<Marquee gallery_data={data} />
 	<Today />
 {/if}
-
