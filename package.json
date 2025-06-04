@@ -51,13 +51,17 @@
 		"typescript-eslint": "^8.20.0",
 		"vite": "^6.2.6"
 	},
-	"pnpm": {
+	"dependencies": {
+		"chokidar": "^4.0.3",
+		"normalize.css": "^8.0.1"
+	},
+		"pnpm": {
 		"onlyBuiltDependencies": [
 			"esbuild"
 		]
 	},
-	"dependencies": {
-		"chokidar": "^4.0.3",
-		"normalize.css": "^8.0.1"
+	"engines": {
+		"node": "22.x",
+		"packageManager": "pnpm@8.15.4"
 	}
 }
