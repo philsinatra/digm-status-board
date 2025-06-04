@@ -13,3 +13,5 @@ export function get_days_until(date: Date) {
 	const days_diff = Math.ceil(time_diff / (1000 * 3600 * 24));
 	return days_diff;
 }
+
+
