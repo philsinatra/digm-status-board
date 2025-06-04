@@ -95,6 +95,7 @@
 				p {
 					height: auto;
 					margin: 0;
+					text-wrap: balance;
 					text-wrap: pretty;
 					width: 100%;
 
@@ -103,11 +104,6 @@
 					}
 				}
 			}
-		}
-
-		@media screen and (width >= 768px) {
-			display: none;
-			position: absolute;
 		}
 	}
 </style>

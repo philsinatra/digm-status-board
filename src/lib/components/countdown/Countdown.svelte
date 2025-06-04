@@ -2,12 +2,17 @@
 	import '$lib/styles/components/_tables.css';
 	import { innerWidth } from 'svelte/reactivity/window';
 	import { get_days_until, get_simple_date } from '$lib/scripts/utils';
+	import { slugify } from '$lib/scripts/utils';
 	import { writable, type Writable } from 'svelte/store';
 	import type { CountdownItem } from '$lib/types';
 
 	const { data_source = 'static/data/countdown.json' } = $props();
 	const countdown_data: Writable<CountdownItem[]> = writable([]);
 	const current_time = $state<Date>(new Date());
+
+	function format_date_key(iso_date: string): string {
+		return iso_date.slice(0, 10).replace(/-/g, '');
+	}
 
 	/**
 	 * Updates the current time every hour by forcing a reactivity cycle.
@@ -90,7 +95,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				{#each $countdown_data as { date_time, title }}
+				{#each $countdown_data as { date_time, title } (`countdown-item-${format_date_key(date_time)}-${slugify(title)}`)}
 					<tr>
 						{#if (innerWidth.current ?? 0) < 665}
 							<td>

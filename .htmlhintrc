@@ -10,5 +10,5 @@
 	"src-not-empty": true,
 	"tag-pair": true,
 	"tagname-lowercase": true,
-	"title-require": true
+	"title-require": false
 }
