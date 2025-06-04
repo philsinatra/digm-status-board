@@ -56,3 +56,21 @@ export function shuffle_array<T>(array: T[]): T[] {
 	}
 	return new_array;
 }
+
+/**
+ * Slugifies the input text by converting to lowercase, replacing spaces with hyphens, removing non-word characters,
+ * replacing multiple hyphens with a single hyphen, and trimming hyphens from the start and end of the text.
+ * @param {string} text - The text to slugify
+ * @return {string} The slugified text
+ */
+export function slugify(text: string): string {
+	return text
+		.toString()
+		.toLowerCase()
+		.replace(/\s+/g, '-') // Replace spaces with -
+		.replace(/[^\w-]+/g, '') // Remove all non-word chars
+		.replace(/--+/g, '-') // Replace multiple - with single -
+		.replace(/^-+/, '') // Trim - from start of text
+		.replace(/-+$/, ''); // Trim - from end of text
+}
+

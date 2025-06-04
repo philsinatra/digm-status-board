@@ -18,6 +18,7 @@ export class GalleryService {
 
 			const query = `
         SELECT
+          p.id,
           p.post_title,
           p.post_content,
           GROUP_CONCAT(t.slug) as term_slug,

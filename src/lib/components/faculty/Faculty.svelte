@@ -3,6 +3,7 @@
 	import { innerWidth } from 'svelte/reactivity/window';
 	import { writable, type Writable } from 'svelte/store';
 	import type { FacultyItem } from '$lib/types';
+	import { slugify } from '$lib/scripts/utils';
 
 	const { data_source = 'static/data/faculty.json' } = $props();
 	const faculty_data: Writable<FacultyItem[]> = writable([]);
@@ -66,7 +67,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				{#each $faculty_data as { name, title, office, email }}
+				{#each $faculty_data as { name, title, office, email } (`faculty-item-${slugify(name)}`)}
 					<tr>
 						{#if (innerWidth.current ?? 0) < 665}
 							<td><a href="mailto:{email}">{name}</a><br />{title}</td>

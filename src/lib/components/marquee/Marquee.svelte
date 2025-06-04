@@ -99,7 +99,7 @@
 <section id="events">
 	<div aria-label="Event carousel" class="events" bind:this={events_container} role="region">
 		{#if shuffled_gallery_data?.posts?.length}
-			{#each shuffled_gallery_data.posts as post}
+			{#each shuffled_gallery_data.posts as post (`post-${post.id}`)}
 				<MarqueeItem {post} />
 			{/each}
 		{/if}

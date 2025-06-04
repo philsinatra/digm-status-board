@@ -17,7 +17,7 @@
 
 	type Props = {
 		data: {
-			posts: any[];
+			posts: any[]; //eslint-disable-line
 			success: boolean;
 			total_posts: number;
 			current_page: number;
@@ -62,6 +62,9 @@
 				} finally {
 					is_refreshing = false;
 					active_timeout = null;
+					if (import.meta.env.DEV) {
+						console.log(`Refresh status: is_refreshing=${is_refreshing}, error=${error}`);
+					}
 					refresh();
 				}
 			}, delay);
