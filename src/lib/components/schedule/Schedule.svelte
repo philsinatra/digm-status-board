@@ -62,12 +62,10 @@
 		}
 	});
 
-	// Helper to normalize room codes as string
 	function normalizeRoomCode(code: string | number | null): string {
 		return code == null ? '' : String(code);
 	}
 
-	// Helper for grid column based on time (number, e.g. 1800)
 	function getGridColumn(time: number | null): number {
 		if (typeof time === 'number') {
 			const hour = Math.floor(time / 100);
