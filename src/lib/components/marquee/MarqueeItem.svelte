@@ -83,13 +83,12 @@
 
 <style>
 	.qr-code {
-		--code-position: 0;
 		--code-size: 80px;
 
-		bottom: var(--code-position);
+		bottom: 6px;
 		height: var(--code-size);
 		position: absolute;
-		right: var(--code-position);
+		right: 6px;
 		width: var(--code-size);
 
 		svg {
@@ -115,6 +114,7 @@
 		.event-content {
 			display: flex;
 			flex-direction: column;
+			flex-grow: 1;
 			height: 100%;
 			justify-content: space-between;
 			padding: var(--space-medium);

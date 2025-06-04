@@ -14,13 +14,10 @@
 		gap: var(--space-medium);
 		grid-template-areas:
 			'brand brand'
-			'weather weather'
 			'schedule schedule'
 			'countdown countdown'
 			'quote quote'
 			'reel reel'
-			'marquee marquee'
-			'alumni alumni'
 			'faculty faculty'
 			'resources resources'
 			'footer footer';
@@ -28,16 +25,14 @@
 		margin: var(--space-medium);
 		position: relative;
 
-		@media screen and (width >= 540px) {
+		@media screen and (width >= 340px) {
 			grid-template-areas:
 				'brand brand'
 				'weather weather'
+				'quote quote'
 				'schedule schedule'
 				'countdown countdown'
 				'reel reel'
-				'quote quote'
-				'marquee marquee'
-				'alumni alumni'
 				'faculty faculty'
 				'resources resources'
 				'footer footer';
@@ -48,10 +43,10 @@
 			grid-auto-columns: 0;
 			grid-template-areas:
 				'brand brand brand brand weather weather weather weather'
+				'quote quote quote quote quote quote quote quote'
 				'schedule schedule schedule schedule schedule schedule schedule schedule'
 				'countdown countdown countdown countdown countdown countdown countdown countdown'
 				'reel reel reel reel reel reel reel reel'
-				'marquee marquee marquee marquee alumni alumni alumni alumni'
 				'faculty faculty faculty faculty faculty faculty faculty faculty'
 				'resources resources resources resources resources resources resources resources'
 				'footer footer footer footer footer footer footer footer';
@@ -62,10 +57,9 @@
 			grid-template-areas:
 				'brand brand brand brand brand brand weather weather weather weather weather weather'
 				'schedule schedule schedule schedule schedule schedule schedule schedule schedule schedule schedule schedule'
+				'quote quote quote quote countdown countdown countdown countdown countdown countdown countdown countdown'
 				'reel reel reel reel reel reel reel reel reel reel reel reel'
-				'countdown countdown countdown countdown countdown countdown countdown countdown countdown countdown countdown countdown'
-				'marquee marquee marquee marquee alumni alumni alumni alumni resources resources resources resources'
-				'faculty faculty faculty faculty faculty faculty faculty faculty faculty faculty faculty faculty'
+				'faculty faculty faculty faculty faculty faculty faculty faculty resources resources resources resources'
 				'footer footer footer footer footer footer footer footer footer footer footer footer';
 			grid-template-columns: repeat(12, 1fr);
 		}

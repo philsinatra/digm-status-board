@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { innerWidth } from 'svelte/reactivity/window';
-	import Alumni from '$lib/components/alumni/Alumni.svelte';
 	import AnimatedQuote from '$lib/components/quote/AnimatedQuote.svelte';
 	import Brand from '$lib/components/brand/Brand.svelte';
 	import Countdown from '$lib/components/countdown/Countdown.svelte';
@@ -79,28 +78,23 @@
 </script>
 
 <Brand />
+<Countdown />
+<Faculty />
+<Reel />
+<Schedule />
 
 {#if (innerWidth.current ?? 0) >= 340}
 	<Weather />
 {/if}
 
-<Schedule />
-<Countdown />
 {#if (innerWidth.current ?? 0) < 1920}
-	<Quote />
-{:else}
-	<AnimatedQuote />
-{/if}
-<Reel />
-<Marquee gallery_data={data} />
-<Faculty />
-
-{#if (innerWidth.current ?? 0) < 1920}
-	<Alumni />
-	<Resources />
 	<Footer />
+	<Quote />
+	<Resources />
 {/if}
 
 {#if (innerWidth.current ?? 0) >= 1920}
+	<AnimatedQuote />
+	<Marquee gallery_data={data} />
 	<Today />
 {/if}

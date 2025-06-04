@@ -3,7 +3,7 @@
 	import { shuffle_array } from '$lib/scripts/utils';
 
 	const debug_mode = false;
-	const scroll_pause = 30_000;
+	const scroll_pause = 300_000; // TODO: reset to 30_000
 
 	let { gallery_data } = $props();
 	let events_container: HTMLDivElement;
@@ -129,11 +129,14 @@
 		height: 100%;
 		overflow-x: auto;
 		scroll-snap-type: x mandatory;
-		scrollbar-width: none;
 		width: auto;
 
-		&::-webkit-scrollbar {
-			display: none;
+		@media screen and (width >= 1920px) {
+			scrollbar-width: none;
+
+			&::-webkit-scrollbar {
+				display: none;
+			}
 		}
 	}
 </style>
