@@ -1,7 +1,7 @@
-import type { FieldPacket, PoolConnection, RowDataPacket } from 'mysql2/promise';
 import mysql, { createPool } from 'mysql2/promise';
 
 import type { DatabaseConfig } from '$lib/types';
+import type { FieldPacket, PoolConnection, RowDataPacket } from 'mysql2/promise';
 
 declare module '$env/dynamic/private' {
 	export type PrivateEnv = {

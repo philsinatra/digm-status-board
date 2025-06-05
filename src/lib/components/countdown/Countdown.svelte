@@ -1,10 +1,10 @@
 <script lang="ts">
 	import '$lib/styles/components/_tables.css';
 	import { innerWidth } from 'svelte/reactivity/window';
-	import { get_days_until, get_simple_date } from '$lib/scripts/utils';
-	import { slugify } from '$lib/scripts/utils';
 	import { writable, type Writable } from 'svelte/store';
 	import type { CountdownItem } from '$lib/types';
+	import { get_days_until, get_simple_date } from '$lib/scripts/utils';
+	import { slugify } from '$lib/scripts/utils';
 
 	const { data_source = 'static/data/countdown.json' } = $props();
 	const countdown_data: Writable<CountdownItem[]> = writable([]);

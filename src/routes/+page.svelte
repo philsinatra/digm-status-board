@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { innerWidth } from 'svelte/reactivity/window';
 	import { invalidate } from '$app/navigation';
 	import Brand from '$lib/components/brand/Brand.svelte';
 	import Countdown from '$lib/components/countdown/Countdown.svelte';
@@ -12,7 +13,6 @@
 	import Schedule from '$lib/components/schedule/Schedule.svelte';
 	import Today from '$lib/components/today/Today.svelte';
 	import Weather from '$lib/components/weather/Weather.svelte';
-	import { innerWidth } from 'svelte/reactivity/window';
 
 	type Props = {
 		data: {

@@ -1,4 +1,5 @@
 import type { DatabaseConfig } from '$lib/types';
+
 import { env } from '$env/dynamic/private';
 
 export const get_database_config = (): DatabaseConfig => ({

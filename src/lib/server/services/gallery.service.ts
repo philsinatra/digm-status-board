@@ -1,5 +1,6 @@
-import { Database } from '$lib/server/database/database';
 import type { GalleryLoadResponse } from '$lib/types';
+
+import { Database } from '$lib/server/database/database';
 
 export class GalleryService {
 	constructor(private db: Database) {}

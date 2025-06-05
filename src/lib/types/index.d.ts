@@ -112,6 +112,11 @@ export type ScheduleItem = {
 	sapr_desc: string | null;
 	process_date: string;
 };
+export type ResourceLink = {
+	category: 'resources' | 'clubs';
+	href: string;
+	title: string;
+};
 
 // SECTION - Database
 export type DatabaseConfig = {

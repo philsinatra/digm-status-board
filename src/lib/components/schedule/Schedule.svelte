@@ -1,10 +1,10 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
+	import { writable } from 'svelte/store';
+	import type { ScheduleItem } from '$lib/types';
 	import Card from '$lib/components/card/Card.svelte';
 	import Modal from '$lib/components/modal/Modal.svelte';
 	import { useEventSource } from '$lib/scripts/eventSource';
-	import type { ScheduleItem } from '$lib/types';
-	import { onMount } from 'svelte';
-	import { writable } from 'svelte/store';
 
 	const { data_source = 'static/data/schedule.json' } = $props();
 	const schedule_data = writable<ScheduleItem[]>([]);
