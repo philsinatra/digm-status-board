@@ -112,6 +112,7 @@ export type ScheduleItem = {
 	sapr_desc: string | null;
 	process_date: string;
 };
+
 // SECTION - Database
 export type DatabaseConfig = {
 	host: string;

@@ -15,7 +15,7 @@
 
 	function handle_close() {
 		show_modal = false;
-		document.documentElement.style.overflow = ''; // Ensure cleanup
+		document.documentElement.style.overflow = '';
 	}
 </script>
 
