@@ -1,36 +1,38 @@
 import type { Writable } from 'svelte/store';
 
 type EventSourceOptions<T> = {
-	dataSource: string;
-	onMessage: (data: any) => T;
-	targetStore: Writable<T>;
-	logPrefix?: string;
+	data_source: string;
+	on_message: (data: unknown) => T;
+	target_store: Writable<T>;
+	log_prefix?: string;
+	debug?: boolean;
 };
 
-export function useEventSource<T>({
-	dataSource,
-	onMessage,
-	targetStore,
-	logPrefix = 'SSE'
+export function init_event_source<T>({
+	data_source,
+	on_message,
+	target_store,
+	log_prefix = 'SSE',
+	debug = false
 }: EventSourceOptions<T>) {
-	const source = new EventSource(`/api/data-stream?data_source=${encodeURIComponent(dataSource)}`);
+	const source = new EventSource(`/api/data-stream?data_source=${encodeURIComponent(data_source)}`);
 
 	source.onopen = () => {
-		console.log(`${logPrefix} connection opened`);
+		if (debug) console.log(`${log_prefix} connection opened`);
 	};
 
 	source.onmessage = (event: MessageEvent) => {
 		try {
 			const raw = JSON.parse(event.data);
-			const transformed = onMessage(raw);
-			targetStore.set(transformed);
+			const transformed = on_message(raw);
+			target_store.set(transformed);
 		} catch (e) {
-			console.error(`${logPrefix} parse error:`, e);
+			if (debug) console.error(`${log_prefix} parse error:`, e);
 		}
 	};
 
 	source.onerror = (error) => {
-		console.error(`${logPrefix} error:`, error);
+		if (debug) console.error(`${log_prefix} error:`, error);
 		source.close();
 	};
 

@@ -1,0 +1,6 @@
+#!/bin/sh
+. "$(git rev-parse --show-toplevel)/.husky/_/husky.sh"
+
+pnpm format
+pnpm lint
+pnpm lint:style
