@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { innerWidth } from 'svelte/reactivity/window';
 	import { invalidate } from '$app/navigation';
+	import { innerWidth } from 'svelte/reactivity/window';
 	import Brand from '$lib/components/brand/Brand.svelte';
 	import Countdown from '$lib/components/countdown/Countdown.svelte';
 	import Faculty from '$lib/components/faculty/Faculty.svelte';
