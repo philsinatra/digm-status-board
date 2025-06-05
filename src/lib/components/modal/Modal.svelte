@@ -21,6 +21,8 @@
 
 <dialog
 	bind:this={dialog}
+	role="dialog"
+	aria-modal="true"
 	onclose={handle_close}
 	onclick={(e) => {
 		if (e.target === dialog) {
