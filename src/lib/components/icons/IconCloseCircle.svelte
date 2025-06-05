@@ -1,7 +1,7 @@
 <script lang="ts">
 </script>
 
-<svg xmlns="http://www.w3.org/2000/svg" width="39" height="38" viewBox="0 0 39 38" fill="none">
+<svg xmlns="http://www.w3.org/2000/svg" width="39" height="38" viewBox="0 0 39 38" fill="none" aria-hidden="true">
 	<mask
 		id="mask0"
 		style="mask-type:luminance"
