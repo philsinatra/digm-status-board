@@ -1,14 +1,15 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import { writable } from 'svelte/store';
 	import type { ScheduleItem } from '$lib/types';
 	import Card from '$lib/components/card/Card.svelte';
 	import Modal from '$lib/components/modal/Modal.svelte';
-	import { useEventSource } from '$lib/scripts/eventSource';
+	import { init_event_source } from '$lib/scripts/eventSource';
 
 	const { data_source = 'static/data/schedule.json' } = $props();
-	const schedule_data = writable<ScheduleItem[]>([]);
 	const days = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
+	const modal_data = writable<ScheduleItem | null>(null);
+	const rooms = $state<string[]>([]);
+	const schedule_data = writable<ScheduleItem[]>([]);
 	const schedule_hours: {
 		full: string;
 		short: string;
@@ -23,14 +24,10 @@
 			period
 		};
 	});
-	const rooms = $state<string[]>([]);
+
 	let selected_day_state = $state<string>('MON');
-
 	let current_time = new Date();
-
 	let grid_wrapper: HTMLDivElement;
-
-	const modal_data = writable<ScheduleItem | null>(null);
 
 	function format_time(time: number): string {
 		const hour = Math.floor(time / 100);
@@ -111,13 +108,13 @@
 	}
 
 	$effect(() => {
-		useEventSource({
-			dataSource: data_source,
-			onMessage: (data) => {
+		return init_event_source({
+			data_source,
+			on_message: (data) => {
 				return Array.isArray(data) ? data : [];
 			},
-			targetStore: schedule_data,
-			logPrefix: 'schedule'
+			target_store: schedule_data,
+			log_prefix: 'schedule'
 		});
 	});
 
@@ -133,7 +130,7 @@
 		}
 	});
 
-	onMount(() => {
+	$effect(() => {
 		const today = new Date().getDay();
 		selected_day_state = days[today] || 'MON';
 		track_current_time();
@@ -185,7 +182,6 @@
 						>
 							URBN-{room}
 						</div>
-						<!-- eslint-disable-next-line @typescript-eslint/no-unused-vars -->
 						{#each Array(15) as _, j (j)}
 							<div
 								class="grid-cell grid-cell-body {i % 2 === 0 ? 'grid-cell-even' : 'grid-cell-odd'}"
@@ -199,7 +195,10 @@
 						{@const room_index = rooms.indexOf(normalize_room_code(item.room_code))}
 						{@const column = get_grid_column(item.begin_time)}
 						{@const left_offset = get_fractional_offset(item.begin_time)}
-						{@const width = get_duration_width(item.begin_time, item.end_time)}
+						{@const width =
+							item.begin_time != null && item.end_time != null
+								? get_duration_width(item.begin_time, item.end_time)
+								: 0}
 						<div
 							class="schedule-event event"
 							data-a={item.begin_time}
@@ -263,15 +262,15 @@
 
 <style>
 	#schedule {
-		border-radius: calc(var(--radius) / 2);
+		border-radius: var(--radius);
 		grid-area: schedule;
 		overflow-x: auto;
 	}
 
 	.schedule-grid-wrapper {
-		margin-top: -1px;
 		-webkit-overflow-scrolling: touch;
 		overflow-x: auto;
+		translate: 0 -2px;
 	}
 
 	.schedule-grid {
@@ -287,7 +286,7 @@
 		align-items: center;
 		color: var(--color-black);
 		display: flex;
-		font-size: 0.75rem;
+		font-size: var(--font-size-small);
 		justify-content: center;
 		text-align: center;
 	}
@@ -302,11 +301,11 @@
 	}
 
 	.grid-cell {
-		border: 0.5px solid var(--color-neutral-400);
+		border: 0.0156rem solid var(--color-neutral-400);
 		box-sizing: border-box;
 		min-height: 0;
 		min-width: 0;
-		padding: 8px;
+		padding: var(--space-small);
 	}
 
 	.grid-cell-even {
@@ -314,16 +313,14 @@
 	}
 
 	.grid-cell-odd {
-		background-color: var(--color-drexel-neutral-gray);
+		background-color: var(--color-neutral-200);
 	}
 
 	.grid-cell-room {
 		color: var(--color-black);
-		font-size: 12px;
-		font-style: normal;
+		font-size: var(--font-size-small);
 		font-weight: 500;
 		justify-content: center;
-		line-height: normal;
 		text-align: center;
 	}
 
@@ -336,25 +333,25 @@
 		align-items: center;
 		background-color: var(--color-drexel-orange-dark);
 		border: 0;
-		border-radius: 4px;
+		border-radius: calc(var(--radius) / 2);
 		color: var(--color-white);
 		cursor: pointer;
 		display: flex;
-		font-size: 0.75rem;
+		font-size: var(--font-size-small);
 		height: calc(100% - 8px * 2);
 		justify-content: center;
 		outline: 0;
 		overflow: hidden;
-		padding: 0 4px;
+		padding: 0 calc(var(--space-small) / 2);
 		position: absolute;
 		text-overflow: ellipsis;
 		white-space: nowrap;
-		z-index: 2;
+		z-index: 10;
 	}
 
 	.weekday-selector {
 		display: flex;
-		gap: 1rem;
+		gap: var(--space-medium);
 	}
 
 	.weekday-selector button {
@@ -362,9 +359,9 @@
 		border: none;
 		border-radius: 9999px;
 		cursor: pointer;
-		font-size: 0.9rem;
-		font-weight: bold;
-		padding: 0.5rem 1rem;
+		font-size: calc(var(--font-size-small) + 0.2rem);
+		font-weight: 700;
+		padding: var(--space-small) var(--space-medium);
 	}
 
 	.weekday-selector button.selected {
@@ -376,6 +373,23 @@
 		display: none;
 	}
 
+	.schedule-current-time {
+		background-color: var(--color-drexel-blue);
+		bottom: 0;
+		position: absolute;
+		top: 0;
+		width: 2px;
+		z-index: 20;
+	}
+
+	.schedule-modal-list {
+		padding-left: var(--space-medium);
+
+		li {
+			margin: var(--space-small) 0;
+		}
+	}
+
 	@media (width <= 768px) {
 		.weekday-selector .short {
 			display: inline;
@@ -384,30 +398,11 @@
 		.weekday-selector .full {
 			display: none;
 		}
-	}
 
-	@media (width <= 768px) {
 		.schedule-grid {
-			font-size: 0.6rem;
+			font-size: var(--font-size-medium);
 			grid-auto-rows: 50px;
 			min-width: 900px;
-		}
-	}
-
-	.schedule-current-time {
-		background-color: var(--color-drexel-blue);
-		bottom: 0;
-		position: absolute;
-		top: 0;
-		width: 2px;
-		z-index: 10;
-	}
-
-	.schedule-modal-list {
-		padding-left: 1rem;
-
-		li {
-			margin: 10px 0;
 		}
 	}
 </style>

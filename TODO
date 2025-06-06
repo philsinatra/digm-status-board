@@ -6,6 +6,8 @@ TODO:
   ☐ double check faculty email addresses
 
 Archive:
+  ✔ Incorporate eventSource utility @done(25-06-06 12:55) @project(TODO)
   ✔ Events auto refresh every x minutes @done(25-06-04 14:44) @project(TODO)
   ✔ quote component on medium/large screens @done(25-06-04 14:44) @project(TODO)
   ✔ Need updated reel videos on CDN that include Drexel branding @done(25-05-23 12:29) @project(TODO)
+

@@ -30,13 +30,13 @@
 		background-color: var(--color-drexel-blue);
 		color: var(--color-white);
 		font-weight: bold;
-		padding: 0.5rem 0;
+		padding: var(--space-small) 0;
 	}
 
 	.card-header {
-		border-bottom: 1px solid #eee;
+		border-bottom: 1px solid var(--color-neutral-50);
 		color: var(--color-white);
-		padding: 16px;
+		padding: var(--space-medium);
 	}
 
 	.card-content {
@@ -45,7 +45,7 @@
 	}
 
 	.card-footer {
-		border-top: 1px solid #eee;
+		border-top: 1px solid var(--color-neutral-50);
 		font-size: 0.9rem;
 	}
 </style>

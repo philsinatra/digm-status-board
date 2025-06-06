@@ -3,38 +3,22 @@
 	import { innerWidth } from 'svelte/reactivity/window';
 	import { writable, type Writable } from 'svelte/store';
 	import type { FacultyItem } from '$lib/types';
+	import { init_event_source } from '$lib/scripts/eventSource';
 	import { slugify } from '$lib/scripts/utils';
 
 	const { data_source = 'static/data/faculty.json' } = $props();
 	const faculty_data: Writable<FacultyItem[]> = writable([]);
 
 	$effect(() => {
-		const source = new EventSource(
-			`/api/data-stream?data_source=${encodeURIComponent(data_source)}`
-		);
-
-		source.onopen = () => {
-			console.log('EventSource connection opened for faculty');
-		};
-
-		source.onmessage = (event) => {
-			console.log('Received SSE message:', event.data);
-			try {
-				const new_data = JSON.parse(event.data);
-				faculty_data.set(new_data);
-			} catch (error) {
-				console.error('Error parsing SSE data:', error);
-			}
-		};
-
-		source.onerror = (error) => {
-			console.error('SSE EventSource error {faculty}:', error);
-			source.close();
-		};
-
-		return () => {
-			source.close();
-		};
+		return init_event_source({
+			data_source,
+			on_message: (data) => {
+				return Array.isArray(data) ? data : [];
+			},
+			target_store: faculty_data,
+			log_prefix: 'faculty',
+			debug: true
+		});
 	});
 </script>
 
@@ -47,8 +31,8 @@
 		<table>
 			{#if (innerWidth.current ?? 0) >= 1920}
 				<colgroup>
-					<col style="width: 114px" />
-					<col style="width: 205px" />
+					<col style="width: 115px" />
+					<col style="width: 202px" />
 					<col style="width: 78px" />
 					<col style="width: 131px" />
 				</colgroup>

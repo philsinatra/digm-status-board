@@ -21,7 +21,7 @@
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"format": "prettier --write .",
-		"lint": "prettier --check . && eslint --ext .js,.ts,.svelte",
+		"lint": "prettier --check . && eslint --ext .js,.ts,.svelte,.html",
 		"lint:style": "stylelint \"**/*.{css,svelte}\"",
 		"postinstall": "husky install"
 	},
@@ -66,7 +66,7 @@
 		]
 	},
 	"engines": {
-		"node": "22.x",
-		"packageManager": "pnpm@8.15.4"
+		"node": ">=22",
+		"packageManager": "pnpm@>=8.15"
 	}
 }

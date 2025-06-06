@@ -1,94 +1,47 @@
 <script lang="ts">
-	import IconCloseCircle from '$lib/components/icons/IconCloseCircle.svelte';
 	let { show_modal = $bindable(), header, children } = $props();
 	let dialog = $state<HTMLDialogElement>();
 
 	$effect(() => {
-		console.log('Modal show state changed:', show_modal);
-		if (show_modal) {
-			dialog.show_modal();
+		if (show_modal && dialog) {
+			dialog.showModal();
 			document.documentElement.style.overflow = 'hidden';
-		} else {
-			document.documentElement.style.overflow = '';
-		}
+		} else document.documentElement.style.overflow = '';
 	});
 
 	function handle_close() {
+		dialog?.close();
 		show_modal = false;
 		document.documentElement.style.overflow = '';
 	}
 </script>
 
 <dialog
-	bind:this={dialog}
-	role="dialog"
 	aria-modal="true"
+	bind:this={dialog}
 	onclose={handle_close}
 	onclick={(e) => {
-		if (e.target === dialog) {
-			handle_close();
-		}
+		if (e.target === dialog) handle_close();
 	}}
 >
-	<div class="modal-card">
+	<div class="dialog">
 		{#if header}
 			<header>
 				<h2>{@render header()}</h2>
 			</header>
 		{/if}
-
-		<hr />
-		<div class="modal-content">{@render children()}</div>
-		<button class="modal-close" onclick={handle_close} aria-label="Close modal">
-			<IconCloseCircle />
-		</button>
+		<div class="dialog-content">
+			{@render children()}
+		</div>
+		<div class="dialog-controls">
+			<button onclick={handle_close} aria-label="Close modal">
+				<svg><use href="#icon-cross" /></svg>
+			</button>
+		</div>
 	</div>
 </dialog>
 
 <style>
-	dialog {
-		backdrop-filter: blur(2px);
-		background: rgb(51 51 51 / 0.5);
-		border: none;
-		display: grid;
-		height: 100vh;
-		left: 0;
-		margin: 0;
-		padding: 0;
-		place-items: center;
-		position: fixed;
-		top: 0;
-		width: 100vw;
-		z-index: 50;
-	}
-
-	dialog::backdrop {
-		background: rgb(0 0 0 / 0.3);
-	}
-
-	.modal-card {
-		background-color: var(--color-drexel-blue);
-		border-radius: 0.5rem;
-		box-shadow: 0 10px 30px rgb(0 0 0 / 0.3);
-		color: var(--color-white);
-		font-size: 1rem;
-		margin: 1rem;
-		max-width: 32em;
-		padding: 1rem;
-		position: relative;
-		width: 100%;
-	}
-
-	h2 {
-		font-size: 20px;
-		font-weight: 700;
-		line-height: normal;
-	}
-
-	dialog[open] {
-		animation: zoom 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-	}
-
 	@keyframes zoom {
 		from {
 			transform: scale(0.95);
@@ -99,38 +52,98 @@
 		}
 	}
 
-	dialog[open]::backdrop {
-		animation: fade 0.2s ease-out;
-	}
+	dialog {
+		background-color: var(--color-dialog-backdrop);
+		border-radius: var(--radius);
+		display: grid;
+		height: 100%;
+		left: 0;
+		margin: 0;
+		max-height: none;
+		max-width: none;
+		padding: 0;
+		place-items: center;
+		position: fixed;
+		top: 0;
+		width: 100%;
+		z-index: 50;
 
-	@keyframes fade {
-		from {
-			opacity: 0;
+		&[open] {
+			animation: zoom var(--duration-medium) cubic-bezier(0.34, 1.56, 0.64, 1);
+
+			&::backdrop {
+				animation: fade var(--duration-short) ease-out;
+			}
 		}
 
-		to {
-			opacity: 1;
+		&::backdrop {
+			background: var(--color-dialog-backdrop);
 		}
 	}
 
-	button {
-		display: block;
+	.dialog {
+		backdrop-filter: blur(10px);
+		background: linear-gradient(135deg, rgb(255 255 255 / 0.1), rgb(255 255 255 / 0.05));
+		border: 1px solid var(--color-dialog-border);
+		border-radius: var(--radius);
+		box-shadow: 0 8px 32px rgb(0 0 0 / 0.1);
+		color: var(--color-neutral-200);
+		font-size: clamp(var(--font-size-small), 4cqw, var(--font-size-medium));
+		font-weight: 400;
+		margin-inline: auto;
+		max-width: 32em;
+		padding: var(--space-medium);
+		position: relative;
+		width: 90dvw;
+
+		&::before {
+			background: linear-gradient(
+				to bottom right,
+				var(--color-dialog-border-1) 0%,
+				var(--color-dialog-border-2) 50%,
+				var(--color-dialog-border-3) 100%
+			);
+			border-radius: var(--radius);
+			content: '';
+			inset: -1px;
+			position: absolute;
+			z-index: -1;
+		}
 	}
 
-	.modal-close {
-		align-items: center;
-		background: transparent;
-		border: 0;
-		cursor: pointer;
-		display: flex;
-		font-size: 1.25rem;
-		font-weight: bold;
-		height: 36px;
-		justify-content: center;
-		line-height: 1;
-		position: absolute;
-		right: 0.75rem;
-		top: 0.75rem;
-		width: 36px;
+	h2 {
+		color: var(--color-white);
+		font-size: var(--font-size-medium);
+		font-weight: 600;
+		margin: 0;
+	}
+
+	.dialog-controls {
+		button {
+			align-items: center;
+			background: transparent;
+			border: 0;
+			cursor: pointer;
+			display: flex;
+			height: 2.25rem;
+			justify-content: center;
+			position: absolute;
+			right: 0.75rem;
+			top: 0.75rem;
+			width: 2.25rem;
+
+			svg {
+				color: var(--color-neutral-200);
+				height: 2.25rem;
+				transition: color var(--duration-short) ease;
+				width: 2.25rem;
+
+				@media (hover: hover) and (pointer: fine) {
+					&:hover {
+						color: var(--color-white);
+					}
+				}
+			}
+		}
 	}
 </style>
