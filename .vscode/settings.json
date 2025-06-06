@@ -25,6 +25,7 @@
 		"svelte",
 		"sveltekit",
 		"tagname",
+		"urbn",
 		"willink"
 	],
 	"editor.codeActionsOnSave": {

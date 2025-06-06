@@ -2,37 +2,21 @@
 	import { writable, type Writable } from 'svelte/store';
 	import { fade } from 'svelte/transition';
 	import type { Quote } from '$lib/types';
+	import { init_event_source } from '$lib/scripts/eventSource';
 
 	const { data_source = 'static/data/quotes.json' } = $props();
 	const quote_data: Writable<Quote[]> = writable([]);
 
 	$effect(() => {
-		const source = new EventSource(
-			`/api/data-stream?data_source=${encodeURIComponent(data_source)}`
-		);
-
-		source.onopen = () => {
-			console.log('EventSource connection opened for quotes');
-		};
-
-		source.onmessage = (event) => {
-			console.log('Received SSE message:', event.data);
-			try {
-				const new_data = JSON.parse(event.data);
-				quote_data.set(new_data);
-			} catch (error) {
-				console.error('Error parsing SSE data:', error);
-			}
-		};
-
-		source.onerror = (error) => {
-			console.error('SSE EventSource error {quotes}:', error);
-			source.close();
-		};
-
-		return () => {
-			source.close();
-		};
+		return init_event_source({
+			data_source,
+			on_message: (data) => {
+				return Array.isArray(data) ? data : [];
+			},
+			target_store: quote_data,
+			log_prefix: 'quotes',
+			debug: true
+		});
 	});
 
 	let active_quote_key = $state(Math.floor(Math.random() * $quote_data.length));
