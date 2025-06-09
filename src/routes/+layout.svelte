@@ -29,9 +29,9 @@
 			grid-template-areas:
 				'brand brand'
 				'weather weather'
-				'quote quote'
 				'schedule schedule'
 				'countdown countdown'
+				'quote quote'
 				'reel reel'
 				'faculty faculty'
 				'resources resources'
@@ -41,9 +41,9 @@
 		@media screen and (width >= 500px) {
 			grid-template-areas:
 				'brand brand weather'
-				'quote quote quote'
 				'schedule schedule schedule'
 				'countdown countdown countdown'
+				'quote quote quote'
 				'reel reel reel'
 				'faculty faculty faculty'
 				'resources resources resources'
@@ -56,12 +56,11 @@
 			grid-auto-columns: 0;
 			grid-template-areas:
 				'brand brand brand brand weather weather weather weather'
-				'quote quote quote quote quote quote quote quote'
 				'schedule schedule schedule schedule schedule schedule schedule schedule'
 				'countdown countdown countdown countdown countdown countdown countdown countdown'
 				'reel reel reel reel reel reel reel reel'
 				'faculty faculty faculty faculty faculty faculty faculty faculty'
-				'resources resources resources resources resources resources resources resources'
+				'resources resources resources resources quote quote quote quote'
 				'footer footer footer footer footer footer footer footer';
 			grid-template-columns: repeat(8, 1fr);
 		}

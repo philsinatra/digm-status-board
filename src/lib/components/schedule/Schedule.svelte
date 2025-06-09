@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { writable } from 'svelte/store';
 	import type { ScheduleItem } from '$lib/types';
-	import Card from '$lib/components/card/Card.svelte';
 	import Modal from '$lib/components/modal/Modal.svelte';
 	import { init_event_source } from '$lib/scripts/eventSource';
 
@@ -139,26 +138,24 @@
 </script>
 
 <section id="schedule">
-	<Card>
-		{#snippet header()}
-			<nav class="weekday-selector">
-				{#each days as day (day)}
-					<button
-						class:selected={day === selected_day_state}
-						onclick={() => {
-							selected_day_state = day;
-							center_current_time();
-						}}
-					>
-						<span class="full">{day}</span>
-						<span class="short">{day === 'SUN' ? 'U' : day[0]}</span>
-					</button>
-				{/each}
-			</nav>
-		{/snippet}
+	<div class="schedule">
+		<nav class="weekday-selector">
+			{#each days as day (day)}
+				<button
+					class:selected={day === selected_day_state}
+					onclick={() => {
+						selected_day_state = day;
+						center_current_time();
+					}}
+				>
+					<span class="full">{day}</span>
+					<span class="short">{day === 'SUN' ? 'U' : day[0]}</span>
+				</button>
+			{/each}
+		</nav>
 
 		<div class="schedule-grid-wrapper" bind:this={grid_wrapper}>
-			<div class="schedule-grid" style="grid-template-rows: 34px repeat({rooms.length}, 50px);">
+			<div class="schedule-grid">
 				<!-- Top-left -->
 				<div class="grid-cell" style="grid-column: 1; grid-row: 1"></div>
 				<!-- Hour headers -->
@@ -168,7 +165,7 @@
 							class="schedule-column grid-cell-hours grid-cell"
 							style="grid-column: {i + 2}; grid-row: 1;"
 						>
-							{hour.full}
+							<span>{hour.full}</span>
 						</div>
 					{/each}
 				{/if}
@@ -180,7 +177,7 @@
 								: 'grid-cell-odd'}"
 							style="grid-column: 1; grid-row: {i + 2}"
 						>
-							URBN-{room}
+							<span>URBN-{room}</span>
 						</div>
 						{#each Array(15) as _, j (j)}
 							<div
@@ -234,30 +231,30 @@
 				{/if}
 			</div>
 		</div>
-	</Card>
 
-	{#if $modal_data}
-		<Modal bind:show_modal={$modal_data}>
-			{#snippet header()}
-				{$modal_data?.subj_code}
-				{$modal_data?.crse_numb} - {String($modal_data?.seq_numb).padStart(3, '0')}
-			{/snippet}
+		{#if $modal_data}
+			<Modal bind:show_modal={$modal_data}>
+				{#snippet header()}
+					{$modal_data?.subj_code}
+					{$modal_data?.crse_numb} - {String($modal_data?.seq_numb).padStart(3, '0')}
+				{/snippet}
 
-			<ul class="schedule-modal-list">
-				<li><strong>Course:</strong> {$modal_data?.course_title}</li>
-				<li><strong>Instructor:</strong> {$modal_data?.all_instructors}</li>
-				<li><strong>Room:</strong> {$modal_data?.room_code}</li>
-				<li>
-					<strong>Time:</strong>
-					{#if $modal_data?.begin_time != null && $modal_data?.end_time != null}
-						{format_time($modal_data.begin_time)} - {format_time($modal_data.end_time)}
-					{:else}
-						<em>Time not available</em>
-					{/if}
-				</li>
-			</ul>
-		</Modal>
-	{/if}
+				<ul class="schedule-modal-list">
+					<li><strong>Course:</strong> {$modal_data?.course_title}</li>
+					<li><strong>Instructor:</strong> {$modal_data?.all_instructors}</li>
+					<li><strong>Room:</strong> {$modal_data?.room_code}</li>
+					<li>
+						<strong>Time:</strong>
+						{#if $modal_data?.begin_time != null && $modal_data?.end_time != null}
+							{format_time($modal_data.begin_time)} - {format_time($modal_data.end_time)}
+						{:else}
+							<em>Time not available</em>
+						{/if}
+					</li>
+				</ul>
+			</Modal>
+		{/if}
+	</div>
 </section>
 
 <style>
@@ -275,18 +272,26 @@
 
 	.schedule-grid {
 		align-items: stretch;
-		border: 1px solid var(--color-neutral-400);
 		border-collapse: collapse;
+		border-top: 1px solid var(--color-neutral-300);
 		display: grid;
-		grid-template-columns: 100px repeat(15, minmax(80px, 1fr));
+		font-size: var(--font-size-medium);
+		grid-auto-rows: 50px;
+		grid-template-columns: 100px repeat(15, minmax(90px, 1fr));
+		grid-template-rows: 34px repeat(8, 50px);
+		min-width: 900px;
 		position: relative;
+
+		@media screen and (width >= 768px) {
+			grid-auto-rows: unset;
+			min-width: unset;
+		}
 	}
 
 	.grid-cell-hours {
 		align-items: center;
 		color: var(--color-black);
 		display: flex;
-		font-size: var(--font-size-small);
 		justify-content: center;
 		text-align: center;
 	}
@@ -295,13 +300,24 @@
 		align-items: center;
 		background-color: var(--color-neutral-50);
 		display: flex;
-		font-weight: bold;
-		padding-right: 0.5rem;
+		padding-right: var(--space-small);
 		white-space: nowrap;
+
+		span {
+			font-size: var(--font-size-small);
+			font-weight: 600;
+		}
+	}
+
+	.schedule-column {
+		span {
+			font-size: var(--font-size-xxxx-small);
+			font-weight: 600;
+		}
 	}
 
 	.grid-cell {
-		border: 0.0156rem solid var(--color-neutral-400);
+		border: 0.0156rem solid var(--color-neutral-300);
 		box-sizing: border-box;
 		min-height: 0;
 		min-width: 0;
@@ -350,27 +366,55 @@
 	}
 
 	.weekday-selector {
+		background-color: var(--color-drexel-blue);
 		display: flex;
-		gap: var(--space-medium);
-	}
+		overflow-y: auto;
+		width: 100%;
 
-	.weekday-selector button {
-		background: var(--color-white);
-		border: none;
-		border-radius: 9999px;
-		cursor: pointer;
-		font-size: calc(var(--font-size-small) + 0.2rem);
-		font-weight: 700;
-		padding: var(--space-small) var(--space-medium);
-	}
+		&::-webkit-scrollbar {
+			display: none;
+		}
 
-	.weekday-selector button.selected {
-		background-color: var(--color-drexel-gold);
-		color: var(--color-black);
-	}
+		button {
+			background-color: var(--color-drexel-blue);
+			border: none;
+			color: var(--color-white);
+			cursor: pointer;
+			font-size: var(--font-size-small);
+			font-weight: 700;
+			min-height: 3rem;
+			min-width: 3rem;
+			transition: background-color var(--duration-short) ease;
 
-	.weekday-selector .short {
-		display: none;
+			&.selected {
+				background-color: var(--color-drexel-blue-light);
+				color: var(--color-white);
+			}
+
+			@media (hover: hover) and (pointer: fine) {
+				&:hover,
+				&.selected:hover {
+					background-color: var(--color-drexel-blue-dark);
+					color: var(--color-white);
+				}
+			}
+		}
+
+		.short {
+			display: inline;
+
+			@media screen and (width >= 768px) {
+				display: none;
+			}
+		}
+
+		.full {
+			display: none;
+
+			@media screen and (width >= 768px) {
+				display: block;
+			}
+		}
 	}
 
 	.schedule-current-time {
@@ -387,22 +431,6 @@
 
 		li {
 			margin: var(--space-small) 0;
-		}
-	}
-
-	@media (width <= 768px) {
-		.weekday-selector .short {
-			display: inline;
-		}
-
-		.weekday-selector .full {
-			display: none;
-		}
-
-		.schedule-grid {
-			font-size: var(--font-size-medium);
-			grid-auto-rows: 50px;
-			min-width: 900px;
 		}
 	}
 </style>
