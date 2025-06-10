@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { fetchWeatherApi } from 'openmeteo';
-	import WeatherBubbles from './WeatherBubbles.svelte';
+	import Bubbles from '$lib/components/bubbles/Bubbles.svelte';
 
 	type WeatherData = {
 		current: {
@@ -146,7 +146,7 @@
 			</div>
 		{/if}
 	</div>
-	<WeatherBubbles />
+	<Bubbles parent_component="weather" />
 </section>
 
 <style>

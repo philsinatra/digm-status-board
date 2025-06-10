@@ -1,4 +1,6 @@
 <script lang="ts">
+	import Bubbles from '$lib/components/bubbles/Bubbles.svelte';
+
 	let date_time = $state(new Date());
 	const interval_duration = 1_000;
 
@@ -40,6 +42,7 @@
 		<div class="time">{format_time(date_time)}</div>
 		<div class="date">{format_date_time(date_time)}</div>
 	</div>
+	<Bubbles parent_component="today" />
 </section>
 
 <style>
@@ -51,6 +54,7 @@
 		display: grid;
 		grid-area: today;
 		height: clamp(80px, 8vw, 100px);
+		position: relative;
 
 		.today {
 			display: grid;
