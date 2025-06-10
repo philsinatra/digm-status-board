@@ -1,5 +1,6 @@
 @import 'normalize.css';
 @import './abstracts/_variables.css';
+@import './abstracts/_animation.css';
 
 @font-face {
 	font-display: swap;

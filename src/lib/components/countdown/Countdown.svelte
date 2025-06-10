@@ -3,6 +3,7 @@
 	import { innerWidth } from 'svelte/reactivity/window';
 	import { writable, type Writable } from 'svelte/store';
 	import type { CountdownItem } from '$lib/types';
+	import { init_event_source } from '$lib/scripts/eventSource';
 	import { get_days_until, get_simple_date } from '$lib/scripts/utils';
 	import { slugify } from '$lib/scripts/utils';
 
@@ -36,39 +37,22 @@
 	});
 
 	$effect(() => {
-		console.log('Setting up EventSource for countdown with data source:', data_source);
-		const source = new EventSource(
-			`/api/data-stream?data_source=${encodeURIComponent(data_source)}`
-		);
-
-		source.onopen = () => {
-			console.log('EventSource connection opened for countdown');
-		};
-
-		source.onmessage = (event) => {
-			console.log('Received SSE message:', event.data);
-			try {
-				const new_data = JSON.parse(event.data);
-				const future_items = new_data.filter((item: CountdownItem) => {
+		return init_event_source({
+			data_source,
+			on_message: (data) => {
+				if (!Array.isArray(data)) return [];
+				const future_items = data.filter((item: CountdownItem) => {
 					return new Date(item.date_time) > new Date();
 				});
-				const sorted_future_items = future_items.sort((a: CountdownItem, b: CountdownItem) => {
+
+				return future_items.sort((a: CountdownItem, b: CountdownItem) => {
 					return new Date(a.date_time).getTime() - new Date(b.date_time).getTime();
 				});
-				countdown_data.set(sorted_future_items);
-			} catch (error) {
-				console.error('Error parsing SSE data:', error);
-			}
-		};
-
-		source.onerror = (error) => {
-			console.error('SSE EventSource error {countdown}:', error);
-			source.close();
-		};
-
-		return () => {
-			source.close();
-		};
+			},
+			target_store: countdown_data,
+			log_prefix: 'countdown',
+			debug: true
+		});
 	});
 </script>
 
