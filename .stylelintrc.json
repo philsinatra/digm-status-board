@@ -6,7 +6,7 @@
 		"stylelint-config-html"
 	],
 	"customSyntax": "postcss-html",
-	"plugins": ["stylelint-value-no-unknown-custom-properties"],
+	"plugins": ["stylelint-value-no-unknown-custom-properties", "stylelint-order"],
 	"overrides": [
 		{
 			"files": ["**/*.svelte"],
@@ -56,6 +56,14 @@
 		],
 		"font-family-no-missing-generic-family-keyword": null,
 		"import-notation": "string",
+		"order/properties-order": [
+			{
+				"properties": [],
+				"unspecified": "bottomAlphabetical",
+				"emptyLineBeforeUnspecified": true,
+				"customProperties": true
+			}
+		],
 		"value-keyword-case": [
 			"lower",
 			{

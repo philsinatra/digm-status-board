@@ -79,10 +79,11 @@
 				poster={current_reel?.poster}
 				controls={!is_large_screen}
 				muted={is_large_screen}
-				autoplay={is_large_screen}
 				preload="auto"
 				onended={handle_video_end}
 			>
+				<!-- TODO: reset autoplay -->
+				<!-- autoplay={is_large_screen} -->
 			</video>
 		{/key}
 	</div>

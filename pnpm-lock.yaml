@@ -14,6 +14,9 @@ importers:
       normalize.css:
         specifier: ^8.0.1
         version: 8.0.1
+      openmeteo:
+        specifier: ^1.2.0
+        version: 1.2.0
     devDependencies:
       '@eslint/compat':
         specifier: ^1.2.5
@@ -78,6 +81,9 @@ importers:
       stylelint-config-standard:
         specifier: ^38.0.0
         version: 38.0.0(stylelint@16.19.1(typescript@5.8.3))
+      stylelint-order:
+        specifier: ^7.0.0
+        version: 7.0.0(stylelint@16.19.1(typescript@5.8.3))
       stylelint-value-no-unknown-custom-properties:
         specifier: ^6.0.1
         version: 6.0.1(stylelint@16.19.1(typescript@5.8.3))
@@ -389,6 +395,10 @@ packages:
   '@nodelib/fs.walk@1.2.8':
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
+
+  '@openmeteo/sdk@1.20.1':
+    resolution: {integrity: sha512-o5tw3+N617Ms8nDm649PWwWt6PDz8NHWBLjOOFB8bx/EJpvsvKEeHMMoapxQ71bjHzQM+4h39eCe6/nM+nBuwg==}
+    engines: {node: '>=12.0'}
 
   '@polka/url@1.0.0-next.29':
     resolution: {integrity: sha512-wwQAWhWSuHaag8c4q/KN/vCoeOJYshAIvMQwD4GpSb3OiZklFfvAgmj0VCBBImRpuF/aFgIRzllXlVX93Jevww==}
@@ -1045,6 +1055,9 @@ packages:
   flat-cache@6.1.9:
     resolution: {integrity: sha512-DUqiKkTlAfhtl7g78IuwqYM+YqvT+as0mY+EVk6mfimy19U79pJCzDZQsnqk3Ou/T6hFXWLGbwbADzD/c8Tydg==}
 
+  flatbuffers@25.2.10:
+    resolution: {integrity: sha512-7JlN9ZvLDG1McO3kbX0k4v+SUAg48L1rIwEvN6ZQl/eCtgJz9UylTMzE9wrmYrcorgxm3CX/3T/w5VAub99UUw==}
+
   flatted@3.3.3:
     resolution: {integrity: sha512-GX+ysw4PBCz0PzosHDepZGANEuFCMLrnRTiEy9McGjmkCQYwRq4A/X786G/fjM/+OjsWSU1ZrY5qyARZmO/uwg==}
 
@@ -1488,6 +1501,10 @@ packages:
     resolution: {integrity: sha512-gXah6aZrcUxjWg2zR2MwouP2eHlCBzdV4pygudehaKXSGW4v2AsRQUK+lwwXhii6KFZcunEnmSUoYp5CXibxtA==}
     engines: {node: '>= 0.4'}
 
+  openmeteo@1.2.0:
+    resolution: {integrity: sha512-YinFo02TM4wXdm9o2FBAO2u1ka3drNdnFsGNskiO8aCWvZa6nljh3ioH79ipwPdFhCrIiq/LCfpjDGXqH2RBFw==}
+    engines: {node: '>=12.0'}
+
   optionator@0.9.4:
     resolution: {integrity: sha512-6IpQ7mKUxRcZNLIObR0hz7lxsapSSIYNZJwXPGeF0mTVqGKFIXj1DQcMoT22S3ROcLyY/rz0PWaWZ9ayWmad9g==}
     engines: {node: '>= 0.8.0'}
@@ -1585,6 +1602,11 @@ packages:
 
   postcss-sorting@8.0.2:
     resolution: {integrity: sha512-M9dkSrmU00t/jK7rF6BZSZauA5MAaBW4i5EnJXspMwt4iqTh/L9j6fgMnbElEOfyRyfLfVbIHj/R52zHzAPe1Q==}
+    peerDependencies:
+      postcss: ^8.4.20
+
+  postcss-sorting@9.1.0:
+    resolution: {integrity: sha512-Mn8KJ45HNNG6JBpBizXcyf6LqY/qyqetGcou/nprDnFwBFBLGj0j/sNKV2lj2KMOVOwdXu14aEzqJv8CIV6e8g==}
     peerDependencies:
       postcss: ^8.4.20
 
@@ -1810,6 +1832,12 @@ packages:
     resolution: {integrity: sha512-0UuKo4+s1hgQ/uAxlYU4h0o0HS4NiQDud0NAUNI0aa8FJdmYHA5ZZTFHiV5FpmE3071e9pZx5j0QpVJW5zOCUA==}
     peerDependencies:
       stylelint: ^14.0.0 || ^15.0.0 || ^16.0.1
+
+  stylelint-order@7.0.0:
+    resolution: {integrity: sha512-rSWxx0KscYfxU02wEskKXES9lkRzuuONMMNkZ7SUc6uiF3tDKm7e+sE0Ax/SBlG4TUf1sp1R6f3/SlsPGmzthg==}
+    engines: {node: '>=20.19.0'}
+    peerDependencies:
+      stylelint: ^16.18.0
 
   stylelint-value-no-unknown-custom-properties@6.0.1:
     resolution: {integrity: sha512-N60PTdaTknB35j6D4FhW0GL2LlBRV++bRpXMMldWMQZ240yFQaoltzlLY4lXXs7Z0J5mNUYZQ/gjyVtU2DhCMA==}
@@ -2220,6 +2248,10 @@ snapshots:
     dependencies:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.19.1
+
+  '@openmeteo/sdk@1.20.1':
+    dependencies:
+      flatbuffers: 25.2.10
 
   '@polka/url@1.0.0-next.29': {}
 
@@ -3007,6 +3039,8 @@ snapshots:
       flatted: 3.3.3
       hookified: 1.9.0
 
+  flatbuffers@25.2.10: {}
+
   flatted@3.3.3: {}
 
   for-each@0.3.5:
@@ -3433,6 +3467,11 @@ snapshots:
       define-properties: 1.2.1
       es-object-atoms: 1.1.1
 
+  openmeteo@1.2.0:
+    dependencies:
+      '@openmeteo/sdk': 1.20.1
+      flatbuffers: 25.2.10
+
   optionator@0.9.4:
     dependencies:
       deep-is: 0.1.4
@@ -3517,6 +3556,10 @@ snapshots:
       util-deprecate: 1.0.2
 
   postcss-sorting@8.0.2(postcss@8.5.3):
+    dependencies:
+      postcss: 8.5.3
+
+  postcss-sorting@9.1.0(postcss@8.5.3):
     dependencies:
       postcss: 8.5.3
 
@@ -3782,6 +3825,12 @@ snapshots:
     dependencies:
       postcss: 8.5.3
       postcss-sorting: 8.0.2(postcss@8.5.3)
+      stylelint: 16.19.1(typescript@5.8.3)
+
+  stylelint-order@7.0.0(stylelint@16.19.1(typescript@5.8.3)):
+    dependencies:
+      postcss: 8.5.3
+      postcss-sorting: 9.1.0(postcss@8.5.3)
       stylelint: 16.19.1(typescript@5.8.3)
 
   stylelint-value-no-unknown-custom-properties@6.0.1(stylelint@16.19.1(typescript@5.8.3)):

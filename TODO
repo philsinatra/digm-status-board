@@ -1,11 +1,11 @@
 TODO:
   ☐ HTML meta/title/favicon
   ☐ Events non-kiosk layouts
-  ☐ weather animations
   ☐ header animation?
   ☐ double check faculty email addresses
 
 Archive:
+  ✔ weather animations (https://www.subframe.com/tips/css-weather-widget-examples) @done(25-06-10 13:45) @project(TODO)
   ✔ Events auto refresh every x minutes @done(25-06-04 14:44) @project(TODO)
   ✔ quote component on medium/large screens @done(25-06-04 14:44) @project(TODO)
   ✔ Need updated reel videos on CDN that include Drexel branding @done(25-05-23 12:29) @project(TODO)

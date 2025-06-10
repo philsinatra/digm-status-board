@@ -40,7 +40,8 @@
 
 		@media screen and (width >= 500px) {
 			grid-template-areas:
-				'brand brand weather'
+				'brand brand brand'
+				'weather weather weather'
 				'quote quote quote'
 				'schedule schedule schedule'
 				'countdown countdown countdown'
