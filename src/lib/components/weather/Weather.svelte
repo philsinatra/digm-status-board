@@ -50,8 +50,6 @@
 	};
 
 	async function get_weather() {
-		console.log('get_weather');
-
 		try {
 			const latitude = 39.9566168;
 			const longitude = -75.192519;

@@ -95,12 +95,13 @@
 				p {
 					height: auto;
 					margin: 0;
+					max-width: 65ch;
+					text-align: center;
 					text-wrap: balance;
-					text-wrap: pretty;
 					width: 100%;
 
 					&:last-of-type {
-						text-align: right;
+						font-size: var(--font-size-x-small);
 					}
 				}
 			}

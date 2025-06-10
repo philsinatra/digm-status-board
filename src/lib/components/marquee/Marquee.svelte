@@ -107,12 +107,28 @@
 </section>
 
 <style>
+	@keyframes pulse {
+		0% {
+			background-position: 0% 0;
+		}
+
+		50% {
+			background-position: 100% 0;
+		}
+
+		100% {
+			background-position: 0% 0;
+		}
+	}
+
 	#events {
+		animation: pulse 20s ease-in-out infinite;
 		background: linear-gradient(
 			to bottom right,
 			var(--color-drexel-blue) 50%,
 			var(--color-drexel-blue-dark)
 		);
+		background-size: 300% 100%;
 		border-radius: var(--radius);
 		color: var(--color-white);
 		grid-area: marquee;
