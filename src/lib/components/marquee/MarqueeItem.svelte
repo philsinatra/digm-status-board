@@ -131,19 +131,20 @@
 				}
 
 				h2 {
+					color: var(--color-white);
 					font-size: var(--font-size-large);
 					text-wrap: pretty;
 				}
 
 				p {
-					color: var(--color-neutral-200);
+					color: var(--color-blue-100);
 					font-size: max(1rem, 110%);
 					line-height: var(--line-height);
 				}
 			}
 
 			ul {
-				color: var(--color-white);
+				color: var(--color-blue-100);
 				display: grid;
 				font-weight: 500;
 				list-style: none;

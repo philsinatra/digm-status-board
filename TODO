@@ -1,11 +1,11 @@
 TODO:
-  ☐ HTML meta/title/favicon
-  ☐ Events non-kiosk layouts
   ☐ weather animations
   ☐ header animation?
   ☐ double check faculty email addresses
+  ☐ trash or refactor `Card` component
 
 Archive:
+  ✔ HTML meta/title/favicon @done(25-06-10 10:38) @project(TODO)
   ✔ Incorporate eventSource utility @done(25-06-06 12:55) @project(TODO)
   ✔ Events auto refresh every x minutes @done(25-06-04 14:44) @project(TODO)
   ✔ quote component on medium/large screens @done(25-06-04 14:44) @project(TODO)
