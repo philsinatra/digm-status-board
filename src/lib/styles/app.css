@@ -10,6 +10,15 @@
 	src: url('/fonts/Geist.ttf') format('truetype');
 }
 
+@font-face {
+	font-display: swap;
+	font-family: GeistMono;
+	font-feature-settings: normal;
+	font-style: normal;
+	font-weight: 100 900;
+	src: url('/fonts/GeistMono.ttf') format('truetype');
+}
+
 :root {
 	box-sizing: border-box;
 	font-size: 100%;

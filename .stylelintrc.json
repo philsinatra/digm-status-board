@@ -67,7 +67,7 @@
 		"value-keyword-case": [
 			"lower",
 			{
-				"ignoreKeywords": ["Geist", "Arial"]
+				"ignoreKeywords": ["Geist", "GeistMono", "Arial"]
 			}
 		]
 	}

@@ -106,15 +106,7 @@
 	$effect(() => {
 		set_weather();
 	});
-
-	$inspect(weather_data.current);
 </script>
-
-{#if weather_data.current}
-	{#if weather_data.current.weather_code}
-		{weather_codes[weather_data.current.weather_code]?.status}
-	{/if}
-{/if}
 
 <section id="weather">
 	<div class="weather">
@@ -160,9 +152,9 @@
 <style>
 	#weather {
 		background: linear-gradient(
-			to bottom right,
-			var(--color-drexel-blue),
-			var(--color-drexel-blue-dark)
+			to right,
+			var(--color-drexel-blue-dark),
+			var(--color-drexel-green-light)
 		);
 		border-radius: var(--radius);
 		color: var(--color-white);

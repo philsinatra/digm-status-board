@@ -32,6 +32,7 @@
 
 	/* #region Typography */
 	--font-family: Geist, system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
+	--font-family-mono: GeistMono, monospace;
 	--font-size: max(1.375rem, 2.225vw);
 	--font-size-xxxx-small: max(0.875rem, 50%);
 	--font-size-xxx-small: max(0.9375rem, 60%);
