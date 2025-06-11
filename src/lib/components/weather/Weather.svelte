@@ -94,6 +94,10 @@
 		}
 	}
 
+	function has_weather_code(data: WeatherData): boolean {
+		return typeof data?.current?.weather_code === 'number';
+	}
+
 	const refresh_interval = 600_000;
 
 	$effect(() => {
@@ -113,9 +117,11 @@
 				<div class="currently">
 					<p>Currently Outside</p>
 					<p class="temperature">{weather_data.current.temperature_2m}°F</p>
-					{#if weather_data.current.weather_code}
+					{#if has_weather_code(weather_data)}
 						<p class="conditions">
-							{weather_codes[weather_data.current.weather_code]?.status ?? ''}
+							{weather_data.current.weather_code !== null
+								? (weather_codes[weather_data.current.weather_code]?.status ?? '')
+								: ''}
 						</p>
 					{/if}
 				</div>

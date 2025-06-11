@@ -8,14 +8,15 @@
 	</div>
 	{#if (innerWidth.current ?? 0) >= 1920}
 		<div class="message">
-			<p>console.log('Hello, DIGM!');</p>
+			<p>Download the<br />DIGM Status Web App</p>
+			<svg><use href="#qr-status-board" /></svg>
 		</div>
 	{/if}
 </section>
 
 <style>
 	#brand {
-		background-color: var(--color-drexel-blue);
+		background: linear-gradient(to right, var(--color-drexel-blue), var(--color-drexel-blue-dark));
 		border-radius: var(--radius);
 		color: var(--color-drexel-gold);
 		display: grid;
@@ -53,15 +54,36 @@
 		}
 
 		@media screen and (width >= 1920px) {
-			grid-template-columns: 300px auto;
+			column-gap: var(--space-medium);
+			grid-template-columns: repeat(2, 1fr);
 			place-items: center start;
 
 			.message {
-				font-family: var(--font-family-mono);
+				align-items: center;
+				color: var(--color-white);
+				display: flex;
+				justify-content: flex-end;
 				position: relative;
+				row-gap: var(--space-medium);
 				text-align: right;
 				width: 100%;
 				z-index: 30;
+
+				p {
+					font-size: var(--font-size-x-small);
+					font-weight: 500;
+					justify-self: flex-end;
+					line-height: var(--line-height);
+					margin: 0;
+					text-align: center;
+				}
+
+				svg {
+					color: var(--color-white);
+					height: 84px;
+					translate: 12px 2px;
+					width: 84px;
+				}
 			}
 		}
 	}

@@ -21,7 +21,7 @@
 		"alpha-value-notation": "number",
 		"color-named": "never",
 		"comment-empty-line-before": [
-			"always",
+			"never",
 			{
 				"ignore": ["after-comment", "stylelint-commands"],
 				"ignoreComments": ["#endregion", "/#region/"]
