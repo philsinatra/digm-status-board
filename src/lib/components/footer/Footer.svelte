@@ -6,7 +6,7 @@
 
 <style>
 	footer {
-		background-color: var(--color-drexel-blue);
+		background: linear-gradient(var(--color-drexel-blue-dark), var(--color-drexel-blue));
 		border-radius: var(--radius);
 		color: var(--color-white);
 		display: grid;

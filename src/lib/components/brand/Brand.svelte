@@ -44,7 +44,7 @@
 			height: 100%;
 		}
 
-		@media screen and (width >= 1100px) {
+		@media screen and (width >= 1280px) {
 			padding-inline: var(--space-medium);
 			width: 100%;
 
