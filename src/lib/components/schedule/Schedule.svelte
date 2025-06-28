@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { writable } from 'svelte/store';
-	import type { ScheduleItem } from '$lib/types';
 	import Modal from '$lib/components/modal/Modal.svelte';
 	import { init_event_source } from '$lib/scripts/eventSource';
+	import type { ScheduleItem } from '$lib/types';
+	import { writable } from 'svelte/store';
 
 	const { data_source = 'static/data/schedule.json' } = $props();
 	const days = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
@@ -265,8 +265,8 @@
 	}
 
 	.schedule-grid-wrapper {
+		overflow: auto hidden;
 		-webkit-overflow-scrolling: touch;
-		overflow-x: auto;
 		translate: 0 -2px;
 	}
 
@@ -278,7 +278,8 @@
 		font-size: var(--font-size-medium);
 		grid-auto-rows: 50px;
 		grid-template-columns: 100px repeat(15, minmax(90px, 1fr));
-		grid-template-rows: 34px repeat(8, 50px);
+		grid-template-rows: 34px repeat(8, 1fr);
+		height: calc(34px + (8 * 1fr));
 		min-width: 900px;
 		position: relative;
 
@@ -324,6 +325,13 @@
 		padding: var(--space-small);
 	}
 
+	.grid-cell:first-child {
+		background-color: var(--color-neutral-50);
+		left: 0;
+		position: sticky;
+		z-index: 6; /* above room rows */
+	}
+
 	.grid-cell-even {
 		background-color: var(--color-neutral-50);
 	}
@@ -333,11 +341,15 @@
 	}
 
 	.grid-cell-room {
+		background-color: var(--color-neutral-50);
 		color: var(--color-black);
 		font-size: var(--font-size-small);
 		font-weight: 500;
 		justify-content: center;
+		left: 0;
+		position: sticky;
 		text-align: center;
+		z-index: 5;
 	}
 
 	.event {
