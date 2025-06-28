@@ -7,7 +7,7 @@
 		"stylelint-config-html"
 	],
 	"customSyntax": "postcss-html",
-	"plugins": ["stylelint-value-no-unknown-custom-properties"],
+	"plugins": ["stylelint-value-no-unknown-custom-properties", "stylelint-order"],
 	"overrides": [
 		{
 			"files": ["**/*.svelte"],
@@ -22,7 +22,7 @@
 		"alpha-value-notation": "number",
 		"color-named": "never",
 		"comment-empty-line-before": [
-			"always",
+			"never",
 			{
 				"ignore": ["after-comment", "stylelint-commands"],
 				"ignoreComments": ["#endregion", "/#region/"]
@@ -60,7 +60,7 @@
 		"value-keyword-case": [
 			"lower",
 			{
-				"ignoreKeywords": ["Geist", "Arial"]
+				"ignoreKeywords": ["Geist", "GeistMono", "Arial"]
 			}
 		]
 	}

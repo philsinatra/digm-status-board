@@ -11,6 +11,15 @@
 	src: url('/fonts/Geist.ttf') format('truetype');
 }
 
+@font-face {
+	font-display: swap;
+	font-family: GeistMono;
+	font-feature-settings: normal;
+	font-style: normal;
+	font-weight: 100 900;
+	src: url('/fonts/GeistMono.ttf') format('truetype');
+}
+
 :root {
 	box-sizing: border-box;
 	font-size: 100%;
@@ -28,7 +37,6 @@
 		font-variant-ligatures: common-ligatures contextual;
 		font-variant-numeric: oldstyle-nums proportional-nums;
 	}
-
 	/* @media (prefers-color-scheme: dark) {} */
 
 	/* @media (prefers-color-scheme: dark) {
@@ -67,7 +75,6 @@ body {
 		min-height: -webkit-fill-available;
 	}
 }
-
 /*
 header, main, article, section, aside, footer, div {
   display: contents;
@@ -82,13 +89,12 @@ a {
 		text-decoration-color: color-mix(in srgb, currentcolor, transparent 75%);
 	}
 }
-
-/* Enable hover only on non-touch devices  */
-
-/* @media (hover: hover) and (pointer: fine) {
+/*
+@media (hover: hover) and (pointer: fine) {
 	a:hover {
 	}
-} */
+}
+*/
 
 abbr {
 	font-feature-settings: 'kern', 'liga', 'clig', 'calt', 'c2sc', 'smcp';

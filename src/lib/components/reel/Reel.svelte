@@ -58,14 +58,14 @@
 	<div class="reel">
 		{#key current_video_index}
 			<video
+				autoplay={is_large_screen}
 				bind:this={video_element}
-				src={current_reel?.video}
-				poster={current_reel?.poster}
 				controls={!is_large_screen}
 				muted={is_large_screen}
-				autoplay={is_large_screen}
-				preload="auto"
 				onended={handle_video_end}
+				poster={current_reel?.poster}
+				preload="auto"
+				src={current_reel?.video}
 			>
 			</video>
 		{/key}

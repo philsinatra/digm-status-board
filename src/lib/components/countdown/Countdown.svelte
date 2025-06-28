@@ -1,11 +1,11 @@
 <script lang="ts">
-	import '$lib/styles/components/_tables.css';
 	import { innerWidth } from 'svelte/reactivity/window';
 	import { writable, type Writable } from 'svelte/store';
 	import type { CountdownItem } from '$lib/types';
+	import Details from '$lib/components/details/Details.svelte';
 	import { init_event_source } from '$lib/scripts/eventSource';
-	import { get_days_until, get_simple_date } from '$lib/scripts/utils';
-	import { slugify } from '$lib/scripts/utils';
+	import { get_days_until, get_simple_date, slugify } from '$lib/scripts/utils';
+	import '$lib/styles/components/_tables.css';
 
 	const { data_source = 'static/data/countdown.json' } = $props();
 	const countdown_data: Writable<CountdownItem[]> = writable([]);
@@ -56,50 +56,60 @@
 	});
 </script>
 
-<section id="countdown">
-	<div class="countdown">
-		{#if (innerWidth.current ?? 0) < 1920}
-			<h2>Important Dates</h2>
+{#snippet countdown_table()}
+	<table>
+		{#if (innerWidth.current ?? 0) >= 1920}
+			<colgroup>
+				<col style="width: 313px" />
+				<col style="width: 90px" />
+				<col style="width: 65px" />
+			</colgroup>
 		{/if}
-		<table>
-			{#if (innerWidth.current ?? 0) >= 1920}
-				<colgroup>
-					<col style="width: 313px" />
-					<col style="width: 90px" />
-					<col style="width: 65px" />
-				</colgroup>
-			{/if}
-			<thead>
+		<thead>
+			<tr>
+				{#if (innerWidth.current ?? 0) < 665}
+					<th>Description</th><th>Countdown</th>
+				{:else}
+					<th>Description</th><th>Date</th><th>Countdown</th>
+				{/if}
+			</tr>
+		</thead>
+		<tbody>
+			{#each $countdown_data as { date_time, title } (`countdown-item-${format_date_key(date_time)}-${slugify(title)}`)}
 				<tr>
 					{#if (innerWidth.current ?? 0) < 665}
-						<th>Description</th><th>Countdown</th>
-					{:else}
-						<th>Description</th><th>Date</th><th>Countdown</th>
-					{/if}
-				</tr>
-			</thead>
-			<tbody>
-				{#each $countdown_data as { date_time, title } (`countdown-item-${format_date_key(date_time)}-${slugify(title)}`)}
-					<tr>
-						{#if (innerWidth.current ?? 0) < 665}
-							<td>
-								<b>{title}</b>
-								<br />
-								{get_simple_date(new Date(date_time))}
-							</td>
-						{:else}
-							<td>
-								<b>{title}</b>
-							</td>
-							<td>{get_simple_date(new Date(date_time))}</td>
-						{/if}
 						<td>
-							{get_days_until(new Date(date_time))} days
+							<b>{title}</b>
+							<br />
+							{get_simple_date(new Date(date_time))}
 						</td>
-					</tr>
-				{/each}
-			</tbody>
-		</table>
+					{:else}
+						<td>
+							<b>{title}</b>
+						</td>
+						<td>{get_simple_date(new Date(date_time))}</td>
+					{/if}
+					<td>
+						{get_days_until(new Date(date_time))} days
+					</td>
+				</tr>
+			{/each}
+		</tbody>
+	</table>
+{/snippet}
+
+<section id="countdown">
+	<div class="countdown">
+		{#if (innerWidth.current ?? 0) < 600}
+			<Details summary="Important Dates">
+				{@render countdown_table()}
+			</Details>
+		{:else}
+			{#if (innerWidth.current ?? 0) < 1920}
+				<h2>Important Dates</h2>
+			{/if}
+			{@render countdown_table()}
+		{/if}
 	</div>
 </section>
 
@@ -110,7 +120,6 @@
 		display: grid;
 		grid-area: countdown;
 		justify-items: stretch;
-		min-height: 300px;
 		overflow: hidden;
 
 		.countdown {
@@ -158,6 +167,10 @@
 					}
 				}
 			}
+		}
+
+		@media screen and (width >= 600px) {
+			min-height: 300px;
 		}
 
 		@media screen and (width >= 768px) {

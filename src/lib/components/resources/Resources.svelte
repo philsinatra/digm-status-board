@@ -1,6 +1,8 @@
 <script lang="ts">
+	import { innerWidth } from 'svelte/reactivity/window';
 	import { writable, type Writable } from 'svelte/store';
 	import type { ResourceLink } from '$lib/types';
+	import Details from '$lib/components/details/Details.svelte';
 	import { init_event_source } from '$lib/scripts/eventSource';
 	import { slugify } from '$lib/scripts/utils';
 
@@ -29,23 +31,33 @@
 	});
 </script>
 
+{#snippet resources_list()}
+	<div class="resource-lists">
+		{#each categories as { name, label } (`resource-group-${name}`)}
+			{#if grouped_items[name].length > 0}
+				<h3>{label}</h3>
+				<ul>
+					{#each grouped_items[name] as { href, title } (`resource-${slugify(title)}`)}
+						<li>
+							<a {href} target="_blank" rel="noopener noreferrer">{title}</a>
+						</li>
+					{/each}
+				</ul>
+			{/if}
+		{/each}
+	</div>
+{/snippet}
+
 <section id="resources">
 	<div class="resources">
-		<h2>DIGM Resource</h2>
-		<div class="resource-lists">
-			{#each categories as { name, label } (`resource-group-${name}`)}
-				{#if grouped_items[name].length > 0}
-					<h3>{label}</h3>
-					<ul>
-						{#each grouped_items[name] as { href, title } (`resource-${slugify(title)}`)}
-							<li>
-								<a {href} target="_blank" rel="noopener noreferrer">{title}</a>
-							</li>
-						{/each}
-					</ul>
-				{/if}
-			{/each}
-		</div>
+		{#if (innerWidth.current ?? 0) < 600}
+			<Details summary="DIGM Resource">
+				{@render resources_list()}
+			</Details>
+		{:else}
+			<h2>DIGM Resource</h2>
+			{@render resources_list()}
+		{/if}
 	</div>
 </section>
 
@@ -54,7 +66,6 @@
 		background-color: var(--color-drexel-blue);
 		border-radius: var(--radius);
 		grid-area: resources;
-		min-height: 400px;
 		overflow: hidden;
 
 		.resources {
@@ -111,6 +122,10 @@
 					}
 				}
 			}
+		}
+
+		@media screen and (width >= 600px) {
+			min-height: 400px;
 		}
 	}
 </style>

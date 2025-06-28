@@ -15,9 +15,9 @@
 		grid-template-areas:
 			'brand brand'
 			'schedule schedule'
-			'countdown countdown'
 			'quote quote'
 			'reel reel'
+			'countdown countdown'
 			'faculty faculty'
 			'resources resources'
 			'footer footer';
@@ -40,11 +40,12 @@
 
 		@media screen and (width >= 500px) {
 			grid-template-areas:
-				'brand brand weather'
+				'brand brand brand'
+				'weather weather weather'
 				'schedule schedule schedule'
-				'countdown countdown countdown'
 				'quote quote quote'
 				'reel reel reel'
+				'countdown countdown countdown'
 				'faculty faculty faculty'
 				'resources resources resources'
 				'footer footer footer';
@@ -58,6 +59,7 @@
 				'brand brand brand brand weather weather weather weather'
 				'schedule schedule schedule schedule schedule schedule schedule schedule'
 				'countdown countdown countdown countdown countdown countdown countdown countdown'
+				'quote quote quote quote quote quote quote quote'
 				'reel reel reel reel reel reel reel reel'
 				'faculty faculty faculty faculty faculty faculty faculty faculty'
 				'resources resources resources resources quote quote quote quote'
@@ -65,9 +67,21 @@
 			grid-template-columns: repeat(8, 1fr);
 		}
 
-		@media screen and (width >= 1280px) {
+		@media screen and (width >= 1024px) {
 			grid-template-areas:
 				'brand brand brand brand brand brand weather weather weather weather weather weather'
+				'schedule schedule schedule schedule schedule schedule schedule schedule schedule schedule schedule schedule'
+				'reel reel reel reel reel reel reel reel reel reel reel reel'
+				'countdown countdown countdown countdown countdown countdown countdown countdown countdown countdown countdown countdown'
+				'faculty faculty faculty faculty faculty faculty faculty faculty faculty faculty faculty faculty'
+				'resources resources resources resources resources resources quote quote quote quote quote quote'
+				'footer footer footer footer footer footer footer footer footer footer footer footer';
+			grid-template-columns: repeat(12, 1fr);
+		}
+
+		@media screen and (width >= 1280px) {
+			grid-template-areas:
+				'brand brand brand weather weather weather weather weather weather weather weather weather'
 				'schedule schedule schedule schedule schedule schedule schedule schedule schedule schedule schedule schedule'
 				'quote quote quote quote countdown countdown countdown countdown countdown countdown countdown countdown'
 				'reel reel reel reel reel reel reel reel reel reel reel reel'
