@@ -59,7 +59,6 @@
 				'brand brand brand brand weather weather weather weather'
 				'schedule schedule schedule schedule schedule schedule schedule schedule'
 				'countdown countdown countdown countdown countdown countdown countdown countdown'
-				'quote quote quote quote quote quote quote quote'
 				'reel reel reel reel reel reel reel reel'
 				'faculty faculty faculty faculty faculty faculty faculty faculty'
 				'resources resources resources resources quote quote quote quote'

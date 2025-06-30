@@ -82,7 +82,7 @@
 	}
 
 	.dialog {
-		backdrop-filter: blur(10px);
+		backdrop-filter: blur(6px);
 		background: linear-gradient(135deg, rgb(255 255 255 / 0.1), rgb(255 255 255 / 0.05));
 		border: 1px solid var(--color-dialog-border);
 		border-radius: var(--radius);
@@ -90,6 +90,7 @@
 		color: var(--color-neutral-200);
 		font-size: clamp(var(--font-size-small), 4cqw, var(--font-size-medium));
 		font-weight: 400;
+		isolation: isolate;
 		margin-inline: auto;
 		max-width: 32em;
 		padding: var(--space-medium);

@@ -1,8 +1,8 @@
 <script lang="ts">
+	import { writable } from 'svelte/store';
+	import type { ScheduleItem } from '$lib/types';
 	import Modal from '$lib/components/modal/Modal.svelte';
 	import { init_event_source } from '$lib/scripts/eventSource';
-	import type { ScheduleItem } from '$lib/types';
-	import { writable } from 'svelte/store';
 
 	const { data_source = 'static/data/schedule.json' } = $props();
 	const days = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
@@ -165,7 +165,7 @@
 							class="schedule-column grid-cell-hours grid-cell"
 							style="grid-column: {i + 2}; grid-row: 1;"
 						>
-							<span>{hour.full}</span>
+							<span style="font-weight: 700;">{hour.full}</span>
 						</div>
 					{/each}
 				{/if}
@@ -177,7 +177,7 @@
 								: 'grid-cell-odd'}"
 							style="grid-column: 1; grid-row: {i + 2}"
 						>
-							<span>URBN-{room}</span>
+							<span style="font-weight: 700;">URBN-{room}</span>
 						</div>
 						{#each Array(15) as _, j (j)}
 							<div
@@ -210,7 +210,6 @@
 								class="event-item"
 								style="
 							left: {left_offset}%;
-							position: absolute;
 							width: {width}%;
 						"
 								aria-label={`${item.subj_code} ${item.crse_numb} with ${item.all_instructors?.split(', ').reverse().join(' ')} from ${item.begin_time} to ${item.end_time}`}
@@ -365,15 +364,16 @@
 		color: var(--color-white);
 		cursor: pointer;
 		display: flex;
-		font-size: var(--font-size-small);
-		height: calc(100% - 8px * 2);
+		font-size: var(--font-size-xx-small);
+		font-weight: 550;
+		height: 94%;
 		justify-content: center;
 		outline: 0;
 		overflow: hidden;
-		padding: 0 calc(var(--space-small) / 2);
 		position: absolute;
 		text-overflow: ellipsis;
 		white-space: nowrap;
+		width: 100%;
 		z-index: 10;
 	}
 
@@ -430,12 +430,12 @@
 	}
 
 	.schedule-current-time {
-		background-color: var(--color-drexel-blue);
+		background-color: var(--color-drexel-blue-dark);
 		bottom: 0;
 		position: absolute;
-		top: 0;
+		top: 34px;
 		width: 2px;
-		z-index: 20;
+		z-index: 5;
 	}
 
 	.schedule-modal-list {
