@@ -3,6 +3,7 @@
 	import { writable, type Writable } from 'svelte/store';
 	import type { ResourceLink } from '$lib/types';
 	import Details from '$lib/components/details/Details.svelte';
+	import { init_event_source } from '$lib/scripts/eventSource';
 	import { slugify } from '$lib/scripts/utils';
 
 	const { data_source = 'static/data/resources.json' } = $props();
@@ -13,32 +14,15 @@
 	];
 
 	$effect(() => {
-		const source = new EventSource(
-			`/api/data-stream?data_source=${encodeURIComponent(data_source)}`
-		);
-
-		source.onopen = () => {
-			console.log('EventSource connection opened for resources');
-		};
-
-		source.onmessage = (event) => {
-			console.log('Received SSE message:', event.data);
-			try {
-				const new_data = JSON.parse(event.data);
-				resource_data.set(new_data);
-			} catch (error) {
-				console.error('Error parsing SSE data:', error);
-			}
-		};
-
-		source.onerror = (error) => {
-			console.error('SSE EventSource error {resources}:', error);
-			source.close();
-		};
-
-		return () => {
-			source.close();
-		};
+		return init_event_source({
+			data_source,
+			on_message: (data) => {
+				return Array.isArray(data) ? data : [];
+			},
+			target_store: resource_data,
+			log_prefix: 'resources',
+			debug: true
+		});
 	});
 
 	const grouped_items = $derived({

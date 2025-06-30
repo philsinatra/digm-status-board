@@ -100,6 +100,14 @@ export default ts.config(
 						match: true
 					}
 				}
+			],
+			'@typescript-eslint/no-unused-vars': [
+				'error',
+				{
+					argsIgnorePattern: '^_',
+					varsIgnorePattern: '^_',
+					destructuredArrayIgnorePattern: '^_'
+				}
 			]
 		}
 	},

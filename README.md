@@ -1,39 +1,45 @@
-# sv
+# DIGM Status Board
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+App for displaying DIGM information such as class schedules, events, and more.
 
-## Creating a project
+## Getting Started
 
-If you're seeing this, you've probably already done this step. Congrats!
+1. Make sure you're using **Node.js v22 or later**.
+2. Install [pnpm](https://pnpm.io/):
 
-```bash
-# create a new project in the current directory
-npx sv create
+   ```bash
+   npm install -g pnpm
+   ```
 
-# create a new project in my-app
-npx sv create my-app
-```
+3. Install dependencies:
+
+   ```bash
+   pnpm install
+   ```
+
+4. You're ready to develop your app!
 
 ## Developing
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+To start the local development server with hot module reloading:
 
 ```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+pnpm dev
 ```
 
-## Building
+## Building for Production
 
-To create a production version of your app:
+To create an optimized build:
 
 ```bash
-npm run build
+pnpm build
 ```
 
-You can preview the production build with `npm run preview`.
+To preview the production build locally:
+
+```bash
+pnpm preview
+```
 
 > To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
 
