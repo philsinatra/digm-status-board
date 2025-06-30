@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { writable } from 'svelte/store';
+	import { writable, get } from 'svelte/store';
 	import type { ScheduleItem } from '$lib/types';
 	import Modal from '$lib/components/modal/Modal.svelte';
 	import { init_event_source } from '$lib/scripts/eventSource';
@@ -9,11 +9,12 @@
 	const modal_data = writable<ScheduleItem | null>(null);
 	const rooms = $state<string[]>([]);
 	const schedule_data = writable<ScheduleItem[]>([]);
+	const current_time = writable(new Date());
 	const schedule_hours: {
 		full: string;
 		short: string;
 		period: string;
-	}[] = Array.from({ length: 15 }, (unused, i) => {
+	}[] = Array.from({ length: 14 }, (unused, i) => {
 		const hour = 8 + i;
 		const period = hour >= 12 ? 'PM' : 'AM';
 		const display_hour = hour % 12 === 0 ? 12 : hour % 12;
@@ -25,8 +26,9 @@
 	});
 
 	let selected_day_state = $state<string>('MON');
-	let current_time = new Date();
+	let current_position = $state(0);
 	let grid_wrapper: HTMLDivElement;
+	let grid_el: HTMLDivElement;
 
 	function format_time(time: number): string {
 		const hour = Math.floor(time / 100);
@@ -43,12 +45,11 @@
 	function get_grid_column(time: number | null): number {
 		if (typeof time === 'number') {
 			const hour = Math.floor(time / 100);
-			return hour - 7 + 1;
+			return hour - 8 + 2;
 		}
 		return 1;
 	}
 
-	// Returns the percent offset (0-100) within the hour grid cell for a given time (e.g. 8:30 = 50).
 	function get_fractional_offset(time: number | null): number {
 		if (!time) return 0;
 		const minutes = time % 100;
@@ -60,44 +61,52 @@
 		const start_min = start % 100;
 		const end_hour = Math.floor(end / 100);
 		const end_min = end % 100;
-
 		const start_decimal = start_hour + start_min / 60;
 		const end_decimal = end_hour + end_min / 60;
-
 		return (end_decimal - start_decimal) * 100;
 	}
 
 	function get_current_hour_decimal() {
-		const hour = current_time.getHours();
-		const min = current_time.getMinutes();
+		const time = get(current_time);
+		const hour = time.getHours();
+		const min = time.getMinutes();
 		return hour + min / 60;
 	}
 
-	function get_current_time_column() {
-		return get_current_hour_decimal() - 7 + 1;
-	}
-
 	function track_current_time() {
-		const interval = setInterval(() => {
-			current_time = new Date();
-		}, 60 * 1000);
-		return () => clearInterval(interval);
+		current_time.set(new Date());
+		const time = get(current_time);
+		const seconds = time.getSeconds();
+		const milliseconds = time.getMilliseconds();
+		const time_to_next_minute = (60 - seconds) * 1000 - milliseconds;
+
+		let interval: ReturnType<typeof setInterval> | undefined;
+		const timeout = setTimeout(() => {
+			current_time.set(new Date());
+			interval = setInterval(() => {
+				current_time.set(new Date());
+			}, 60_000);
+		}, time_to_next_minute);
+
+		return () => {
+			clearTimeout(timeout);
+			if (interval) clearInterval(interval);
+		};
 	}
 
 	function is_current_time_within_bounds() {
-		const hour = current_time.getHours();
+		const time = get(current_time);
+		const hour = time.getHours();
 		return hour >= 8 && hour < 22;
 	}
 
 	function center_current_time() {
 		if (!grid_wrapper) return;
-
 		const wrapper_width = grid_wrapper.clientWidth;
 		const scroll_width = grid_wrapper.scrollWidth;
-
-		const left_percent = (get_current_time_column() - 2) / 15;
-		const scroll_to = scroll_width * left_percent - wrapper_width / 2;
-
+		const hour_decimal = get_current_hour_decimal();
+		const time_progress = (hour_decimal - 8) / 14;
+		const scroll_to = (scroll_width - 100) * time_progress - wrapper_width / 2;
 		grid_wrapper.scrollLeft = Math.max(scroll_to, 0);
 	}
 
@@ -106,12 +115,22 @@
 		return a.every((v, i) => v === b[i]);
 	}
 
+	function get_current_time_left_px(): number {
+		if (!grid_el || !grid_wrapper) return 0;
+		const hour_decimal = get_current_hour_decimal();
+		if (hour_decimal < 8 || hour_decimal >= 22) return 0;
+		const first_cell = grid_el.querySelector('.grid-cell:first-child') as HTMLElement;
+		const room_col_width = first_cell ? first_cell.offsetWidth : 100;
+		const time_progress = (hour_decimal - 8) / 14;
+		const total_grid_width = grid_el.offsetWidth;
+		const time_columns_width = total_grid_width - room_col_width;
+		return room_col_width + time_progress * time_columns_width;
+	}
+
 	$effect(() => {
 		return init_event_source({
 			data_source,
-			on_message: (data) => {
-				return Array.isArray(data) ? data : [];
-			},
+			on_message: (data) => (Array.isArray(data) ? data : []),
 			target_store: schedule_data,
 			log_prefix: 'schedule'
 		});
@@ -121,8 +140,6 @@
 		const unique_rooms = Array.from(
 			new Set($schedule_data.map((item) => normalize_room_code(item.room_code)))
 		).filter((c) => c !== '' && c !== 'null' && c !== 'undefined');
-
-		// Only update if different to avoid infinite loop
 		if (!arrays_are_equal(rooms, unique_rooms)) {
 			rooms.length = 0;
 			rooms.push(...unique_rooms);
@@ -131,9 +148,20 @@
 
 	$effect(() => {
 		const today = new Date().getDay();
-		selected_day_state = days[today] || 'MON';
-		track_current_time();
+		selected_day_state = days[today === 0 ? 6 : today - 1] || 'MON';
+		const cleanup = track_current_time();
 		center_current_time();
+		return cleanup;
+	});
+
+	$effect(() => {
+		return current_time.subscribe(() => {
+			if (grid_el && is_current_time_within_bounds()) {
+				current_position = get_current_time_left_px();
+			} else {
+				current_position = 0;
+			}
+		});
 	});
 </script>
 
@@ -155,38 +183,32 @@
 		</nav>
 
 		<div class="schedule-grid-wrapper" bind:this={grid_wrapper}>
-			<div class="schedule-grid">
-				<!-- Top-left -->
+			<div class="schedule-grid" bind:this={grid_el}>
 				<div class="grid-cell" style="grid-column: 1; grid-row: 1"></div>
-				<!-- Hour headers -->
-				{#if schedule_hours.length}
-					{#each schedule_hours as hour, i (hour.full)}
+				{#each schedule_hours as hour, i (hour.full)}
+					<div
+						class="schedule-column grid-cell-hours grid-cell"
+						style="grid-column: {i + 2}; grid-row: 1;"
+					>
+						<span style="font-weight: 700;">{hour.full}</span>
+					</div>
+				{/each}
+				{#each rooms as room, i (room)}
+					<div
+						class="schedule-row grid-cell-room grid-cell {i % 2 === 0
+							? 'grid-cell-even'
+							: 'grid-cell-odd'}"
+						style="grid-column: 1; grid-row: {i + 2};"
+					>
+						<span style="font-weight: 700;">URBN-{room}</span>
+					</div>
+					{#each Array(14) as _, j (j)}
 						<div
-							class="schedule-column grid-cell-hours grid-cell"
-							style="grid-column: {i + 2}; grid-row: 1;"
-						>
-							<span style="font-weight: 700;">{hour.full}</span>
-						</div>
+							class="grid-cell grid-cell-body {i % 2 === 0 ? 'grid-cell-even' : 'grid-cell-odd'}"
+							style="grid-column: {j + 2}; grid-row: {i + 2}"
+						></div>
 					{/each}
-				{/if}
-				{#if rooms && rooms.length}
-					{#each rooms as room, i (room)}
-						<div
-							class="schedule-row grid-cell-room grid-cell {i % 2 === 0
-								? 'grid-cell-even'
-								: 'grid-cell-odd'}"
-							style="grid-column: 1; grid-row: {i + 2}"
-						>
-							<span style="font-weight: 700;">URBN-{room}</span>
-						</div>
-						{#each Array(15) as _, j (j)}
-							<div
-								class="grid-cell grid-cell-body {i % 2 === 0 ? 'grid-cell-even' : 'grid-cell-odd'}"
-								style="grid-column: {j + 2}; grid-row: {i + 2}"
-							></div>
-						{/each}
-					{/each}
-				{/if}
+				{/each}
 				{#each $schedule_data as item (item)}
 					{#if item.day && selected_day_state && item.day[0] === selected_day_state[0]}
 						{@const room_index = rooms.indexOf(normalize_room_code(item.room_code))}
@@ -200,35 +222,27 @@
 							class="schedule-event event"
 							data-a={item.begin_time}
 							data-s={item.end_time}
-							style="
-						grid-column: {column};
-						grid-row: {room_index + 2};
-						position: relative;
-					"
+							style="grid-column: {column}; grid-row: {room_index + 2}; position: relative;"
 						>
 							<button
 								class="event-item"
-								style="
-							left: {left_offset}%;
-							width: {width}%;
-						"
+								style="left: {left_offset}%; width: {width}%;"
 								aria-label={`${item.subj_code} ${item.crse_numb} with ${item.all_instructors?.split(', ').reverse().join(' ')} from ${item.begin_time} to ${item.end_time}`}
-								onclick={() => {
-									modal_data?.set(item);
-								}}
+								onclick={() => modal_data?.set(item)}
 							>
 								{`${item.subj_code} ${item.crse_numb} (${item.all_instructors?.split(', ').reverse().join(' ')})`}
 							</button>
 						</div>
 					{/if}
 				{/each}
-				{#if is_current_time_within_bounds()}
-					<div
-						class="schedule-current-time"
-						style="left: calc((100% / 15) * {get_current_time_column() - 2});"
-					></div>
-				{/if}
 			</div>
+			{#if is_current_time_within_bounds()}
+				<div
+					class="schedule-current-time"
+					style="left: {current_position}px;"
+					data-position={current_position}
+				></div>
+			{/if}
 		</div>
 
 		{#if $modal_data}
@@ -237,7 +251,6 @@
 					{$modal_data?.subj_code}
 					{$modal_data?.crse_numb} - {String($modal_data?.seq_numb).padStart(3, '0')}
 				{/snippet}
-
 				<ul class="schedule-modal-list">
 					<li><strong>Course:</strong> {$modal_data?.course_title}</li>
 					<li><strong>Instructor:</strong> {$modal_data?.all_instructors}</li>
@@ -266,6 +279,7 @@
 	.schedule-grid-wrapper {
 		overflow: auto hidden;
 		-webkit-overflow-scrolling: touch;
+		position: relative;
 		translate: 0 -2px;
 	}
 
@@ -276,7 +290,7 @@
 		display: grid;
 		font-size: var(--font-size-medium);
 		grid-auto-rows: 50px;
-		grid-template-columns: 100px repeat(15, minmax(90px, 1fr));
+		grid-template-columns: 100px repeat(14, minmax(90px, 1fr));
 		grid-template-rows: 34px repeat(8, 1fr);
 		height: calc(34px + (8 * 1fr));
 		min-width: 900px;
@@ -328,7 +342,7 @@
 		background-color: var(--color-neutral-50);
 		left: 0;
 		position: sticky;
-		z-index: 6; /* above room rows */
+		z-index: 6;
 	}
 
 	.grid-cell-even {
@@ -374,7 +388,6 @@
 		text-overflow: ellipsis;
 		white-space: nowrap;
 		width: 100%;
-		z-index: 10;
 	}
 
 	.weekday-selector {
@@ -430,12 +443,18 @@
 	}
 
 	.schedule-current-time {
-		background-color: var(--color-drexel-blue-dark);
-		bottom: 0;
-		position: absolute;
-		top: 34px;
-		width: 2px;
-		z-index: 5;
+		display: none;
+
+		@media screen and (width >= 1920px) {
+			background-color: var(--color-drexel-blue-dark);
+			bottom: 0;
+			display: block;
+			position: absolute;
+			top: 0;
+			transition: left 0.5s linear;
+			width: 2px;
+			z-index: 5;
+		}
 	}
 
 	.schedule-modal-list {
