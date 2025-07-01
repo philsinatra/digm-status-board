@@ -178,11 +178,13 @@ The hosting environment should support:
 ### Common Issues
 
 1. **File Watching Not Working**
+
    - Check file system permissions
    - Verify chokidar is properly installed
    - Check for file system limitations
 
 2. **SSE Connections Dropping**
+
    - Check server timeout settings
    - Verify proxy/load balancer configuration
    - Monitor server resources
