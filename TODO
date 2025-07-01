@@ -1,7 +1,7 @@
 TODO:
-  ☐ header animation?
+  ☐ Increase polling time from one second to appropriate value
+  ☐ Update API paths for JSON loading based on hosting environment
   ☐ double check faculty email addresses
-  ☐ trash or refactor `Card` component
 
 Archive:
   ✔ weather animations (https://www.subframe.com/tips/css-weather-widget-examples) @done(25-06-10 13:45) @project(TODO)

@@ -1,9 +1,8 @@
-import fs from 'fs';
-
-import { error } from '@sveltejs/kit';
 import chokidar, { FSWatcher } from 'chokidar';
 
 import type { RequestEvent } from '@sveltejs/kit';
+import { error } from '@sveltejs/kit';
+import fs from 'fs';
 
 // Route that serves JSON data from a specified file
 /**
@@ -82,6 +81,7 @@ export async function GET({ setHeaders, url }: RequestEvent) {
 					alwaysStat: true,
 					ignoreInitial: false,
 					usePolling: true, // Use polling for more reliable detection
+					// TODO: increase polling interval
 					interval: 1000, // Poll every second
 					binaryInterval: 1000 // Poll binary files every second
 				});
