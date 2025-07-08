@@ -300,6 +300,10 @@
 			grid-auto-rows: unset;
 			min-width: unset;
 		}
+
+		@media screen and (width >= 1920px) {
+			min-height: 322px;
+		}
 	}
 
 	.grid-cell-hours {
