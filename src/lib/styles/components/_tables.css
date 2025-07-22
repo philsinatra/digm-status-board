@@ -35,7 +35,7 @@ table {
 
 	td {
 		border-right: 1px solid var(--color-drexel-neutral-gray);
-		font-size: calc(var(--font-size-small) - 0.25px);
+		font-size: calc(var(--font-size-small) - 0.35px);
 	}
 
 	a {
