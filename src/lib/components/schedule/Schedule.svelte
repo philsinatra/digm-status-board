@@ -273,7 +273,7 @@
 	#schedule {
 		border-radius: var(--radius);
 		grid-area: schedule;
-		overflow-x: auto;
+		overflow: auto hidden;
 	}
 
 	.schedule-grid-wrapper {
