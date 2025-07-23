@@ -34,17 +34,6 @@
 	},
 	{
 		"subj_code": "ANIM",
-		"crse_numb": 215,
-		"seq_numb": 1,
-		"course_title": "History of Animation",
-		"all_instructors": "Johnson, Mindy",
-		"room_code": "ATTEND",
-		"begin_time": 1800.0,
-		"end_time": 2050.0,
-		"day": "W"
-	},
-	{
-		"subj_code": "ANIM",
 		"crse_numb": 231,
 		"seq_numb": 1,
 		"course_title": "Scripting for Animation & VFX",
@@ -75,28 +64,6 @@
 		"begin_time": 1530.0,
 		"end_time": 1820.0,
 		"day": "T"
-	},
-	{
-		"subj_code": "ANIM",
-		"crse_numb": 250,
-		"seq_numb": 2,
-		"course_title": "Prof. Practices for ANFX",
-		"all_instructors": "Miller, Valentina",
-		"room_code": "ATTEND",
-		"begin_time": 1530.0,
-		"end_time": 1820.0,
-		"day": "T"
-	},
-	{
-		"subj_code": "ANIM",
-		"crse_numb": "T380",
-		"seq_numb": 1,
-		"course_title": "Creature Texture & Look Dev.",
-		"all_instructors": "Rader, John",
-		"room_code": "ATTEND",
-		"begin_time": 900.0,
-		"end_time": 1150.0,
-		"day": "M"
 	},
 	{
 		"subj_code": "ANIM",
@@ -218,17 +185,6 @@
 		"begin_time": 1700.0,
 		"end_time": 1750.0,
 		"day": "M"
-	},
-	{
-		"subj_code": "GMAP",
-		"crse_numb": 367,
-		"seq_numb": 1,
-		"course_title": "Character Animation for Gaming",
-		"all_instructors": "Hadley, Dia",
-		"room_code": "ATTEND",
-		"begin_time": 930.0,
-		"end_time": 1220.0,
-		"day": "R"
 	},
 	{
 		"subj_code": "GMAP",
