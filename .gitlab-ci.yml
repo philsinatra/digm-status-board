@@ -1,7 +1,7 @@
 variables:
-  DOCKER_IMAGE: "$CI_REGISTRY_IMAGE"
-  UNIQUE_TAG: "$CI_COMMIT_SHA"
-  LATEST_TAG: "latest"
+  DOCKER_IMAGE: '$CI_REGISTRY_IMAGE'
+  UNIQUE_TAG: '$CI_COMMIT_SHA'
+  LATEST_TAG: 'latest'
 
 stages:
   - build
@@ -11,7 +11,7 @@ build_image:
   stage: build
   image: docker:24
   services: [docker:dind]
-  variables: { DOCKER_TLS_CERTDIR: "" }
+  variables: { DOCKER_TLS_CERTDIR: '' }
   script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
     - docker build -t "$DOCKER_IMAGE:$UNIQUE_TAG" -t "$DOCKER_IMAGE:$LATEST_TAG" .
@@ -22,7 +22,7 @@ push_image:
   needs: [build_image]
   image: docker:24
   services: [docker:dind]
-  variables: { DOCKER_TLS_CERTDIR: "" }
+  variables: { DOCKER_TLS_CERTDIR: '' }
   script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
     - docker push "$DOCKER_IMAGE:$UNIQUE_TAG"
