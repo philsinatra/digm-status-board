@@ -2,7 +2,7 @@ services:
   app:
     image: registry.westphal.drexel.edu/digital-media/digm-status-board:latest
     ports:
-      - "3000:3000"
+      - '3000:3000'
     environment:
       - NODE_ENV=production
     restart: always
