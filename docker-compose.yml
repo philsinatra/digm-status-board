@@ -1,8 +1,21 @@
 services:
   app:
     image: registry.westphal.drexel.edu/digital-media/digm-status-board:latest
-    ports:
-      - '3000:3000'
+    # ports:
+    #   - '3000:3000'
     environment:
       - NODE_ENV=production
     restart: always
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.docker.network=traefik_gateway'
+      - 'traefik.http.routers.digm-status.rule=Host(`digm.westphal.drexel.edu`) && PathPrefix(`/status-new`)'
+      - 'traefik.http.routers.digm-status.entrypoints=websecure'
+      - 'traefik.http.routers.digm-status.tls=true'
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    name: traefik_gateway
+    external: true

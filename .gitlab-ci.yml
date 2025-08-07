@@ -29,7 +29,6 @@ push_image:
     - docker push "$DOCKER_IMAGE:$UNIQUE_TAG"
     - docker push "$DOCKER_IMAGE:$LATEST_TAG"
   only: [main]
-
 # deploy:
 #   stage: deploy
 #   before_script:
