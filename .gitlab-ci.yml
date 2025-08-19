@@ -1,48 +1,37 @@
 variables:
-  DOCKER_IMAGE: '$CI_REGISTRY_IMAGE'
-  UNIQUE_TAG: '$CI_COMMIT_SHA'
-  LATEST_TAG: 'latest'
+  TAG_LATEST: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_NAME:latest
+  TAG_COMMIT: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_NAME:$CI_COMMIT_SHORT_SHA
 
 stages:
-  - build
-  - push
+  - publish
   - deploy
 
-build_image:
-  stage: build
-  image: docker:24
-  services: [docker:dind]
-  variables: { DOCKER_TLS_CERTDIR: '' }
+publish:
+  image: docker:latest
+  stage: publish
+  services:
+    - docker:dind
   script:
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
-    - docker build -t "$DOCKER_IMAGE:$UNIQUE_TAG" -t "$DOCKER_IMAGE:$LATEST_TAG" .
-  only: [main]
-
-push_image:
-  stage: push
-  needs: [build_image]
-  image: docker:24
-  services: [docker:dind]
-  variables: { DOCKER_TLS_CERTDIR: '' }
-  script:
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
-    - docker push "$DOCKER_IMAGE:$UNIQUE_TAG"
-    - docker push "$DOCKER_IMAGE:$LATEST_TAG"
-  only: [main]
+    - docker build -t $TAG_COMMIT -t $TAG_LATEST .
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - docker push $TAG_COMMIT
+    - docker push $TAG_LATEST
 
 deploy:
+  image: alpine:latest
   stage: deploy
-  before_script:
-    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
-    - mkdir -p ~/.ssh
-    - echo "$SSH_PRIVATE_KEY_BASE64" | base64 -d > ~/.ssh/id_rsa
-    - chmod 600 ~/.ssh/id_rsa
-    - eval $(ssh-agent -s)
-    - ssh-add ~/.ssh/id_rsa
-    - mkdir -p ~/.ssh
-    - chmod 700 ~/.ssh
-    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
   script:
-    - ssh -o BatchMode=yes $REMOTE_USER@$REMOTE_HOST "echo SSH connection successful"
-    - scp -r ./docker-compose.yml $REMOTE_USER@$REMOTE_HOST:$DEPLOY_PATH
-    - ssh $REMOTE_USER@$REMOTE_HOST "cd $DEPLOY_PATH && docker compose up -d"
+    - chmod og= $ID_RSA
+    - apk update && apk add openssh-client
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "mkdir -p ~/digm-status-board"
+    - "printf 'services:\n  app:\n    image: \"%s\"\\n' \"$TAG_COMMIT\" > docker-compose.override.yml"
+    - scp -i $ID_RSA -o StrictHostKeyChecking=no docker-compose.yml $SERVER_USER@$SERVER_IP:~/digm-status-board/docker-compose.yml
+    - scp -i $ID_RSA -o StrictHostKeyChecking=no docker-compose.override.yml $SERVER_USER@$SERVER_IP:~/digm-status-board/docker-compose.override.yml
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY"
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "cd ~/digm-status-board && (docker compose -f docker-compose.yml -f docker-compose.override.yml pull || docker-compose -f docker-compose.yml -f docker-compose.override.yml pull)"
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "cd ~/digm-status-board && (docker compose -f docker-compose.yml -f docker-compose.override.yml up -d --remove-orphans || docker-compose -f docker-compose.yml -f docker-compose.override.yml up -d --remove-orphans)"
+  environment:
+    name: prod
+    url: https://digmstatus.westphal.drexel.edu
+  only:
+    - main
