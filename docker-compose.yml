@@ -1,8 +1,7 @@
 services:
   app:
     image: registry.westphal.drexel.edu/digital-media/digm-status-board:latest
-    environment:
-      - NODE_ENV=production
+    env_file: .env
     restart: always
     labels:
       - 'traefik.enable=true'
