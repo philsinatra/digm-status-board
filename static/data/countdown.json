@@ -1,18 +1,61 @@
 [
-	{ "date_time": "2025-06-07T00:00:00.000Z", "title": "Summer Classes End" },
-	{ "date_time": "2025-06-09T00:00:00.000Z", "title": "Term Examinations Begin" },
-	{ "date_time": "2025-06-09T00:00:00.000Z", "title": "University Commencement" },
-	{ "date_time": "2025-06-09T00:00:00.000Z", "title": "Term Examinations End" },
-	{ "date_time": "2025-06-20T00:00:00.000Z", "title": "Last day of Spring Co-op" },
-	{ "date_time": "2025-06-23T00:00:00.000Z", "title": "Summer Classes and Co-op Begin" },
-	{ "date_time": "2025-06-30T00:00:00.000Z", "title": "First day to Withdraw from a course" },
-	{ "date_time": "2025-06-30T00:00:00.000Z", "title": "First day to Withdraw from a Co-op" },
-	{ "date_time": "2025-07-04T00:00:00.000Z", "title": "Independence Day" },
-	{ "date_time": "2025-07-26T00:00:00.000Z", "title": "Summer Classes End (Term A)" },
-	{ "date_time": "2025-07-28T00:00:00.000Z", "title": "Summer Classes Begin (Term B)" },
 	{ "date_time": "2025-08-30T00:00:00.000Z", "title": "Summer Classes End (Term B)" },
 	{ "date_time": "2025-09-01T00:00:00.000Z", "title": "Labor Day" },
 	{ "date_time": "2025-09-02T00:00:00.000Z", "title": "Term Examinations Begin" },
 	{ "date_time": "2025-09-06T00:00:00.000Z", "title": "Term Examinations End" },
-	{ "date_time": "2025-09-19T00:00:00.000Z", "title": "Last day of Summer Co-op" }
+	{ "date_time": "2025-09-19T00:00:00.000Z", "title": "Last day of Summer Co-op" },
+	{ "date_time": "2024-09-23T00:00:00.000Z", "title": "Classes and Co-op Begin" },
+	{
+		"date_time": "2024-09-27T00:00:00.000Z",
+		"title": "Last day to secure a Closed Section Override"
+	},
+	{
+		"date_time": "2024-09-27T00:00:00.000Z",
+		"title": "Last day to Add/Drop a course with Academic Advisor assistance"
+	},
+	{
+		"date_time": "2024-09-27T00:00:00.000Z",
+		"title": "Last day to resolve Financial Holds"
+	},
+	{
+		"date_time": "2024-09-27T00:00:00.000Z",
+		"title": "Last Day to Add/Drop Co-op Employment"
+	},
+	{
+		"date_time": "2024-09-29T00:00:00.000Z",
+		"title": "Last day to Add/Drop a course via DrexelOne"
+	},
+	{
+		"date_time": "2024-10-14T00:00:00.000Z",
+		"title": "Indigenous Peoples' Day (University Holiday)"
+	},
+	{
+		"date_time": "2024-11-05T00:00:00.000Z",
+		"title": "Election Day (No classes)"
+	},
+	{
+		"date_time": "2024-11-08T00:00:00.000Z",
+		"title": "Last day to Withdraw from a course"
+	},
+	{
+		"date_time": "2024-11-26T00:00:00.000Z",
+		"title": "Thanksgiving Holiday begins at close of classes"
+	},
+	{ "date_time": "2024-12-02T00:00:00.000Z", "title": "Classes Resume - 8 a.m." },
+	{
+		"date_time": "2024-12-07T00:00:00.000Z",
+		"title": "Classes End"
+	},
+	{
+		"date_time": "2024-12-09T00:00:00.000Z",
+		"title": "Term Examinations Begin"
+	},
+	{
+		"date_time": "2024-12-14T00:00:00.000Z",
+		"title": "Term Examinations End"
+	},
+	{
+		"date_time": "2024-12-23T00:00:00.000Z",
+		"title": "Administrative Offices CLOSED for Winter Break"
+	}
 ]
