@@ -30,9 +30,9 @@
 				'brand brand'
 				'weather weather'
 				'schedule schedule'
-				'countdown countdown'
 				'quote quote'
 				'reel reel'
+				'countdown countdown'
 				'faculty faculty'
 				'resources resources'
 				'footer footer';
@@ -58,8 +58,8 @@
 			grid-template-areas:
 				'brand brand brand brand weather weather weather weather'
 				'schedule schedule schedule schedule schedule schedule schedule schedule'
-				'countdown countdown countdown countdown countdown countdown countdown countdown'
 				'reel reel reel reel reel reel reel reel'
+				'countdown countdown countdown countdown countdown countdown countdown countdown'
 				'faculty faculty faculty faculty faculty faculty faculty faculty'
 				'resources resources resources resources quote quote quote quote'
 				'footer footer footer footer footer footer footer footer';

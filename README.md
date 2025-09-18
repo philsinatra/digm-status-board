@@ -59,3 +59,9 @@ function scroll_to_next_event() {
 	events_container.scrollTo({ left: scroll_position, behavior: 'smooth' });
 }
 ```
+
+## Schedule
+
+1. Move the schedule XLSX document into the `input` directory: `input/schedule.xlsx`
+1. Run the extraction script: `node scripts/xlsx_extract.ts`
+1. Clean up the output JSON as needed. The script has priority rules for specific classroom numbers.

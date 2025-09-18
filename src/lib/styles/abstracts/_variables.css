@@ -37,7 +37,7 @@
 	--color-white: #fff;
 	--color-table-head: var(--color-neutral-300);
 	--color-table-alt: var(--color-neutral-200);
-	--color-dialog-backdrop: hsl(0deg 0% 0% / 0.5);
+	--color-dialog-backdrop: hsl(0deg 0% 0% / 0.7);
 	--color-dialog-background: rgb(255 255 255 / 0.1);
 	--color-dialog-border: rgb(255 255 255 / 0.2);
 	--color-dialog-border-1: rgb(255 255 255 / 0.2);

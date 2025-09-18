@@ -90,7 +90,7 @@
 
 				h3 {
 					color: var(--color-drexel-blue);
-					font-size: calc(var(--font-size-medium) + 2px);
+					font-size: var(--font-size-medium);
 					font-weight: 650;
 					line-height: 1.2;
 					margin: 0;
@@ -98,7 +98,7 @@
 
 				ul {
 					display: grid;
-					font-size: var(--font-size-medium);
+					font-size: var(--font-size-xx-small);
 					row-gap: var(--space-small);
 
 					li {

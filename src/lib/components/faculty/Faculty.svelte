@@ -142,6 +142,10 @@
 			min-height: 400px;
 		}
 
+		@media screen and (width >= 1280px) {
+			min-height: 646px;
+		}
+
 		@media screen and (width >= 1920px) {
 			min-height: unset;
 		}

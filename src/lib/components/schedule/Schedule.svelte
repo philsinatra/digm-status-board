@@ -5,9 +5,10 @@
 	import { init_event_source } from '$lib/scripts/eventSource';
 
 	const { data_source = 'static/data/schedule.json' } = $props();
-	const days = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
+	const days = ['MON', 'TUE', 'WED', 'R', 'FRI', 'SAT', 'SUN'];
 	const modal_data = writable<ScheduleItem | null>(null);
 	const rooms = $state<string[]>([]);
+	const sorted_rooms = $derived(rooms.slice().sort((a, b) => a.localeCompare(b)));
 	const schedule_data = writable<ScheduleItem[]>([]);
 	const current_time = writable(new Date());
 	const schedule_hours: {
@@ -176,7 +177,8 @@
 						center_current_time();
 					}}
 				>
-					<span class="full">{day}</span>
+					<!-- <span class="full">{day}</span> -->
+					<span class="full">{day === 'R' ? 'THU' : day}</span>
 					<span class="short">{day === 'SUN' ? 'U' : day[0]}</span>
 				</button>
 			{/each}
@@ -193,12 +195,12 @@
 						<span style="font-weight: 700;">{hour.full}</span>
 					</div>
 				{/each}
-				{#each rooms as room, i (room)}
+				{#each sorted_rooms as room, i (room)}
 					<div
 						class="schedule-row grid-cell-room grid-cell {i % 2 === 0
 							? 'grid-cell-even'
 							: 'grid-cell-odd'}"
-						style="grid-column: 1; grid-row: {i + 2};"
+						style="grid-column: 1; grid-row: {sorted_rooms.indexOf(room) + 2};"
 					>
 						<span style="font-weight: 700;">URBN-{room}</span>
 					</div>
@@ -211,7 +213,7 @@
 				{/each}
 				{#each $schedule_data as item (item)}
 					{#if item.day && selected_day_state && item.day[0] === selected_day_state[0]}
-						{@const room_index = rooms.indexOf(normalize_room_code(item.room_code))}
+						{@const room_index = sorted_rooms.indexOf(normalize_room_code(item.room_code))}
 						{@const column = get_grid_column(item.begin_time)}
 						{@const left_offset = get_fractional_offset(item.begin_time)}
 						{@const width =
@@ -226,11 +228,16 @@
 						>
 							<button
 								class="event-item"
-								style="left: {left_offset}%; width: {width}%;"
+								style:left="{left_offset}%"
+								style:width="{width}%"
+								style:background-color={item.color_override
+									? `var(${item.color_override})`
+									: undefined}
 								aria-label={`${item.subj_code} ${item.crse_numb} with ${item.all_instructors?.split(', ').reverse().join(' ')} from ${item.begin_time} to ${item.end_time}`}
 								onclick={() => modal_data?.set(item)}
 							>
-								{`${item.subj_code} ${item.crse_numb} (${item.all_instructors?.split(', ').reverse().join(' ')})`}
+								<!-- {`${item.subj_code} ${item.crse_numb} (${item.all_instructors?.split(', ').reverse().join(' ')})`} -->
+								{`${item.subj_code} ${item.crse_numb}`}
 							</button>
 						</div>
 					{/if}
@@ -253,7 +260,9 @@
 				{/snippet}
 				<ul class="schedule-modal-list">
 					<li><strong>Course:</strong> {$modal_data?.course_title}</li>
-					<li><strong>Instructor:</strong> {$modal_data?.all_instructors}</li>
+					{#if $modal_data?.all_instructors}
+						<li><strong>Instructor:</strong> {$modal_data?.all_instructors}</li>
+					{/if}
 					<li><strong>Room:</strong> {$modal_data?.room_code}</li>
 					<li>
 						<strong>Time:</strong>
@@ -382,7 +391,7 @@
 		color: var(--color-white);
 		cursor: pointer;
 		display: flex;
-		font-size: var(--font-size-xx-small);
+		font-size: var(--font-size-xxxx-small);
 		font-weight: 550;
 		height: 94%;
 		justify-content: center;

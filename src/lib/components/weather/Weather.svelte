@@ -208,7 +208,7 @@
 
 				& > div {
 					display: grid;
-					row-gap: var(--space-small);
+					row-gap: calc(var(--space-small) / 2);
 					text-align: center;
 				}
 
@@ -291,7 +291,7 @@
 			min-height: unset;
 
 			.weather {
-				padding: var(--space-medium);
+				padding: var(--space-small) var(--space-medium);
 
 				> * p {
 					font-size: var(--font-size-small);

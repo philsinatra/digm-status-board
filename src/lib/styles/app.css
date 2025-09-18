@@ -27,7 +27,7 @@
 	overflow-x: hidden;
 	scroll-behavior: smooth;
 	text-size-adjust: 100%;
-	text-spacing: trim-start allow-end trim-adjacent ideograph-alpha ideograph-numeric;
+	/* text-spacing-trim: trim-start allow-end trim-adjacent ideograph-alpha ideograph-numeric ideographic-numeric; */
 	touch-action: manipulation;
 
 	@supports (font-kerning: normal) and (font-variant-ligatures: common-ligatures contextual) and
