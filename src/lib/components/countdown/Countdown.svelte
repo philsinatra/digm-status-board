@@ -177,5 +177,18 @@
 		@media screen and (width >= 768px) {
 			min-height: unset;
 		}
+
+		@media screen and (width >= 1920px) {
+			.countdown {
+				table {
+					tbody {
+						tr {
+							height: 45px;
+							min-height: 45px;
+						}
+					}
+				}
+			}
+		}
 	}
 </style>

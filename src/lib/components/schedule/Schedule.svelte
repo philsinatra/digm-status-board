@@ -227,7 +227,7 @@
 							style="grid-column: {column}; grid-row: {room_index + 2}; position: relative;"
 						>
 							<button
-								class="event-item"
+								class="event-item program-{item.subj_code.toLowerCase()}"
 								style:left="{left_offset}%"
 								style:width="{width}%"
 								style:background-color={item.color_override
@@ -385,7 +385,7 @@
 
 	.event-item {
 		align-items: center;
-		background-color: var(--color-drexel-orange-dark);
+		background-color: var(--color-purple-600);
 		border: 0;
 		border-radius: calc(var(--radius) / 2);
 		color: var(--color-white);
@@ -401,6 +401,21 @@
 		text-overflow: ellipsis;
 		white-space: nowrap;
 		width: 100%;
+
+		&.program-anim,
+		&.program-vrim {
+			background-color: var(--color-drexel-orange-dark);
+		}
+
+		&.program-gdap,
+		&.program-gmap {
+			background-color: var(--color-red-600);
+		}
+
+		&.program-idm,
+		&.program-uxid {
+			background-color: var(--color-blue-600);
+		}
 	}
 
 	.weekday-selector {
