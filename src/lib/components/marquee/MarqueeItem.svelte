@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
+	import QRCode from 'qrcode';
 	import { get_date_and_day, truncate_string } from '$lib/scripts/utils';
 
 	const initial_truncation_limit = 290;
@@ -21,21 +22,6 @@
 		return lede?.textContent?.trim() ?? '';
 	}
 
-	/**
-	 * Extracts the type of post from its slug.
-	 * Sets a specific priority for QR codes.
-	 * @param {string} slug The post slug.
-	 * @returns {string} The type of post.
-	 */
-	function parse_slug(slug: string): string {
-		const classes = slug.split(',');
-		if (classes.includes('events')) return 'events';
-		if (classes.includes('alumni')) return 'alumni';
-		if (classes.includes('news')) return 'news';
-		if (classes.includes('awards')) return 'awards';
-		return '';
-	}
-
 	$effect(() => {
 		// Skip during SSR or if post is not yet loaded
 		if (!browser || !post || post === undefined) return;
@@ -51,6 +37,30 @@
 		if (browser) {
 			lede = truncate_string(extract_lede(post.post_content), truncate_limit);
 		}
+	});
+
+	let url = `https://digm.drexel.edu/${post.post_name}`;
+	let qr_svg: string | undefined = $state('');
+	let error: string | undefined;
+
+	async function generate_qr_code(url: string) {
+		try {
+			qr_svg = await QRCode.toString(url, {
+				type: 'svg',
+				margin: 2,
+				color: {
+					dark: '#ffffff',
+					light: '#9493000'
+				}
+			});
+		} catch (err) {
+			error = (err as Error).message;
+			console.error(error);
+		}
+	}
+
+	$effect(() => {
+		generate_qr_code(url);
 	});
 </script>
 
@@ -76,25 +86,22 @@
 			</ul>
 		{/if}
 	</div>
-	<div class="qr-code">
-		<svg><use href="#qr-{parse_slug(post.term_slug)}" /></svg>
-	</div>
+	{#if qr_svg}
+		<div class="qr-code">
+			{@html qr_svg}
+		</div>
+	{/if}
 </div>
 
 <style>
 	.qr-code {
 		--code-size: 80px;
 
-		bottom: 6px;
+		bottom: 12px;
 		height: var(--code-size);
 		position: absolute;
-		right: 6px;
+		right: 18px;
 		width: var(--code-size);
-
-		svg {
-			height: var(--code-size);
-			width: var(--code-size);
-		}
 	}
 
 	.event {
