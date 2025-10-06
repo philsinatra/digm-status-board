@@ -3,9 +3,7 @@
 </script>
 
 <section id="brand">
-	<div class="brand">
-		<svg><use href="#brand" /></svg>
-	</div>
+	<div class="brand"></div>
 	{#if (innerWidth.current ?? 0) >= 1920}
 		<div class="message">
 			<p>Download the<br />DIGM Status Web App</p>
@@ -21,22 +19,20 @@
 		color: var(--color-drexel-gold);
 		display: grid;
 		grid-area: brand;
-		height: clamp(80px, 8vw, 100px);
 		overflow: hidden;
+		padding: var(--space-medium);
 		place-items: center;
 		position: relative;
 
 		.brand {
+			background-color: var(--color-drexel-gold);
+			color: var(--color-drexel-gold);
 			height: min(60cqh, 80px);
-			width: auto;
-
-			svg {
-				height: 100%;
-				max-width: 250px;
-				position: relative;
-				width: auto;
-				z-index: 30;
-			}
+			mask-image: url('/images/brand.svg');
+			mask-position: center;
+			mask-repeat: no-repeat;
+			mask-size: contain;
+			width: 100%;
 		}
 
 		@media screen and (width >= 768px) {
@@ -56,7 +52,13 @@
 		@media screen and (width >= 1920px) {
 			column-gap: var(--space-medium);
 			grid-template-columns: repeat(2, 1fr);
+			padding-block: 0;
 			place-items: center start;
+
+			.brand {
+				max-height: 100px;
+				padding: 0;
+			}
 
 			.message {
 				align-items: center;

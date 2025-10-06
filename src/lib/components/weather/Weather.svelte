@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { fetchWeatherApi } from 'openmeteo';
+	import { innerWidth } from 'svelte/reactivity/window';
 	import Bubbles from '$lib/components/bubbles/Bubbles.svelte';
 
 	type WeatherData = {
@@ -8,6 +9,7 @@
 			weather_code: number | null;
 			relative_humidity_2m: number | null;
 			wind_speed_10m: number | null;
+			precipitation: number | null;
 		};
 	};
 
@@ -16,9 +18,12 @@
 			temperature_2m: null,
 			weather_code: null,
 			relative_humidity_2m: null,
-			wind_speed_10m: null
+			wind_speed_10m: null,
+			precipitation: null
 		}
 	});
+
+	$inspect(weather_data.current.precipitation);
 
 	// https://open-meteo.com/en/docs?current=temperature_2m,precipitation&temperature_unit=fahrenheit&wind_speed_unit=mph&precipitation_unit=inch#weather_variable_documentation
 	const weather_codes: Record<number, { status: string; icon: string }> = {
@@ -56,7 +61,13 @@
 			const params = {
 				latitude: latitude,
 				longitude: longitude,
-				current: ['temperature_2m', 'weather_code', 'relative_humidity_2m', 'wind_speed_10m'],
+				current: [
+					'temperature_2m',
+					'weather_code',
+					'relative_humidity_2m',
+					'wind_speed_10m',
+					'precipitation'
+				],
 				wind_speed_unit: 'mph',
 				temperature_unit: 'fahrenheit',
 				precipitation_unit: 'inch'
@@ -84,7 +95,8 @@
 						temperature_2m: Number(current?.variables(0)!.value().toFixed(1)),
 						weather_code: Number(current?.variables(1)!.value().toFixed(1)),
 						relative_humidity_2m: Number(current?.variables(2)!.value().toFixed(1)),
-						wind_speed_10m: Number(current?.variables(3)!.value().toFixed(1))
+						wind_speed_10m: Number(current?.variables(3)!.value().toFixed(1)),
+						precipitation: Number(current?.variables(4)!.value().toFixed(1))
 					}
 				};
 			}
@@ -144,6 +156,15 @@
 							<svg><use href="#ico-fa-wind" /></svg>
 						</div>
 						<p class="data-point wind-speed">{weather_data.current.wind_speed_10m} mph</p>
+						<p class="label">Wind</p>
+					</div>
+				{/if}
+				{#if (innerWidth.current ?? 0) >= 720}
+					<div class="wind">
+						<div class="icon">
+							<svg><use href="#ico-fa-wind" /></svg>
+						</div>
+						<p class="data-point wind-speed">{weather_data.current.precipitation} mph</p>
 						<p class="label">Wind</p>
 					</div>
 				{/if}
@@ -252,6 +273,10 @@
 			@media screen and (width >= 570px) {
 				grid-template-columns: repeat(2, 1fr);
 			}
+
+			/* @media screen and (width >= 720px) {  */
+			/*     grid-template-columns: 1fr 2fr; */
+			/* } */
 
 			@media screen and (width >= 768px) {
 				padding-inline: var(--space-large) calc(var(--space-small) + 0.25em);
