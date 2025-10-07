@@ -440,7 +440,7 @@
 			transition: background-color var(--duration-short) ease;
 
 			&.selected {
-				background-color: var(--color-drexel-blue-light);
+				background-color: var(--color-emerald-600);
 				color: var(--color-white);
 			}
 
