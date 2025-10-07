@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { fetchWeatherApi } from 'openmeteo';
-	import { innerWidth } from 'svelte/reactivity/window';
+	// import { innerWidth } from 'svelte/reactivity/window';
 	import Bubbles from '$lib/components/bubbles/Bubbles.svelte';
 
 	type WeatherData = {
@@ -127,7 +127,7 @@
 		{#if weather_data.current}
 			{#if weather_data.current.temperature_2m}
 				<div class="currently">
-					<p>Currently Outside</p>
+					<p class="currently-label">Currently</p>
 					<p class="temperature">{weather_data.current.temperature_2m}°F</p>
 					{#if has_weather_code(weather_data)}
 						<p class="conditions">
@@ -159,15 +159,13 @@
 						<p class="label">Wind</p>
 					</div>
 				{/if}
-				{#if (innerWidth.current ?? 0) >= 720}
-					<div class="wind">
-						<div class="icon">
-							<svg><use href="#ico-fa-wind" /></svg>
-						</div>
-						<p class="data-point wind-speed">{weather_data.current.precipitation} mph</p>
-						<p class="label">Wind</p>
+				<div class="precipitation">
+					<div class="icon">
+						<svg><use href="#ico-rain" /></svg>
 					</div>
-				{/if}
+					<p class="data-point precipitation-total">{weather_data.current.precipitation} in</p>
+					<p class="label">Precipitation</p>
+				</div>
 			</div>
 		{/if}
 	</div>
@@ -176,11 +174,7 @@
 
 <style>
 	#weather {
-		background: linear-gradient(
-			to right,
-			var(--color-drexel-blue-dark),
-			var(--color-drexel-green-light)
-		);
+		background: linear-gradient(to right, var(--color-drexel-blue-dark), var(--color-neutral-700));
 		border-radius: var(--radius);
 		color: var(--color-white);
 		grid-area: weather;
@@ -189,161 +183,104 @@
 		position: relative;
 
 		.weather {
-			align-items: center;
 			display: grid;
-			grid-template-columns: 2fr 1fr;
-			height: 100%;
-			padding: var(--space-medium);
-			width: 100%;
+			gap: calc(var(--space-small) + 4px);
+			padding: var(--space-medium) var(--space-small);
 
-			> * p {
-				font-size: var(--font-size);
-				line-height: 1;
+			p {
 				margin: 0;
 			}
 
-			p.label {
-				font-size: var(--font-size-xx-small);
-			}
-
-			p.data-point {
-				font-size: var(--font-size);
-				font-weight: 600;
-			}
-
 			.currently {
-				display: grid;
-				row-gap: var(--space-small);
+				display: flex;
+				font-size: clamp(var(--font-size-small), 4cqw, 24px);
+				font-weight: 500;
+				gap: var(--space-small);
+				justify-content: center;
+				width: 100%;
 
 				.temperature {
-					font-size: calc(var(--font-size-xx-large) + 0.5em);
-					font-weight: 500;
+					font-weight: 700;
 				}
 			}
 
 			.weather-details {
 				display: grid;
-				justify-self: end;
-				row-gap: var(--space-medium);
-				width: 100%;
+				gap: var(--space-small);
+				grid-template-columns: repeat(3, 1fr);
+				margin-inline: auto;
+				text-align: center;
 
-				& > div {
-					display: grid;
-					row-gap: calc(var(--space-small) / 2);
-					text-align: center;
+				> div {
+					display: flex;
+					flex-direction: column;
+					gap: calc(var(--space-small) / 2);
 				}
 
-				.humidity {
-					display: none;
+				.data-point {
+					font-size: var(--font-size);
 				}
 
-				.icon {
-					display: grid;
-					height: 24px;
-					place-items: center;
-					width: 100%;
-
-					svg {
-						height: 100%;
-						width: 100%;
-					}
-				}
-			}
-
-			@media screen and (width >= 460px) {
-				grid-template-columns: 2fr 1.5fr;
-				padding-inline: var(--space-large);
-
-				.weather-details {
-					max-width: 90px;
-				}
-			}
-
-			@media screen and (width >= 500px) {
-				.weather-details {
-					grid-template-columns: repeat(2, 1fr);
-					max-width: 200px;
-
-					.humidity {
-						display: grid;
-					}
-				}
-			}
-
-			@media screen and (width >= 570px) {
-				grid-template-columns: repeat(2, 1fr);
-			}
-
-			/* @media screen and (width >= 720px) {  */
-			/*     grid-template-columns: 1fr 2fr; */
-			/* } */
-
-			@media screen and (width >= 768px) {
-				padding-inline: var(--space-large) calc(var(--space-small) + 0.25em);
-
-				> * p {
-					font-size: calc(var(--font-size-small) + 0.25em);
-				}
-
-				p.data-point {
-					font-size: calc(var(--font-size) - 0.25em);
-				}
-			}
-
-			@media screen and (width >= 1340px) {
-				grid-template-columns: 2fr 1fr;
-				padding-inline: var(--space-large);
-
-				> * p {
+				.label {
 					font-size: var(--font-size-small);
 				}
 
-				p.label {
-					font-size: var(--font-size-xx-small);
+				.icon {
+					svg {
+						color: var(--color-white);
+						height: 32px;
+						width: 32px;
+					}
 				}
+			}
 
-				p.data-point {
-					font-size: calc(var(--font-size-small) + 0.75em);
+			@media screen and (width >= 768px) {
+				.currently {
+					font-size: 20px;
+				}
+			}
+
+			@media screen and (width >= 1280px) {
+				grid-template-columns: 120px 1fr;
+				height: 100%;
+				padding: var(--space-medium);
+
+				.currently {
+					flex-direction: column;
+					text-align: center;
+
+					.temperature {
+						font-size: var(--font-size-large);
+					}
 				}
 
 				.weather-details {
-					width: 345px;
+					align-content: center;
+					justify-self: end;
+					margin: 0;
+				}
+			}
+
+			@media screen and (width >= 1920px) {
+				height: auto;
+				min-height: unset;
+				padding: 0.75rem var(--space-medium) var(--space-small);
+
+				.currently {
+					font-size: 14px;
+					text-align: left;
+				}
+
+				.weather-details {
+					.data-point {
+						font-size: var(--font-size-small);
+					}
 				}
 			}
 		}
 
 		@media screen and (width >= 1920px) {
 			min-height: unset;
-
-			.weather {
-				padding: var(--space-small) var(--space-medium);
-
-				> * p {
-					font-size: var(--font-size-small);
-				}
-
-				p.label {
-					font-size: var(--font-size-xxxx-small);
-				}
-
-				p.data-point {
-					font-size: var(--font-size-x-small);
-				}
-
-				.weather-details {
-					max-width: unset;
-					min-width: unset;
-					width: auto;
-				}
-
-				.currently {
-					row-gap: calc(var(--space-small) / 2);
-
-					.temperature {
-						font-size: var(--font-size-x-large);
-					}
-				}
-			}
 		}
 	}
 </style>

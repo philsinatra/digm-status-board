@@ -3,21 +3,21 @@ import type { GalleryLoadResponse } from '$lib/types';
 import { Database } from '$lib/server/database/database';
 
 export class GalleryService {
-    constructor(private db: Database) { }
+	constructor(private db: Database) {}
 
-    async get_posts(page: number, posts_per_page: number): Promise<GalleryLoadResponse> {
-        try {
-            const offset = (page - 1) * posts_per_page;
+	async get_posts(page: number, posts_per_page: number): Promise<GalleryLoadResponse> {
+		try {
+			const offset = (page - 1) * posts_per_page;
 
-            const connection = await this.db.connect();
-            if (!connection) {
-                return {
-                    success: false,
-                    error: 'Failed to connect to database'
-                };
-            }
+			const connection = await this.db.connect();
+			if (!connection) {
+				return {
+					success: false,
+					error: 'Failed to connect to database'
+				};
+			}
 
-            const query = `
+			const query = `
         SELECT
           p.id,
           p.post_title,
@@ -92,14 +92,14 @@ export class GalleryService {
         ORDER BY p.post_date DESC
         LIMIT ?, ?`;
 
-            const query_params: (string | number)[] = [offset, posts_per_page];
+			const query_params: (string | number)[] = [offset, posts_per_page];
 
-            const [rows] = (await connection.query(query, query_params)) as unknown as [
-                GalleryLoadResponse['posts']
-            ];
+			const [rows] = (await connection.query(query, query_params)) as unknown as [
+				GalleryLoadResponse['posts']
+			];
 
-            // Count total posts for pagination
-            const count_query = `
+			// Count total posts for pagination
+			const count_query = `
             SELECT COUNT(DISTINCT p.ID) as total
             FROM wp_posts p
             LEFT JOIN wp_term_relationships tr ON p.ID = tr.object_id
@@ -125,29 +125,29 @@ export class GalleryService {
               ) >= CURDATE()
             )`;
 
-            const [count_results] = (await connection.query(count_query)) as unknown as [
-                { total: number }[]
-            ];
+			const [count_results] = (await connection.query(count_query)) as unknown as [
+				{ total: number }[]
+			];
 
-            const total_posts = count_results[0]?.total ?? 0;
-            const total_pages = Math.ceil(total_posts / posts_per_page);
+			const total_posts = count_results[0]?.total ?? 0;
+			const total_pages = Math.ceil(total_posts / posts_per_page);
 
-            return {
-                posts: rows,
-                success: true,
-                total_posts,
-                current_page: page,
-                total_pages
-            };
-        } catch (error) {
-            console.error('Database error:', error);
+			return {
+				posts: rows,
+				success: true,
+				total_posts,
+				current_page: page,
+				total_pages
+			};
+		} catch (error) {
+			console.error('Database error:', error);
 
-            const db_error = error as Error;
-            return {
-                success: false,
-                error: 'Database error occurred',
-                details: db_error.message
-            };
-        }
-    }
+			const db_error = error as Error;
+			return {
+				success: false,
+				error: 'Database error occurred',
+				details: db_error.message
+			};
+		}
+	}
 }
