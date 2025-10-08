@@ -71,11 +71,7 @@ export class GalleryService {
         WHERE p.post_type = "post"
         AND p.post_status = "publish"
         AND (
-          t.slug = "events" OR
-          t.slug = "alumni" OR
-          t.slug = "news" OR
-          t.slug = "awards" OR
-          t.slug = "messages"
+          t.slug = "status-board"
         )
         AND (
           t.slug != "events" OR
