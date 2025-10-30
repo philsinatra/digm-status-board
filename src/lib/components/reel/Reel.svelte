@@ -80,6 +80,23 @@
 		grid-area: reel;
 		overflow: hidden;
 
+		.reel {
+			align-items: center;
+			/* background-color: var(--color-black); */
+			border-radius: var(--radius);
+			display: flex;
+			height: 100%;
+			justify-content: center;
+			overflow: hidden;
+			width: 100%;
+
+			video {
+				height: 100%;
+				object-fit: cover;
+				width: 100%;
+			}
+		}
+
 		@media screen and (width >= 1920px) {
 			aspect-ratio: unset;
 		}

@@ -90,6 +90,7 @@
 		}
 
 		@media screen and (width >= 1920px) {
+			gap: var(--space-small);
 			grid-auto-columns: 0;
 			grid-template-areas:
 				'brand brand brand brand brand faculty faculty faculty faculty countdown countdown countdown'
@@ -101,6 +102,7 @@
 			max-height: 1080px;
 			max-width: 1920px;
 			overflow: hidden;
+			padding: var(--space-large);
 		}
 	}
 </style>
