@@ -1,5 +1,31 @@
 <script lang="ts">
+	import QRCode from 'qrcode';
 	import { innerWidth } from 'svelte/reactivity/window';
+	import '$lib/components/brand/brand.css';
+
+	const url = 'https://digmstatus.westphal.drexel.edu/';
+	let qr_svg: string | undefined = $state('');
+	let error: string | undefined;
+
+	async function generate_qr_code(url: string) {
+		try {
+			qr_svg = await QRCode.toString(url, {
+				type: 'svg',
+				margin: 2,
+				color: {
+					dark: '#ffffff',
+					light: '#9493000'
+				}
+			});
+		} catch (err) {
+			error = (err as Error).message;
+			console.error(error);
+		}
+	}
+
+	$effect(() => {
+		generate_qr_code(url);
+	});
 </script>
 
 <section id="brand">
@@ -7,7 +33,7 @@
 	{#if (innerWidth.current ?? 0) >= 1920}
 		<div class="message">
 			<p>Download the<br />DIGM Status Web App</p>
-			<svg><use href="#qr-status-board" /></svg>
+			{@html qr_svg}
 		</div>
 	{/if}
 </section>
@@ -65,6 +91,7 @@
 				color: var(--color-white);
 				display: flex;
 				justify-content: flex-end;
+				max-height: 64px;
 				position: relative;
 				row-gap: var(--space-medium);
 				text-align: right;
@@ -78,13 +105,6 @@
 					line-height: var(--line-height);
 					margin: 0;
 					text-align: center;
-				}
-
-				svg {
-					color: var(--color-white);
-					height: 84px;
-					translate: 12px 2px;
-					width: 84px;
 				}
 			}
 		}

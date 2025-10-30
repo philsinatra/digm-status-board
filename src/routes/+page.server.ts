@@ -17,7 +17,7 @@ const gallery_service = new GalleryService(db);
 export const load = async ({ url, depends }: LoadEvent): Promise<GalleryLoadResponse> => {
 	depends('app:gallery');
 	const page = Number(url.searchParams.get('page')) || 1;
-	const posts_per_page = 12;
+	const posts_per_page = 25;
 
 	return await gallery_service.get_posts(page, posts_per_page);
 };

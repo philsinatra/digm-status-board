@@ -183,8 +183,8 @@
 				table {
 					tbody {
 						tr {
-							height: 45px;
-							min-height: 45px;
+							height: 42px;
+							min-height: 42px;
 						}
 					}
 				}

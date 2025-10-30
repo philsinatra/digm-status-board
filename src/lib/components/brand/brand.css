@@ -1,0 +1,13 @@
+#brand {
+	@media screen and (width >= 1920px) {
+		.message {
+			svg {
+				--dims: 84px;
+
+				height: var(--dims);
+				translate: 10px 1px;
+				width: var(--dims);
+			}
+		}
+	}
+}

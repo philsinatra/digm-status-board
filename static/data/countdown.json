@@ -1,30 +1,4 @@
 [
-	{ "date_time": "2025-09-19T00:00:00.000Z", "title": "Last day of Summer Co-op" },
-	{ "date_time": "2025-09-23T00:00:00.000Z", "title": "Classes and Co-op Begin" },
-	{
-		"date_time": "2025-09-27T00:00:00.000Z",
-		"title": "Last day to secure a Closed Section Override"
-	},
-	{
-		"date_time": "2025-09-27T00:00:00.000Z",
-		"title": "Last day to Add/Drop a course with Academic Advisor assistance"
-	},
-	{
-		"date_time": "2025-09-27T00:00:00.000Z",
-		"title": "Last day to resolve Financial Holds"
-	},
-	{
-		"date_time": "2025-09-27T00:00:00.000Z",
-		"title": "Last Day to Add/Drop Co-op Employment"
-	},
-	{
-		"date_time": "2025-09-29T00:00:00.000Z",
-		"title": "Last day to Add/Drop a course via DrexelOne"
-	},
-	{
-		"date_time": "2025-10-14T00:00:00.000Z",
-		"title": "Indigenous Peoples' Day (University Holiday)"
-	},
 	{
 		"date_time": "2025-11-05T00:00:00.000Z",
 		"title": "Election Day (No classes)"

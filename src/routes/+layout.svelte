@@ -90,7 +90,7 @@
 		}
 
 		@media screen and (width >= 1920px) {
-			gap: var(--space-small);
+			gap: calc(var(--space-small) / 2);
 			grid-auto-columns: 0;
 			grid-template-areas:
 				'brand brand brand brand brand faculty faculty faculty faculty countdown countdown countdown'

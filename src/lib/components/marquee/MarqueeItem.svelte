@@ -3,7 +3,7 @@
 	import QRCode from 'qrcode';
 	import { get_date_and_day, truncate_string } from '$lib/scripts/utils';
 
-	const initial_truncation_limit = 290;
+	const initial_truncation_limit = 220;
 	let { post } = $props();
 	let lede: string = $state('');
 	let truncate_limit: number = $state(initial_truncation_limit);
@@ -67,30 +67,30 @@
 <div class="event {post.term_slug}">
 	<figure><img src={post.teaser_image} alt={post.post_title} /></figure>
 	<div class="event-content">
-		<div class="event-meta">
-			<h2>{post.post_title}</h2>
+		<h2>{post.post_title}</h2>
+		<div class="event-details">
 			<p>{lede}</p>
+			{#if post.event_start_date}
+				<ul>
+					<li>
+						{get_date_and_day(new Date(post.event_start_date))}
+						{post.event_end_date ? ` - ${get_date_and_day(new Date(post.event_end_date))}` : ''}
+					</li>
+					{#if post.event_location}
+						<li>{post.event_location}</li>
+					{/if}
+					{#if post.event_host}
+						<li>Hosted by: {post.event_host}</li>
+					{/if}
+				</ul>
+			{/if}
 		</div>
-		{#if post.event_start_date}
-			<ul>
-				<li>
-					{get_date_and_day(new Date(post.event_start_date))}
-					{post.event_end_date ? ` - ${get_date_and_day(new Date(post.event_end_date))}` : ''}
-				</li>
-				{#if post.event_location}
-					<li>{post.event_location}</li>
-				{/if}
-				{#if post.event_host}
-					<li>Hosted by: {post.event_host}</li>
-				{/if}
-			</ul>
+		{#if qr_svg}
+			<div class="qr-code">
+				{@html qr_svg}
+			</div>
 		{/if}
 	</div>
-	{#if qr_svg}
-		<div class="qr-code">
-			{@html qr_svg}
-		</div>
-	{/if}
 </div>
 
 <style>
@@ -119,35 +119,27 @@
 		}
 
 		.event-content {
-			display: flex;
-			flex-direction: column;
-			flex-grow: 1;
-			height: 100%;
-			justify-content: space-between;
+			display: grid;
+			grid-template-columns: auto 100px;
 			padding: var(--space-medium);
+			row-gap: var(--space-small);
 
-			.event-meta {
-				display: flex;
-				flex-direction: column;
-				flex-grow: 1;
-				row-gap: var(--space-small);
+			h2,
+			p {
+				margin: 0;
+			}
 
-				h2,
-				p {
-					margin: 0;
-				}
+			h2 {
+				color: var(--color-white);
+				font-size: calc(var(--font-size-medium) * 1.125);
+				grid-column: 1 / -1;
+				text-wrap: pretty;
+			}
 
-				h2 {
-					color: var(--color-white);
-					font-size: var(--font-size-large);
-					text-wrap: pretty;
-				}
-
-				p {
-					color: var(--color-blue-100);
-					font-size: max(1rem, 110%);
-					line-height: var(--line-height);
-				}
+			p {
+				color: var(--color-blue-100);
+				font-size: max(1rem, 110%);
+				line-height: var(--line-height);
 			}
 
 			ul {
@@ -155,7 +147,7 @@
 				display: grid;
 				font-weight: 500;
 				list-style: none;
-				margin: 0;
+				margin: var(--space-small) 0 0;
 				padding: 0;
 				row-gap: calc(var(--space-small) / 2);
 
