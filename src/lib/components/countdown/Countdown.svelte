@@ -68,9 +68,9 @@
 		<thead>
 			<tr>
 				{#if (innerWidth.current ?? 0) < 665}
-					<th>Description</th><th>Countdown</th>
+					<th>Calendar Event</th><th>Countdown</th>
 				{:else}
-					<th>Description</th><th>Date</th><th>Countdown</th>
+					<th>Calendar Event</th><th>Date</th><th>Countdown</th>
 				{/if}
 			</tr>
 		</thead>

@@ -38,7 +38,7 @@
 			{#key active_quote_key}
 				<blockquote transition:fade={{ duration: 500 }}>
 					<p>{$quote_data[active_quote_key]?.quote ?? ''}</p>
-					<p>— {$quote_data[active_quote_key]?.author ?? ''}</p>
+					<p>{$quote_data[active_quote_key]?.author ?? ''}</p>
 				</blockquote>
 			{/key}
 		{/if}

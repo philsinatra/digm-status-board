@@ -236,8 +236,14 @@
 								aria-label={`${item.subj_code} ${item.crse_numb} with ${item.all_instructors?.split(', ').reverse().join(' ')} from ${item.begin_time} to ${item.end_time}`}
 								onclick={() => modal_data?.set(item)}
 							>
-								<!-- {`${item.subj_code} ${item.crse_numb} (${item.all_instructors?.split(', ').reverse().join(' ')})`} -->
-								{`${item.subj_code} ${item.crse_numb}`}
+								<span>{`${item.subj_code} ${item.crse_numb}`}</span>
+								{#if item.all_instructors}
+									<span>
+										{(item.end_time ?? 0) - (item.begin_time ?? 0) >= 200
+											? `(${item.all_instructors?.split(', ').reverse().join(' ')})`
+											: ''}
+									</span>
+								{/if}
 							</button>
 						</div>
 					{/if}
@@ -391,8 +397,9 @@
 		color: var(--color-white);
 		cursor: pointer;
 		display: flex;
-		font-size: var(--font-size-xxxx-small);
+		font-size: calc(var(--font-size-xxxx-small) - 0.75px);
 		font-weight: 550;
+		gap: var(--space-small);
 		height: 94%;
 		justify-content: center;
 		outline: 0;

@@ -70,7 +70,7 @@
 		{#if is_visible && current_quote}
 			<blockquote class="text-animate" transition:fade={{ duration: 500 }}>
 				<p>{current_quote.quote ?? ''}</p>
-				<p>— {current_quote.author ?? ''}</p>
+				<p>{current_quote.author ?? ''}</p>
 			</blockquote>
 		{/if}
 	</div>
@@ -149,12 +149,14 @@
 				row-gap: var(--space-medium);
 
 				p {
+					line-height: 1.3;
 					margin: 0;
+					text-align: center;
 					text-wrap: balance;
 					width: 100%;
 
 					&:last-of-type {
-						text-align: right;
+						font-size: 80%;
 					}
 				}
 			}
