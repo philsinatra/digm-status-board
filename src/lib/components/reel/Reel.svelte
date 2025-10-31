@@ -1,5 +1,4 @@
 <script lang="ts">
-	// TODO: Debug video loop
 	import { innerWidth } from 'svelte/reactivity/window';
 	import { writable, type Writable } from 'svelte/store';
 	import type { Reel } from '$lib/types';
@@ -21,9 +20,10 @@
 	});
 
 	let current_video_index = $state(0);
+	let current_reel = $derived($reel_data[current_video_index]);
 	let is_large_screen = $state(false);
 	let video_element: HTMLVideoElement | undefined = $state();
-	let current_reel = $derived($reel_data[current_video_index]);
+	let video_extension = $derived(is_large_screen ? 'webm' : 'mp4');
 
 	function check_screen_size() {
 		is_large_screen = (innerWidth.current ?? 0) >= 1920;
@@ -56,19 +56,21 @@
 
 <section id="reel">
 	<div class="reel">
-		{#key current_video_index}
-			<video
-				autoplay={is_large_screen}
-				bind:this={video_element}
-				controls={!is_large_screen}
-				muted={is_large_screen}
-				onended={handle_video_end}
-				poster={current_reel?.poster}
-				preload="auto"
-				src={current_reel?.video}
-			>
-			</video>
-		{/key}
+		{#if current_reel}
+			{#key current_video_index}
+				<video
+					autoplay={is_large_screen}
+					bind:this={video_element}
+					controls={!is_large_screen}
+					muted={is_large_screen}
+					onended={handle_video_end}
+					poster={current_reel?.poster}
+					preload="auto"
+					src={`${current_reel?.video}.${video_extension}`}
+				>
+				</video>
+			{/key}
+		{/if}
 	</div>
 </section>
 
