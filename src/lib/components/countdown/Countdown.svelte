@@ -181,10 +181,15 @@
 		@media screen and (width >= 1920px) {
 			.countdown {
 				table {
-					tbody {
+					thead {
 						tr {
 							height: 42px;
-							min-height: 42px;
+						}
+					}
+
+					tbody {
+						tr {
+							height: 32px;
 						}
 					}
 				}

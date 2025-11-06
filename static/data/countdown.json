@@ -9,7 +9,7 @@
 	},
 	{
 		"date_time": "2025-11-26T00:00:00.000Z",
-		"title": "Thanksgiving Holiday begins at close of classes"
+		"title": "Thanksgiving Holiday begins"
 	},
 	{ "date_time": "2025-12-02T00:00:00.000Z", "title": "Classes Resume - 8 a.m." },
 	{
@@ -26,6 +26,30 @@
 	},
 	{
 		"date_time": "2025-12-23T00:00:00.000Z",
-		"title": "Administrative Offices CLOSED for Winter Break"
+		"title": "Administrative Offices Closed"
+	},
+	{
+		"date_time": "2026-01-05T00:00:00.000Z",
+		"title": "Classes and Co-op Begin"
+	},
+	{
+		"date_time": "2026-01-19T00:00:00.000Z",
+		"title": "Martin Luther King, Jr. Day (University Holiday)"
+	},
+	{
+		"date_time": "2026-03-14T00:00:00.000Z",
+		"title": "Classes End"
+	},
+	{
+		"date_time": "2026-03-16T00:00:00.000Z",
+		"title": "Term Examinations Begin"
+	},
+	{
+		"date_time": "2026-03-21T00:00:00.000Z",
+		"title": "Term Examinations End"
+	},
+	{
+		"date_time": "2026-03-27T00:00:00.000Z",
+		"title": "Last day of Co-op for Winter Term"
 	}
 ]
