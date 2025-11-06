@@ -3,6 +3,41 @@
 	import '$lib/styles/app.css';
 
 	let { children } = $props();
+
+	$effect(() => {
+		console.log('refresh');
+		const REFRESH_KEY = 'digm-status-page-refresh';
+		const SESSION_KEY = 'refresh-scheduled';
+
+		if (sessionStorage.getItem(SESSION_KEY)) return;
+
+		sessionStorage.setItem(SESSION_KEY, 'true');
+
+		const today = new Date().toDateString();
+
+		if (localStorage.getItem(REFRESH_KEY) === today) return;
+
+		const refresh_time = {
+			hour: 14,
+			minute: 0
+		};
+
+		const target = new Date();
+		target.setHours(refresh_time.hour, refresh_time.minute, 0, 0);
+
+		if (target <= new Date()) target.setDate(target.getDate() + 1);
+
+		const delay = target.getTime() - Date.now();
+		const timer = setTimeout(() => {
+			localStorage.setItem(REFRESH_KEY, new Date().toDateString());
+			window.location.reload();
+		}, delay);
+
+		return () => {
+			clearTimeout(timer);
+			sessionStorage.removeItem(SESSION_KEY);
+		};
+	});
 </script>
 
 <Spritesheet />

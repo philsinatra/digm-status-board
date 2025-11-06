@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { fetchWeatherApi } from 'openmeteo';
-	// import { innerWidth } from 'svelte/reactivity/window';
 	import Bubbles from '$lib/components/bubbles/Bubbles.svelte';
 
 	type WeatherData = {
@@ -22,8 +21,6 @@
 			precipitation: null
 		}
 	});
-
-	$inspect(weather_data.current.precipitation);
 
 	// https://open-meteo.com/en/docs?current=temperature_2m,precipitation&temperature_unit=fahrenheit&wind_speed_unit=mph&precipitation_unit=inch#weather_variable_documentation
 	const weather_codes: Record<number, { status: string; icon: string }> = {
