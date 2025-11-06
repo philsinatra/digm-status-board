@@ -770,5 +770,27 @@
 		"begin_time": 1500,
 		"end_time": 1750,
 		"day": "W"
+	},
+	{
+		"subj_code": "UNIV",
+		"crse_numb": 101,
+		"seq_numb": 9,
+		"course_title": "University",
+		"all_instructors": "Thompson, Jervis",
+		"room_code": 239,
+		"begin_time": 1630,
+		"end_time": 1720,
+		"day": "R"
+	},
+	{
+		"subj_code": "DIGM",
+		"crse_numb": 490,
+		"seq_numb": 1,
+		"course_title": "Digital Media Senior Project",
+		"all_instructors": "Finamore, Troy",
+		"room_code": 239,
+		"begin_time": 930,
+		"end_time": 1220,
+		"day": "R"
 	}
 ]

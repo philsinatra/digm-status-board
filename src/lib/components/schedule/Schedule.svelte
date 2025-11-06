@@ -237,10 +237,10 @@
 								onclick={() => modal_data?.set(item)}
 							>
 								<span>{`${item.subj_code} ${item.crse_numb}`}</span>
-								{#if item.all_instructors}
+								{#if item.all_instructors && (item.end_time ?? 0) - (item.begin_time ?? 0) >= 200}
 									<span>
 										{(item.end_time ?? 0) - (item.begin_time ?? 0) >= 200
-											? `(${item.all_instructors?.split(', ').reverse().join(' ')})`
+											? `(${item.all_instructors?.split(', ')[0]})`
 											: ''}
 									</span>
 								{/if}
@@ -422,6 +422,14 @@
 		&.program-idm,
 		&.program-uxid {
 			background-color: var(--color-blue-600);
+		}
+
+		&.program-univ {
+			background-color: var(--color-pink-600);
+		}
+
+		&.program-digm {
+			background-color: var(--color-emerald-600);
 		}
 	}
 
