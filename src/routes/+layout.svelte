@@ -18,7 +18,7 @@
 		if (localStorage.getItem(REFRESH_KEY) === today) return;
 
 		const refresh_time = {
-			hour: 14,
+			hour: 3,
 			minute: 0
 		};
 
