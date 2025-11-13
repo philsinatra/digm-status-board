@@ -30,6 +30,7 @@
 	let current_position = $state(0);
 	let grid_wrapper: HTMLDivElement;
 	let grid_el: HTMLDivElement;
+	let last_day = $state(new Date().getDay());
 
 	function format_time(time: number): string {
 		const hour = Math.floor(time / 100);
@@ -157,6 +158,14 @@
 
 	$effect(() => {
 		return current_time.subscribe(() => {
+			const time = get(current_time);
+			const today = time.getDay();
+
+			if (today !== last_day) {
+				selected_day_state = days[today === 0 ? 6 : today - 1] || 'MON';
+				center_current_time();
+				last_day = today;
+			}
 			if (grid_el && is_current_time_within_bounds()) {
 				current_position = get_current_time_left_px();
 			} else {
