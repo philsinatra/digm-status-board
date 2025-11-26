@@ -1,0 +1,7 @@
+.emoji {
+	--dims: 20px;
+
+	height: var(--dims);
+	vertical-align: -4px;
+	width: var(--dims);
+}

@@ -6,9 +6,29 @@
 	import { init_event_source } from '$lib/scripts/eventSource';
 	import { slugify } from '$lib/scripts/utils';
 	import '$lib/styles/components/_tables.css';
+	import './faculty.css';
 
 	const { data_source = 'static/data/faculty.json' } = $props();
 	const faculty_data: Writable<FacultyItem[]> = writable([]);
+
+	function replace_emoji(text: string): string {
+		return text.replace(/[\p{Emoji_Presentation}\p{Extended_Pictographic}]+/gu, (match) => {
+			const code_points = Array.from(match)
+				.map((char) => char.codePointAt(0)!.toString(16).toUpperCase())
+				.join('-');
+
+			const filename = `${code_points}.svg`;
+
+			return `<img class="emoji" src="/svg/openmoji/${filename}" alt="${match}" loading="lazy" />`;
+		});
+	}
+
+	let faculty_with_emoji = $derived(
+		$faculty_data.map((item) => ({
+			...item,
+			name_html: replace_emoji(item.name)
+		}))
+	);
 
 	$effect(() => {
 		return init_event_source({
@@ -47,18 +67,18 @@
 			</tr>
 		</thead>
 		<tbody>
-			{#each $faculty_data as { name, title, office, email } (`faculty-item-${slugify(name)}`)}
+			{#each faculty_with_emoji as { name_html, title, office, email } (`faculty-item-${slugify(name_html)}`)}
 				<tr>
 					{#if (innerWidth.current ?? 0) < 665}
-						<td><a href="mailto:{email}">{name}</a><br />{title}</td>
+						<td><a href="mailto:{email}">{@html name_html}</a><br />{title}</td>
 						<td>{office}</td>
 					{:else if (innerWidth.current ?? 0) < 1920}
-						<td><b>{name}</b></td>
+						<td><b>{@html name_html}</b></td>
 						<td>{title}</td>
 						<td>{office}</td>
 						<td><a href="mailto:{email}">{email}</a></td>
 					{:else}
-						<td style="width: 135px"><b>{name}</b></td>
+						<td style="width: 135px"><b>{@html name_html}</b></td>
 						<td style="width: 135px">{title}</td>
 						<td style="width: 135px">{office}</td>
 						<td style="width: 135px"><a href="mailto:{email}">{email}</a></td>

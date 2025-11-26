@@ -23,7 +23,8 @@
 	let current_reel = $derived($reel_data[current_video_index]);
 	let is_large_screen = $state(false);
 	let video_element: HTMLVideoElement | undefined = $state();
-	let video_extension = $derived(is_large_screen ? 'webm' : 'mp4');
+	// let video_extension = $derived(is_large_screen ? 'webm' : 'mp4');
+	const video_extension = 'mp4';
 
 	function check_screen_size() {
 		is_large_screen = (innerWidth.current ?? 0) >= 1920;
