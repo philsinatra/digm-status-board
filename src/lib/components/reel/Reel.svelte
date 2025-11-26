@@ -19,12 +19,14 @@
 		});
 	});
 
+	const vimeo_id = '320965196';
+	const vimeo_src = `https://player.vimeo.com/video/${vimeo_id}?autoplay=1&loop=1&muted=1&title=0&byline=0&portrait=0&background=1`;
+
 	let current_video_index = $state(0);
 	let current_reel = $derived($reel_data[current_video_index]);
 	let is_large_screen = $state(false);
 	let video_element: HTMLVideoElement | undefined = $state();
-	// let video_extension = $derived(is_large_screen ? 'webm' : 'mp4');
-	const video_extension = 'mp4';
+	let video_extension = $derived(is_large_screen ? 'webm' : 'mp4');
 
 	function check_screen_size() {
 		is_large_screen = (innerWidth.current ?? 0) >= 1920;
@@ -57,7 +59,18 @@
 
 <section id="reel">
 	<div class="reel">
-		{#if current_reel}
+		{#if is_large_screen}
+			<iframe
+				allow="autoplay; fullscreen; picture-in-picture"
+				allowfullscreen
+				frameborder="0"
+				height="100%"
+				loading="lazy"
+				src={vimeo_src}
+				title="DIGM Status Board"
+				width="100%"
+			></iframe>
+		{:else if current_reel}
 			{#key current_video_index}
 				<video
 					autoplay={is_large_screen}
@@ -85,7 +98,6 @@
 
 		.reel {
 			align-items: center;
-			/* background-color: var(--color-black); */
 			border-radius: var(--radius);
 			display: flex;
 			height: 100%;
