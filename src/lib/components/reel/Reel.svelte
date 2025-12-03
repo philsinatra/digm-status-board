@@ -4,15 +4,14 @@
 	let animation_frame: number;
 	let canvas_element: HTMLCanvasElement | undefined = $state();
 	let video_element: HTMLVideoElement | undefined = $state();
-	let is_brightsign = /BrightSign/i.test(navigator.userAgent);
+	// let is_brightsign = /BrightSign/i.test(navigator.userAgent);
+	let is_brightsign = true;
 	let is_ready = $state(false);
 	let video_src = $derived(
 		is_brightsign
 			? 'https://digmcms.westphal.drexel.edu/dswmedia/status_board/sb-001.mp4'
 			: 'https://digmcms.westphal.drexel.edu/dswmedia/status_board/2019-DIGM-StatusBoard.mp4'
 	);
-
-	$inspect('is_brightsign', is_brightsign);
 
 	function setup_canvas_video() {
 		const canvas = canvas_element;
