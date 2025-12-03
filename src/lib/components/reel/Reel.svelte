@@ -1,112 +1,86 @@
-<!-- eslint-disable -->
-<!-- @ts-nocheck -->
-<!-- svelte-ignore a11y_media_has_caption -->
 <script lang="ts">
+	import { innerWidth } from 'svelte/reactivity/window'
+
 	const video_poster = 'https://digmcms.westphal.drexel.edu/dswmedia/poster-black.webp'
-
-	let video_element: HTMLVideoElement | null = $state(null)
-	/* eslint-disable */
-	let video_player: any = null
-	let is_brightsign = $state(false)
-
-	const brightsign_video_url =
-		'https://digmcms.westphal.drexel.edu/dswmedia/status_board/sb-001.mp4'
-	const fallback_video_url =
+	const video_src =
 		'https://digmcms.westphal.drexel.edu/dswmedia/status_board/2019-DIGM-StatusBoard.mp4'
+	const vimeo_id = '320965196'
+	const vimeo_src = `https://player.vimeo.com/video/${vimeo_id}?autoplay=1&loop=1&muted=1&title=0&byline=0&portrait=0&background=1`
 
-	$effect(() => {
-		const win = window as any
-		if (typeof win.VideoPlayer !== 'undefined' || win.brightsign) {
-			is_brightsign = true
-		}
-	})
+	let is_large_screen = $state(false)
+	let video_element: HTMLVideoElement | undefined = $state()
 
-	function setup_brightsign_video() {
-		if (!is_brightsign || video_player || !video_element) return
-
-		const rect = video_element.getBoundingClientRect()
-
-		const BS = window as any
-		const rectangle = new BS.Rectangle(
-			Math.round(rect.left),
-			Math.round(rect.top),
-			Math.round(rect.width),
-			Math.round(rect.height)
-		)
-
-		video_player = new BS.VideoPlayer()
-		video_player.SetRectangle(rectangle)
-		video_player.SetLoopMode(true)
-		video_player.SetVolume(100)
-
-		video_player.PlayFile(brightsign_video_url)
+	function check_screen_size() {
+		is_large_screen = (innerWidth.current ?? 0) >= 1920
 	}
 
 	$effect(() => {
-		if (is_brightsign && video_element) {
-			setTimeout(setup_brightsign_video, 200)
+		check_screen_size()
+
+		const handle_resize = () => {
+			check_screen_size()
 		}
 
+		window.addEventListener('resize', handle_resize)
+
 		return () => {
-			if (video_player?.Stop) video_player.Stop()
+			window.removeEventListener('resize', handle_resize)
 		}
 	})
 </script>
 
 <section id="reel">
 	<div class="reel">
-		{#if is_brightsign}
-			<video
-				bind:this={video_element}
-				autoplay
-				loop
-				muted
-				playsinline
-				poster={video_poster}
-				preload="none"
-				src={brightsign_video_url}
-				style="opacity:0;pointer-events:none;position:absolute;"
-			></video>
+		{#if is_large_screen}
+			<iframe
+				allow="autoplay; fullscreen; picture-in-picture"
+				allowfullscreen
+				frameborder="0"
+				height="100%"
+				loading="lazy"
+				src={vimeo_src}
+				title="DIGM Status Board"
+				width="100%"
+			></iframe>
 		{:else}
 			<video
 				bind:this={video_element}
 				controls
-				loop
-				muted
 				poster={video_poster}
 				preload="auto"
-				src={fallback_video_url}
-			></video>
+				src={video_src}
+			>
+				<track kind="captions" src="" srclang="en" label="No captions available" />
+			</video>
 		{/if}
 	</div>
 </section>
 
 <style>
 	#reel {
-		aspect-ratio: 16/9;
-		background: var(--color-white);
+		aspect-ratio: 16 / 9;
+		background-color: var(--color-white);
 		border-radius: var(--radius);
 		grid-area: reel;
 		overflow: hidden;
-		position: relative;
-	}
 
-	.reel {
-		align-items: center;
-		display: flex;
-		height: 100%;
-		justify-content: center;
-		width: 100%;
-	}
+		.reel {
+			align-items: center;
+			border-radius: var(--radius);
+			display: flex;
+			height: 100%;
+			justify-content: center;
+			overflow: hidden;
+			width: 100%;
 
-	video {
-		height: 100%;
-		object-fit: cover;
-		width: 100%;
-	}
+			video {
+				height: 100%;
+				object-fit: cover;
+				width: 100%;
+			}
+		}
 
-	@media (width >= 1920px) {
-		#reel {
+		@media screen and (width >= 1920px) {
 			aspect-ratio: unset;
 		}
 	}
