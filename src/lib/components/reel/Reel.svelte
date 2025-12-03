@@ -1,266 +1,127 @@
 <script lang="ts">
-	import { innerWidth } from 'svelte/reactivity/window';
-	// import { writable, type Writable } from 'svelte/store';
-	// import type { Reel } from '$lib/types';
-	// import { init_event_source } from '$lib/scripts/eventSource';
-
-	// const { data_source = 'static/data/reels.json' } = $props();
-	// const reel_data: Writable<Reel[]> = writable([]);
-	//
-	// $effect(() => {
-	// 	return init_event_source({
-	// 		data_source,
-	// 		on_message: (data) => {
-	// 			return Array.isArray(data) ? data : [];
-	// 		},
-	// 		target_store: reel_data,
-	// 		log_prefix: 'reel',
-	// 		debug: true
-	// 	});
-	// });
-
 	const video_poster = 'https://digmcms.westphal.drexel.edu/dswmedia/poster-black.webp';
-	const video_src =
-		'https://digmcms.westphal.drexel.edu/dswmedia/status_board/2019-DIGM-StatusBoard.mp4';
-	const vimeo_id = '320965196';
-	const vimeo_src = `https://player.vimeo.com/video/${vimeo_id}?autoplay=1&loop=1&muted=1&title=0&byline=0&portrait=0&background=1`;
 
-	// let current_video_index = $state(0);
-	// let current_reel = $derived($reel_data[current_video_index]);
-	let is_large_screen = $state(false);
+	let animation_frame: number;
+	let canvas_element: HTMLCanvasElement | undefined = $state();
 	let video_element: HTMLVideoElement | undefined = $state();
-	// let video_extension = $derived(is_large_screen ? 'webm' : 'mp4');
+	let is_brightsign = /BrightSign/i.test(navigator.userAgent);
+	let is_ready = $state(false);
+	let video_src = $derived(
+		is_brightsign
+			? 'https://digmcms.westphal.drexel.edu/dswmedia/status_board/sb-001.mp4'
+			: 'https://digmcms.westphal.drexel.edu/dswmedia/status_board/2019-DIGM-StatusBoard.mp4'
+	);
 
-	function check_screen_size() {
-		is_large_screen = (innerWidth.current ?? 0) >= 1920;
+	$inspect('is_brightsign', is_brightsign);
+
+	function setup_canvas_video() {
+		const canvas = canvas_element;
+		const video = video_element;
+
+		if (!canvas || !video) return;
+
+		const ctx = canvas.getContext('2d');
+
+		if (!ctx) return;
+
+		function draw_frame() {
+			if (video && video.readyState >= 2) {
+				if (canvas) {
+					if (canvas.width === 0 || canvas.height === 0) {
+						const rect = canvas.getBoundingClientRect();
+						canvas.width = rect.width;
+						canvas.height = rect.height;
+					}
+
+					ctx?.drawImage(video, 0, 0, canvas.width, canvas.height);
+				}
+			}
+
+			animation_frame = requestAnimationFrame(draw_frame);
+		}
+
+		video.addEventListener('loadedmetadata', () => {
+			// console.log('Video metadata loaded', {
+			// 	videoWidth: video.videoWidth,
+			// 	videoHeight: video.videoHeight,
+			// 	readyState: video.readyState
+			// });
+
+			const rect = canvas.getBoundingClientRect();
+
+			canvas.width = rect.width || video.videoWidth;
+			canvas.height = rect.height || video.videoHeight;
+
+			draw_frame();
+		});
+
+		if (video.readyState >= 2) {
+			// console.log('Video already loaded, starting draw');
+
+			const rect = canvas.getBoundingClientRect();
+
+			canvas.width = rect.width;
+			canvas.height = rect.height;
+
+			draw_frame();
+		}
+
+		if (is_brightsign) {
+			video
+				.play()
+				.then(() => {
+					console.log('Video started playing');
+				})
+				.catch((error) => {
+					console.error('Video play failed:', error);
+				});
+		}
 	}
 
-	// function handle_video_end() {
-	// 	current_video_index = (current_video_index + 1) % $reel_data.length;
-	//
-	// 	if (is_large_screen && video_element) {
-	// 		setTimeout(() => {
-	// 			video_element?.play().catch(console.error);
-	// 		}, 100);
-	// 	}
-	// }
-
 	$effect(() => {
-		check_screen_size();
+		if (is_brightsign) {
+			if (canvas_element && video_element && !is_ready) {
+				console.log('Elements ready, setting up canvas video');
 
-		const handle_resize = () => {
-			check_screen_size();
-		};
+				is_ready = true;
 
-		window.addEventListener('resize', handle_resize);
+				setTimeout(() => {
+					setup_canvas_video();
+				}, 100);
+			}
+		}
 
 		return () => {
-			window.removeEventListener('resize', handle_resize);
+			if (animation_frame) {
+				cancelAnimationFrame(animation_frame);
+			}
 		};
 	});
-
-	// function handle_video_error(error: Event) {
-	// 	const target = event?.target as HTMLVideoElement;
-	// 	console.error('Video error', target.error);
-	//
-	// 	const error_div = document.createElement('div');
-	// 	error_div.style.cssText =
-	// 		'position:fixed;top:0;background:red;color:white;padding:10px;z-index:9999';
-	// 	error_div.textContent = `Error Code: ${target.error?.code}, Message: ${target.error?.message}`;
-	// 	document.body.appendChild(error_div);
-	// }
-	//
-	// function create_debug_display(message: string) {
-	// 	const debug_div = document.createElement('div');
-	// 	debug_div.style.cssText =
-	// 		'position:fixed;top:0;left:0;background:black;color:lime;padding:5px;z-index:9999;font-family:monospace;font-size:12px;max-width:100%;overflow-wrap:break-word;';
-	// 	debug_div.innerHTML = document.querySelector('.debug-info')?.innerHTML || '';
-	// 	debug_div.innerHTML += `<div>${new Date().toLocaleTimeString()}: ${message}</div>`;
-	// 	debug_div.className = 'debug-info';
-	//
-	// 	// Remove old debug div
-	// 	document.querySelector('.debug-info')?.remove();
-	// 	document.body.appendChild(debug_div);
-	// }
-	//
-	// function log_video_state(video: HTMLVideoElement, context: string) {
-	// 	const info = {
-	// 		context,
-	// 		currentTime: video.currentTime,
-	// 		duration: video.duration,
-	// 		readyState: video.readyState, // 0-4 (HAVE_NOTHING to HAVE_ENOUGH_DATA)
-	// 		networkState: video.networkState, // 0-3 (NETWORK_EMPTY to NETWORK_NO_SOURCE)
-	// 		buffered:
-	// 			video.buffered.length > 0 ? `${video.buffered.start(0)}-${video.buffered.end(0)}` : 'none',
-	// 		played: video.played.length > 0 ? `${video.played.start(0)}-${video.played.end(0)}` : 'none',
-	// 		seekable:
-	// 			video.seekable.length > 0 ? `${video.seekable.start(0)}-${video.seekable.end(0)}` : 'none',
-	// 		videoWidth: video.videoWidth,
-	// 		videoHeight: video.videoHeight,
-	// 		paused: video.paused,
-	// 		ended: video.ended,
-	// 		muted: video.muted,
-	// 		volume: video.volume,
-	// 		playbackRate: video.playbackRate,
-	// 		src: video.src,
-	// 		currentSrc: video.currentSrc // This shows what the browser actually loaded
-	// 	};
-	//
-	// 	create_debug_display(`${context}: ${JSON.stringify(info, null, 1)}`);
-	// 	console.log(`Video ${context}:`, info);
-	// }
-	//
-	// function log_detailed_error(video: HTMLVideoElement) {
-	// 	const error = video.error;
-	// 	if (!error) return;
-	//
-	// 	// MediaError codes
-	// 	const error_codes: { [key: number]: string } = {
-	// 		1: 'MEDIA_ERR_ABORTED',
-	// 		2: 'MEDIA_ERR_NETWORK',
-	// 		3: 'MEDIA_ERR_DECODE',
-	// 		4: 'MEDIA_ERR_SRC_NOT_SUPPORTED'
-	// 	};
-	//
-	// 	const error_info = {
-	// 		code: error.code,
-	// 		codeName: error_codes[error.code] || 'UNKNOWN',
-	// 		message: error.message,
-	// 		// Browser/environment info
-	// 		userAgent: navigator.userAgent,
-	// 		cookieEnabled: navigator.cookieEnabled,
-	// 		onLine: navigator.onLine,
-	// 		// Network timing (if available)
-	// 		// connectionType: (navigator as any).connection?.effectiveType || 'unknown',
-	// 		// Video element state
-	// 		readyState: video.readyState,
-	// 		networkState: video.networkState,
-	// 		currentSrc: video.currentSrc,
-	// 		// Document state
-	// 		documentReadyState: document.readyState,
-	// 		pageVisibility: document.visibilityState
-	// 	};
-	//
-	// 	create_debug_display(`ERROR: ${JSON.stringify(error_info, null, 1)}`);
-	// 	console.error('Detailed video error:', error_info);
-	// }
-	//
-	// // Comprehensive event handlers
-	// function setup_video_debugging(video: HTMLVideoElement) {
-	// 	const events = [
-	// 		'loadstart',
-	// 		'durationchange',
-	// 		'loadedmetadata',
-	// 		'loadeddata',
-	// 		'progress',
-	// 		'canplay',
-	// 		'canplaythrough',
-	// 		'playing',
-	// 		'waiting',
-	// 		'seeking',
-	// 		'seeked',
-	// 		'ended',
-	// 		'error',
-	// 		'abort',
-	// 		'emptied',
-	// 		'stalled',
-	// 		'suspend',
-	// 		'play',
-	// 		'pause',
-	// 		'ratechange',
-	// 		'resize',
-	// 		'volumechange'
-	// 	];
-	//
-	// 	events.forEach((eventType) => {
-	// 		video.addEventListener(eventType, () => {
-	// 			if (eventType === 'error') {
-	// 				log_detailed_error(video);
-	// 			} else {
-	// 				log_video_state(video, `EVENT-${eventType}`);
-	// 			}
-	// 		});
-	// 	});
-	//
-	// 	// Initial state
-	// 	log_video_state(video, 'INITIAL');
-	//
-	// 	// Periodic state logging (helpful for BrightSign timing issues)
-	// 	const interval = setInterval(() => {
-	// 		if (video.parentNode) {
-	// 			log_video_state(video, 'PERIODIC');
-	// 		} else {
-	// 			clearInterval(interval);
-	// 		}
-	// 	}, 2000);
-	// }
-	//
-	// // Network connectivity test
-	// function test_network_access() {
-	// 	// const test_url = `${current_reel?.video}.mp4`;
-	// 	const test_url = video_src;
-	//
-	// 	console.log('test_url', test_url);
-	//
-	// 	fetch(test_url, { method: 'HEAD' })
-	// 		.then((response) => {
-	// 			create_debug_display(
-	// 				`FETCH TEST: Status ${response.status}, Headers: ${JSON.stringify([...response.headers])}`
-	// 			);
-	// 		})
-	// 		.catch((error) => {
-	// 			create_debug_display(`FETCH ERROR: ${error.message}`);
-	// 		});
-	// }
-	//
-	// // Browser capability detection
-	// function log_browser_capabilities() {
-	// 	const video = document.createElement('video');
-	// 	const capabilities = {
-	// 		canPlayMP4: video.canPlayType('video/mp4'),
-	// 		canPlayWebM: video.canPlayType('video/webm'),
-	// 		canPlayH264: video.canPlayType('video/mp4; codecs="avc1.42E01E"'),
-	// 		canPlayVP8: video.canPlayType('video/webm; codecs="vp8"'),
-	// 		canPlayVP9: video.canPlayType('video/webm; codecs="vp9"'),
-	// 		supportsHLS: video.canPlayType('application/vnd.apple.mpegurl'),
-	// 		userAgent: navigator.userAgent,
-	// 		// platform: navigator.platform,
-	// 		language: navigator.language,
-	// 		windowSize: `${window.innerWidth}x${window.innerHeight}`,
-	// 		screenSize: `${screen.width}x${screen.height}`,
-	// 		devicePixelRatio: window.devicePixelRatio
-	// 	};
-	//
-	// 	create_debug_display(`CAPABILITIES: ${JSON.stringify(capabilities, null, 1)}`);
-	// 	console.log('Browser capabilities:', capabilities);
-	// }
-	//
-	// $effect(() => {
-	// 	log_browser_capabilities();
-	// });
-	//
-	// $effect(() => {
-	// 	test_network_access();
-	// });
 </script>
 
 <section id="reel">
 	<div class="reel">
-		{#if is_large_screen}
-			<iframe
-				allow="autoplay; fullscreen; picture-in-picture"
-				allowfullscreen
-				frameborder="0"
-				height="100%"
-				loading="lazy"
-				src={vimeo_src}
-				title="DIGM Status Board"
-				width="100%"
-			></iframe>
+		{#if is_brightsign}
+			<video
+				autoplay
+				bind:this={video_element}
+				loop
+				muted
+				playsinline
+				poster={video_poster}
+				preload="auto"
+				src={video_src}
+				style="display: none"
+			>
+				<track kind="captions" src="" srclang="en" label="No captions available" />
+			</video>
+			<canvas bind:this={canvas_element}></canvas>
 		{:else}
 			<video
 				bind:this={video_element}
 				controls
+				loop
+				muted
 				poster={video_poster}
 				preload="auto"
 				src={video_src}
@@ -268,19 +129,6 @@
 				<track kind="captions" src="" srclang="en" label="No captions available" />
 			</video>
 		{/if}
-
-		<!-- src="https://digmcms.westphal.drexel.edu/dswmedia/status_board/2019-DIGM-StatusBoard.webm" -->
-		<!-- use:setup_video_debugging -->
-
-		<!-- <video -->
-		<!-- 	autoplay -->
-		<!-- 	bind:this={video_element} -->
-		<!-- 	muted -->
-		<!-- 	controls -->
-		<!-- 	loop -->
-		<!-- 	src={video_src} -->
-		<!-- 	use:setup_video_debugging -->
-		<!-- ></video> -->
 	</div>
 </section>
 
@@ -300,12 +148,13 @@
 			justify-content: center;
 			overflow: hidden;
 			width: 100%;
+		}
 
-			video {
-				height: 100%;
-				object-fit: cover;
-				width: 100%;
-			}
+		canvas {
+			display: block;
+			height: 100%;
+			object-fit: cover;
+			width: 100%;
 		}
 
 		@media screen and (width >= 1920px) {
