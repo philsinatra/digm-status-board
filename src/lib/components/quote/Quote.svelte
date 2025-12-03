@@ -53,6 +53,7 @@
 		grid-area: quote;
 		min-height: 300px;
 		position: relative;
+		z-index: 9999;
 
 		.quote {
 			container-type: size;
