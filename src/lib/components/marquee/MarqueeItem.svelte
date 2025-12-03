@@ -1,12 +1,12 @@
 <script lang="ts">
-	import { browser } from '$app/environment';
-	import QRCode from 'qrcode';
-	import { get_date_and_day, truncate_string } from '$lib/scripts/utils';
+	import { browser } from '$app/environment'
+	import QRCode from 'qrcode'
+	import { get_date_and_day, truncate_string } from '$lib/scripts/utils'
 
-	const initial_truncation_limit = 220;
-	let { post } = $props();
-	let lede: string = $state('');
-	let truncate_limit: number = $state(initial_truncation_limit);
+	const initial_truncation_limit = 220
+	let { post } = $props()
+	let lede: string = $state('')
+	let truncate_limit: number = $state(initial_truncation_limit)
 
 	/**
 	 * Extracts the first paragraph from a content string.
@@ -14,34 +14,34 @@
 	 * @returns {string} The lede.
 	 */
 	function extract_lede(content_string: string): string {
-		if (typeof window === 'undefined') return '';
+		if (typeof window === 'undefined') return ''
 
-		const parser = new DOMParser();
-		const doc = parser.parseFromString(content_string, 'text/html');
-		const lede = doc.querySelector('p');
-		return lede?.textContent?.trim() ?? '';
+		const parser = new DOMParser()
+		const doc = parser.parseFromString(content_string, 'text/html')
+		const lede = doc.querySelector('p')
+		return lede?.textContent?.trim() ?? ''
 	}
 
 	$effect(() => {
 		// Skip during SSR or if post is not yet loaded
-		if (!browser || !post || post === undefined) return;
+		if (!browser || !post || post === undefined) return
 
-		truncate_limit = initial_truncation_limit; // Reset to default
+		truncate_limit = initial_truncation_limit // Reset to default
 
 		if (!post.event_end_date || !post.event_location) {
-			truncate_limit = 470;
+			truncate_limit = 470
 		}
-	});
+	})
 
 	$effect(() => {
 		if (browser) {
-			lede = truncate_string(extract_lede(post.post_content), truncate_limit);
+			lede = truncate_string(extract_lede(post.post_content), truncate_limit)
 		}
-	});
+	})
 
-	let url = `https://digm.drexel.edu/${post.post_name}`;
-	let qr_svg: string | undefined = $state('');
-	let error: string | undefined;
+	let url = `https://digm.drexel.edu/${post.post_name}`
+	let qr_svg: string | undefined = $state('')
+	let error: string | undefined
 
 	async function generate_qr_code(url: string) {
 		try {
@@ -52,16 +52,16 @@
 					dark: '#ffffff',
 					light: '#9493000'
 				}
-			});
+			})
 		} catch (err) {
-			error = (err as Error).message;
-			console.error(error);
+			error = (err as Error).message
+			console.error(error)
 		}
 	}
 
 	$effect(() => {
-		generate_qr_code(url);
-	});
+		generate_qr_code(url)
+	})
 </script>
 
 <div class="event {post.term_slug}">

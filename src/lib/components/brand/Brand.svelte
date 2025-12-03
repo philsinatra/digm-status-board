@@ -1,11 +1,11 @@
 <script lang="ts">
-	import QRCode from 'qrcode';
-	import { innerWidth } from 'svelte/reactivity/window';
-	import '$lib/components/brand/brand.css';
+	import QRCode from 'qrcode'
+	import { innerWidth } from 'svelte/reactivity/window'
+	import '$lib/components/brand/brand.css'
 
-	const url = 'https://digmstatus.westphal.drexel.edu/';
-	let qr_svg: string | undefined = $state('');
-	let error: string | undefined;
+	const url = 'https://digmstatus.westphal.drexel.edu/'
+	let qr_svg: string | undefined = $state('')
+	let error: string | undefined
 
 	async function generate_qr_code(url: string) {
 		try {
@@ -16,16 +16,16 @@
 					dark: '#ffffff',
 					light: '#9493000'
 				}
-			});
+			})
 		} catch (err) {
-			error = (err as Error).message;
-			console.error(error);
+			error = (err as Error).message
+			console.error(error)
 		}
 	}
 
 	$effect(() => {
-		generate_qr_code(url);
-	});
+		generate_qr_code(url)
+	})
 </script>
 
 <section id="brand">

@@ -1,14 +1,14 @@
-import type { Writable } from 'svelte/store';
+import type { Writable } from 'svelte/store'
 
 type EventSourceOptions<T> = {
-	data_source: string;
-	on_message: (data: unknown) => T;
-	target_store: Writable<T>;
-	log_prefix?: string;
-	debug?: boolean;
-	retry_interval?: number; // Initial retry interval in ms
-	max_retries?: number; // Max retry attempts
-};
+	data_source: string
+	on_message: (data: unknown) => T
+	target_store: Writable<T>
+	log_prefix?: string
+	debug?: boolean
+	retry_interval?: number // Initial retry interval in ms
+	max_retries?: number // Max retry attempts
+}
 
 /**
  * Initializes an EventSource connection to a server-sent event stream.
@@ -37,8 +37,8 @@ export function init_event_source<T>({
 	retry_interval = 5000,
 	max_retries = 5
 }: EventSourceOptions<T>) {
-	let source: EventSource;
-	let retry_count = 0;
+	let source: EventSource
+	let retry_count = 0
 
 	/**
 	 * Connects to the SSE endpoint and sets up event listeners.
@@ -58,7 +58,7 @@ export function init_event_source<T>({
 	 * The function also logs debug messages if `debug` is true.
 	 */
 	const connect = () => {
-		source = new EventSource(`/api/data-stream?data_source=${encodeURIComponent(data_source)}`);
+		source = new EventSource(`/api/data-stream?data_source=${encodeURIComponent(data_source)}`)
 
 		/**
 		 * Called when the connection is opened.
@@ -67,9 +67,9 @@ export function init_event_source<T>({
 		 * established, we don't need to retry.
 		 */
 		source.onopen = () => {
-			if (debug) console.log(`${log_prefix} connection opened`);
-			retry_count = 0; // Reset retries on successful connection
-		};
+			if (debug) console.log(`${log_prefix} connection opened`)
+			retry_count = 0 // Reset retries on successful connection
+		}
 
 		/**
 		 * Called when a message is received from the server.
@@ -83,13 +83,13 @@ export function init_event_source<T>({
 		 */
 		source.onmessage = (event: MessageEvent) => {
 			try {
-				const raw = JSON.parse(event.data);
-				const transformed = on_message(raw);
-				target_store.set(transformed);
+				const raw = JSON.parse(event.data)
+				const transformed = on_message(raw)
+				target_store.set(transformed)
 			} catch (e) {
-				if (debug) console.error(`${log_prefix} parse error:`, e);
+				if (debug) console.error(`${log_prefix} parse error:`, e)
 			}
-		};
+		}
 
 		/**
 		 * Called when an error occurs with the EventSource connection.
@@ -101,21 +101,21 @@ export function init_event_source<T>({
 		 * retries is reached, logs a debug error.
 		 */
 		source.onerror = () => {
-			if (debug) console.error(`${log_prefix} error`);
-			source.close();
+			if (debug) console.error(`${log_prefix} error`)
+			source.close()
 			if (retry_count < max_retries) {
-				setTimeout(connect, retry_interval * Math.pow(2, retry_count));
-				retry_count++;
-				if (debug) console.log(`${log_prefix} retrying (${retry_count}/${max_retries})`);
+				setTimeout(connect, retry_interval * Math.pow(2, retry_count))
+				retry_count++
+				if (debug) console.log(`${log_prefix} retrying (${retry_count}/${max_retries})`)
 			} else if (debug) {
-				console.error(`${log_prefix} max retries reached`);
+				console.error(`${log_prefix} max retries reached`)
 			}
-		};
-	};
+		}
+	}
 
-	connect();
+	connect()
 
 	return () => {
-		source.close();
-	};
+		source.close()
+	}
 }

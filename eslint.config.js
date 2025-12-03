@@ -1,16 +1,16 @@
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath } from 'node:url'
 
-import { includeIgnoreFile } from '@eslint/compat';
-import js from '@eslint/js';
-import prettier from 'eslint-config-prettier';
-import importPlugin from 'eslint-plugin-import';
-import svelte from 'eslint-plugin-svelte';
-import globals from 'globals';
-import ts from 'typescript-eslint';
+import { includeIgnoreFile } from '@eslint/compat'
+import js from '@eslint/js'
+import prettier from 'eslint-config-prettier'
+import importPlugin from 'eslint-plugin-import'
+import svelte from 'eslint-plugin-svelte'
+import globals from 'globals'
+import ts from 'typescript-eslint'
 
-import svelteConfig from './svelte.config.js';
+import svelteConfig from './svelte.config.js'
 
-const gitignore_path = fileURLToPath(new URL('./.gitignore', import.meta.url));
+const gitignore_path = fileURLToPath(new URL('./.gitignore', import.meta.url))
 
 export default ts.config(
 	includeIgnoreFile(gitignore_path),
@@ -163,4 +163,4 @@ export default ts.config(
 			]
 		}
 	}
-);
+)

@@ -1,68 +1,68 @@
 <script lang="ts">
-	import { writable, type Writable } from 'svelte/store';
-	import { fade } from 'svelte/transition';
-	import type { Quote } from '$lib/types';
-	import { init_event_source } from '$lib/scripts/eventSource';
+	import { writable, type Writable } from 'svelte/store'
+	import { fade } from 'svelte/transition'
+	import type { Quote } from '$lib/types'
+	import { init_event_source } from '$lib/scripts/eventSource'
 
-	const { data_source = 'static/data/quotes.json' } = $props();
-	const quote_data: Writable<Quote[]> = writable([]);
-	const animation_duration = 500; // Duration of animation (matches --duration-long CSS variable)
-	const initial_delay = 180_000; // 3 minutes between quote cycles
-	const visible_duration = 10_000; // How long the quote is visible
+	const { data_source = 'static/data/quotes.json' } = $props()
+	const quote_data: Writable<Quote[]> = writable([])
+	const animation_duration = 500 // Duration of animation (matches --duration-long CSS variable)
+	const initial_delay = 180_000 // 3 minutes between quote cycles
+	const visible_duration = 10_000 // How long the quote is visible
 
-	let current_quote: Quote | null = $state(null);
-	let is_animating_in = $state(false);
-	let is_animating_out = $state(false);
-	let is_visible = $state(false);
+	let current_quote: Quote | null = $state(null)
+	let is_animating_in = $state(false)
+	let is_animating_out = $state(false)
+	let is_visible = $state(false)
 
 	$effect(() => {
 		return init_event_source({
 			data_source,
 			on_message: (data) => {
-				return Array.isArray(data) ? data : [];
+				return Array.isArray(data) ? data : []
 			},
 			target_store: quote_data,
 			log_prefix: 'quotes',
 			debug: true
-		});
-	});
+		})
+	})
 
 	function get_random_quote(): Quote {
-		const random_index = Math.floor(Math.random() * $quote_data.length);
-		return $quote_data[random_index] ?? { quote: '', author: '' };
+		const random_index = Math.floor(Math.random() * $quote_data.length)
+		return $quote_data[random_index] ?? { quote: '', author: '' }
 	}
 
 	function animate_quote_cycle() {
 		// Step 1: Wait for initial delay before starting
 		setTimeout(() => {
 			// Step 2: Update the quote while off-screen and animate in
-			current_quote = get_random_quote();
-			is_animating_in = true;
-			is_visible = true;
+			current_quote = get_random_quote()
+			is_animating_in = true
+			is_visible = true
 
 			// Step 3: Wait for animation in to complete + visible duration
 			// animation_duration for the animation to complete + visible_duration for display time
 			setTimeout(() => {
 				// Step 4: Animate out
-				is_animating_out = true;
-				is_animating_in = false;
+				is_animating_out = true
+				is_animating_in = false
 
 				// Step 5: Wait for animation out to complete, then reset states
 				setTimeout(() => {
-					is_visible = false;
-					is_animating_out = false;
+					is_visible = false
+					is_animating_out = false
 
 					// Step 6: Start the cycle again
-					animate_quote_cycle();
-				}, animation_duration + 100); // Add a small buffer to ensure animation completes
-			}, visible_duration + animation_duration);
-		}, initial_delay);
+					animate_quote_cycle()
+				}, animation_duration + 100) // Add a small buffer to ensure animation completes
+			}, visible_duration + animation_duration)
+		}, initial_delay)
 	}
 
 	$effect(() => {
-		animate_quote_cycle();
-		return () => {};
-	});
+		animate_quote_cycle()
+		return () => {}
+	})
 </script>
 
 <section class:animating-in={is_animating_in} class:animating-out={is_animating_out} id="quote">

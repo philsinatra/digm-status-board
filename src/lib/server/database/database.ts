@@ -1,27 +1,27 @@
-import mysql, { createPool } from 'mysql2/promise';
+import mysql, { createPool } from 'mysql2/promise'
 
-import type { DatabaseConfig } from '$lib/types';
-import type { FieldPacket, PoolConnection, RowDataPacket } from 'mysql2/promise';
+import type { DatabaseConfig } from '$lib/types'
+import type { FieldPacket, PoolConnection, RowDataPacket } from 'mysql2/promise'
 
 declare module '$env/dynamic/private' {
 	export type PrivateEnv = {
-		DB_HOST: string;
-		DB_USER: string;
-		DB_PASS: string;
-		DB_NAME: string;
-	};
+		DB_HOST: string
+		DB_USER: string
+		DB_PASS: string
+		DB_NAME: string
+	}
 }
 
 export type QueryResult<T> = {
-	success: boolean;
-	data?: T;
-	error?: string;
-};
+	success: boolean
+	data?: T
+	error?: string
+}
 
-type QueryParams = string | number | boolean | null | Buffer;
+type QueryParams = string | number | boolean | null | Buffer
 
 export class Database {
-	private pool: mysql.Pool;
+	private pool: mysql.Pool
 
 	/**
 	 * Initializes a new instance of the Database class.
@@ -40,7 +40,7 @@ export class Database {
 			connectTimeout: 10000, // 10 seconds
 			connectionLimit: 25,
 			waitForConnections: true
-		});
+		})
 	}
 
 	/**
@@ -51,11 +51,11 @@ export class Database {
 	 */
 	async connect(): Promise<PoolConnection | null> {
 		try {
-			const connection = await this.pool.getConnection();
-			return connection;
+			const connection = await this.pool.getConnection()
+			return connection
 		} catch (error) {
-			console.error('Error connecting to database:', error);
-			return null;
+			console.error('Error connecting to database:', error)
+			return null
 		}
 	}
 
@@ -72,24 +72,24 @@ export class Database {
 		sql: string,
 		params?: QueryParams[]
 	): Promise<QueryResult<T>> {
-		let connection: PoolConnection | null = null;
+		let connection: PoolConnection | null = null
 
 		try {
-			connection = await this.connect();
+			connection = await this.connect()
 
-			if (!connection) throw new Error('Failed to establish database connection');
+			if (!connection) throw new Error('Failed to establish database connection')
 
-			const [results] = await connection.query<T>(sql, params || []);
+			const [results] = await connection.query<T>(sql, params || [])
 
-			return { success: true, data: results };
+			return { success: true, data: results }
 		} catch (error) {
 			return {
 				success: false,
 				error: error instanceof Error ? error.message : 'Unknown error occurred'
-			};
+			}
 		} finally {
 			if (connection) {
-				connection.release();
+				connection.release()
 			}
 		}
 	}
@@ -108,15 +108,15 @@ export class Database {
 		sql: string,
 		params?: QueryParams[]
 	): Promise<[T, FieldPacket[]]> {
-		let connection: PoolConnection | null = null;
+		let connection: PoolConnection | null = null
 
 		try {
-			connection = await this.connect();
-			if (!connection) throw new Error('Failed to establish database connection');
-			return await connection.execute<T>(sql, params || []);
+			connection = await this.connect()
+			if (!connection) throw new Error('Failed to establish database connection')
+			return await connection.execute<T>(sql, params || [])
 		} finally {
 			if (connection) {
-				connection.release();
+				connection.release()
 			}
 		}
 	}
@@ -128,6 +128,6 @@ export class Database {
 	 * shutting down to avoid memory leaks.
 	 */
 	async end(): Promise<void> {
-		await this.pool.end();
+		await this.pool.end()
 	}
 }

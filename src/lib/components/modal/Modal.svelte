@@ -1,18 +1,18 @@
 <script lang="ts">
-	let { show_modal = $bindable(), header, children } = $props();
-	let dialog = $state<HTMLDialogElement>();
+	let { show_modal = $bindable(), header, children } = $props()
+	let dialog = $state<HTMLDialogElement>()
 
 	$effect(() => {
 		if (show_modal && dialog) {
-			dialog.showModal();
-			document.documentElement.style.overflow = 'hidden';
-		} else document.documentElement.style.overflow = '';
-	});
+			dialog.showModal()
+			document.documentElement.style.overflow = 'hidden'
+		} else document.documentElement.style.overflow = ''
+	})
 
 	function handle_close() {
-		dialog?.close();
-		show_modal = false;
-		document.documentElement.style.overflow = '';
+		dialog?.close()
+		show_modal = false
+		document.documentElement.style.overflow = ''
 	}
 </script>
 
@@ -21,7 +21,7 @@
 	bind:this={dialog}
 	onclose={handle_close}
 	onclick={(e) => {
-		if (e.target === dialog) handle_close();
+		if (e.target === dialog) handle_close()
 	}}
 >
 	<div class="dialog">

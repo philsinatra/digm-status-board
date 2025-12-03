@@ -1,6 +1,6 @@
-import type { DatabaseConfig } from '$lib/types';
+import type { DatabaseConfig } from '$lib/types'
 
-import { env } from '$env/dynamic/private';
+import { env } from '$env/dynamic/private'
 
 export const get_database_config = (): DatabaseConfig => ({
 	host: env.DB_HOST,
@@ -11,4 +11,4 @@ export const get_database_config = (): DatabaseConfig => ({
 	connectTimeout: 10000,
 	connectionLimit: 25,
 	waitForConnections: true
-});
+})

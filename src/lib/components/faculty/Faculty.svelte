@@ -1,26 +1,26 @@
 <script lang="ts">
-	import { innerWidth } from 'svelte/reactivity/window';
-	import { writable, type Writable } from 'svelte/store';
-	import type { FacultyItem } from '$lib/types';
-	import Details from '$lib/components/details/Details.svelte';
-	import { init_event_source } from '$lib/scripts/eventSource';
-	import { slugify } from '$lib/scripts/utils';
-	import '$lib/styles/components/_tables.css';
-	import './faculty.css';
+	import { innerWidth } from 'svelte/reactivity/window'
+	import { writable, type Writable } from 'svelte/store'
+	import type { FacultyItem } from '$lib/types'
+	import Details from '$lib/components/details/Details.svelte'
+	import { init_event_source } from '$lib/scripts/eventSource'
+	import { slugify } from '$lib/scripts/utils'
+	import '$lib/styles/components/_tables.css'
+	import './faculty.css'
 
-	const { data_source = 'static/data/faculty.json' } = $props();
-	const faculty_data: Writable<FacultyItem[]> = writable([]);
+	const { data_source = 'static/data/faculty.json' } = $props()
+	const faculty_data: Writable<FacultyItem[]> = writable([])
 
 	function replace_emoji(text: string): string {
 		return text.replace(/[\p{Emoji_Presentation}\p{Extended_Pictographic}]+/gu, (match) => {
 			const code_points = Array.from(match)
 				.map((char) => char.codePointAt(0)!.toString(16).toUpperCase())
-				.join('-');
+				.join('-')
 
-			const filename = `${code_points}.svg`;
+			const filename = `${code_points}.svg`
 
-			return `<img class="emoji" src="/svg/openmoji/${filename}" alt="${match}" loading="lazy" />`;
-		});
+			return `<img class="emoji" src="/svg/openmoji/${filename}" alt="${match}" loading="lazy" />`
+		})
 	}
 
 	let faculty_with_emoji = $derived(
@@ -28,19 +28,19 @@
 			...item,
 			name_html: replace_emoji(item.name)
 		}))
-	);
+	)
 
 	$effect(() => {
 		return init_event_source({
 			data_source,
 			on_message: (data) => {
-				return Array.isArray(data) ? data : [];
+				return Array.isArray(data) ? data : []
 			},
 			target_store: faculty_data,
 			log_prefix: 'faculty',
 			debug: true
-		});
-	});
+		})
+	})
 </script>
 
 {#snippet faculty_table()}

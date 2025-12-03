@@ -1,16 +1,16 @@
 <script lang="ts">
-	import { fetchWeatherApi } from 'openmeteo';
-	import Bubbles from '$lib/components/bubbles/Bubbles.svelte';
+	import { fetchWeatherApi } from 'openmeteo'
+	import Bubbles from '$lib/components/bubbles/Bubbles.svelte'
 
 	type WeatherData = {
 		current: {
-			temperature_2m: number | null;
-			weather_code: number | null;
-			relative_humidity_2m: number | null;
-			wind_speed_10m: number | null;
-			precipitation: number | null;
-		};
-	};
+			temperature_2m: number | null
+			weather_code: number | null
+			relative_humidity_2m: number | null
+			wind_speed_10m: number | null
+			precipitation: number | null
+		}
+	}
 
 	let weather_data: WeatherData = $state({
 		current: {
@@ -20,7 +20,7 @@
 			wind_speed_10m: null,
 			precipitation: null
 		}
-	});
+	})
 
 	// https://open-meteo.com/en/docs?current=temperature_2m,precipitation&temperature_unit=fahrenheit&wind_speed_unit=mph&precipitation_unit=inch#weather_variable_documentation
 	const weather_codes: Record<number, { status: string; icon: string }> = {
@@ -49,12 +49,12 @@
 		85: { status: 'Snow showers', icon: 'ico-snow' },
 		86: { status: 'Heavy snow showers', icon: 'ico-snow' },
 		95: { status: 'Thunderstorm', icon: 'ico-lightning-cloud' }
-	};
+	}
 
 	async function get_weather() {
 		try {
-			const latitude = 39.9566168;
-			const longitude = -75.192519;
+			const latitude = 39.9566168
+			const longitude = -75.192519
 			const params = {
 				latitude: latitude,
 				longitude: longitude,
@@ -68,23 +68,23 @@
 				wind_speed_unit: 'mph',
 				temperature_unit: 'fahrenheit',
 				precipitation_unit: 'inch'
-			};
-			const url = 'https://api.open-meteo.com/v1/forecast';
-			const responses = await fetchWeatherApi(url, params);
-			const response = responses[0];
-			if (!response) throw new Error(`Failed to fetch weather data.`);
+			}
+			const url = 'https://api.open-meteo.com/v1/forecast'
+			const responses = await fetchWeatherApi(url, params)
+			const response = responses[0]
+			if (!response) throw new Error(`Failed to fetch weather data.`)
 
-			const current = response?.current();
-			return current;
+			const current = response?.current()
+			return current
 		} catch (error) {
-			console.error(`Error fetching weather data: ${error}`);
-			throw error;
+			console.error(`Error fetching weather data: ${error}`)
+			throw error
 		}
 	}
 
 	async function set_weather() {
 		try {
-			const current = await get_weather();
+			const current = await get_weather()
 
 			if (current) {
 				weather_data = {
@@ -95,28 +95,28 @@
 						wind_speed_10m: Number(current?.variables(3)!.value().toFixed(1)),
 						precipitation: Number(current?.variables(4)!.value().toFixed(1))
 					}
-				};
+				}
 			}
 		} catch (error) {
-			console.error(`Error fetching weather data: ${error}`);
-			throw error;
+			console.error(`Error fetching weather data: ${error}`)
+			throw error
 		}
 	}
 
 	function has_weather_code(data: WeatherData): boolean {
-		return typeof data?.current?.weather_code === 'number';
+		return typeof data?.current?.weather_code === 'number'
 	}
 
-	const refresh_interval = 600_000;
+	const refresh_interval = 600_000
 
 	$effect(() => {
-		let interval = setInterval(set_weather, refresh_interval);
-		return () => clearInterval(interval);
-	});
+		let interval = setInterval(set_weather, refresh_interval)
+		return () => clearInterval(interval)
+	})
 
 	$effect(() => {
-		set_weather();
-	});
+		set_weather()
+	})
 </script>
 
 <section id="weather">

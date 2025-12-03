@@ -1,18 +1,18 @@
 <script lang="ts">
-	import { innerWidth } from 'svelte/reactivity/window';
-	import { writable, type Writable } from 'svelte/store';
-	import type { CountdownItem } from '$lib/types';
-	import Details from '$lib/components/details/Details.svelte';
-	import { init_event_source } from '$lib/scripts/eventSource';
-	import { get_days_until, get_simple_date, slugify } from '$lib/scripts/utils';
-	import '$lib/styles/components/_tables.css';
+	import { innerWidth } from 'svelte/reactivity/window'
+	import { writable, type Writable } from 'svelte/store'
+	import type { CountdownItem } from '$lib/types'
+	import Details from '$lib/components/details/Details.svelte'
+	import { init_event_source } from '$lib/scripts/eventSource'
+	import { get_days_until, get_simple_date, slugify } from '$lib/scripts/utils'
+	import '$lib/styles/components/_tables.css'
 
-	const { data_source = 'static/data/countdown.json' } = $props();
-	const countdown_data: Writable<CountdownItem[]> = writable([]);
-	const current_time = $state<Date>(new Date());
+	const { data_source = 'static/data/countdown.json' } = $props()
+	const countdown_data: Writable<CountdownItem[]> = writable([])
+	const current_time = $state<Date>(new Date())
 
 	function format_date_key(iso_date: string): string {
-		return iso_date.slice(0, 10).replace(/-/g, '');
+		return iso_date.slice(0, 10).replace(/-/g, '')
 	}
 
 	/**
@@ -27,33 +27,33 @@
 	$effect(() => {
 		const interval = setInterval(
 			() => {
-				current_time.setTime(new Date().getTime());
-				console.log('Refreshed countdown time:', current_time);
+				current_time.setTime(new Date().getTime())
+				console.log('Refreshed countdown time:', current_time)
 			},
 			60 * 60 * 1000
-		); // Update every hour (60 * 60 * 1000 ms)
+		) // Update every hour (60 * 60 * 1000 ms)
 
-		return () => clearInterval(interval);
-	});
+		return () => clearInterval(interval)
+	})
 
 	$effect(() => {
 		return init_event_source({
 			data_source,
 			on_message: (data) => {
-				if (!Array.isArray(data)) return [];
+				if (!Array.isArray(data)) return []
 				const future_items = data.filter((item: CountdownItem) => {
-					return new Date(item.date_time) > new Date();
-				});
+					return new Date(item.date_time) > new Date()
+				})
 
 				return future_items.sort((a: CountdownItem, b: CountdownItem) => {
-					return new Date(a.date_time).getTime() - new Date(b.date_time).getTime();
-				});
+					return new Date(a.date_time).getTime() - new Date(b.date_time).getTime()
+				})
 			},
 			target_store: countdown_data,
 			log_prefix: 'countdown',
 			debug: true
-		});
-	});
+		})
+	})
 </script>
 
 {#snippet countdown_table()}

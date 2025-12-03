@@ -1,132 +1,132 @@
 <script lang="ts">
-	import { writable, get } from 'svelte/store';
-	import type { ScheduleItem } from '$lib/types';
-	import Modal from '$lib/components/modal/Modal.svelte';
-	import { init_event_source } from '$lib/scripts/eventSource';
+	import { writable, get } from 'svelte/store'
+	import type { ScheduleItem } from '$lib/types'
+	import Modal from '$lib/components/modal/Modal.svelte'
+	import { init_event_source } from '$lib/scripts/eventSource'
 
-	const { data_source = 'static/data/schedule.json' } = $props();
-	const days = ['MON', 'TUE', 'WED', 'R', 'FRI', 'SAT', 'SUN'];
-	const modal_data = writable<ScheduleItem | null>(null);
-	const rooms = $state<string[]>([]);
-	const sorted_rooms = $derived(rooms.slice().sort((a, b) => a.localeCompare(b)));
-	const schedule_data = writable<ScheduleItem[]>([]);
-	const current_time = writable(new Date());
+	const { data_source = 'static/data/schedule.json' } = $props()
+	const days = ['MON', 'TUE', 'WED', 'R', 'FRI', 'SAT', 'SUN']
+	const modal_data = writable<ScheduleItem | null>(null)
+	const rooms = $state<string[]>([])
+	const sorted_rooms = $derived(rooms.slice().sort((a, b) => a.localeCompare(b)))
+	const schedule_data = writable<ScheduleItem[]>([])
+	const current_time = writable(new Date())
 	const schedule_hours: {
-		full: string;
-		short: string;
-		period: string;
+		full: string
+		short: string
+		period: string
 	}[] = Array.from({ length: 14 }, (unused, i) => {
-		const hour = 8 + i;
-		const period = hour >= 12 ? 'PM' : 'AM';
-		const display_hour = hour % 12 === 0 ? 12 : hour % 12;
+		const hour = 8 + i
+		const period = hour >= 12 ? 'PM' : 'AM'
+		const display_hour = hour % 12 === 0 ? 12 : hour % 12
 		return {
 			full: `${display_hour.toString().padStart(2, '0')}:00 ${period}`,
 			short: `${display_hour.toString().padStart(2, '0')} ${period}`,
 			period
-		};
-	});
+		}
+	})
 
-	let selected_day_state = $state<string>('MON');
-	let current_position = $state(0);
-	let grid_wrapper: HTMLDivElement;
-	let grid_el: HTMLDivElement;
-	let last_day = $state(new Date().getDay());
+	let selected_day_state = $state<string>('MON')
+	let current_position = $state(0)
+	let grid_wrapper: HTMLDivElement
+	let grid_el: HTMLDivElement
+	let last_day = $state(new Date().getDay())
 
 	function format_time(time: number): string {
-		const hour = Math.floor(time / 100);
-		const min = time % 100;
-		const period = hour >= 12 ? 'PM' : 'AM';
-		const display_hour = hour % 12 === 0 ? 12 : hour % 12;
-		return `${display_hour}:${min.toString().padStart(2, '0')} ${period}`;
+		const hour = Math.floor(time / 100)
+		const min = time % 100
+		const period = hour >= 12 ? 'PM' : 'AM'
+		const display_hour = hour % 12 === 0 ? 12 : hour % 12
+		return `${display_hour}:${min.toString().padStart(2, '0')} ${period}`
 	}
 
 	function normalize_room_code(code: string | number | null): string {
-		return code == null ? '' : String(code);
+		return code == null ? '' : String(code)
 	}
 
 	function get_grid_column(time: number | null): number {
 		if (typeof time === 'number') {
-			const hour = Math.floor(time / 100);
-			return hour - 8 + 2;
+			const hour = Math.floor(time / 100)
+			return hour - 8 + 2
 		}
-		return 1;
+		return 1
 	}
 
 	function get_fractional_offset(time: number | null): number {
-		if (!time) return 0;
-		const minutes = time % 100;
-		return (minutes / 60) * 100;
+		if (!time) return 0
+		const minutes = time % 100
+		return (minutes / 60) * 100
 	}
 
 	function get_duration_width(start: number, end: number): number {
-		const start_hour = Math.floor(start / 100);
-		const start_min = start % 100;
-		const end_hour = Math.floor(end / 100);
-		const end_min = end % 100;
-		const start_decimal = start_hour + start_min / 60;
-		const end_decimal = end_hour + end_min / 60;
-		return (end_decimal - start_decimal) * 100;
+		const start_hour = Math.floor(start / 100)
+		const start_min = start % 100
+		const end_hour = Math.floor(end / 100)
+		const end_min = end % 100
+		const start_decimal = start_hour + start_min / 60
+		const end_decimal = end_hour + end_min / 60
+		return (end_decimal - start_decimal) * 100
 	}
 
 	function get_current_hour_decimal() {
-		const time = get(current_time);
-		const hour = time.getHours();
-		const min = time.getMinutes();
-		return hour + min / 60;
+		const time = get(current_time)
+		const hour = time.getHours()
+		const min = time.getMinutes()
+		return hour + min / 60
 	}
 
 	function track_current_time() {
-		current_time.set(new Date());
-		const time = get(current_time);
-		const seconds = time.getSeconds();
-		const milliseconds = time.getMilliseconds();
-		const time_to_next_minute = (60 - seconds) * 1000 - milliseconds;
+		current_time.set(new Date())
+		const time = get(current_time)
+		const seconds = time.getSeconds()
+		const milliseconds = time.getMilliseconds()
+		const time_to_next_minute = (60 - seconds) * 1000 - milliseconds
 
-		let interval: ReturnType<typeof setInterval> | undefined;
+		let interval: ReturnType<typeof setInterval> | undefined
 		const timeout = setTimeout(() => {
-			current_time.set(new Date());
+			current_time.set(new Date())
 			interval = setInterval(() => {
-				current_time.set(new Date());
-			}, 60_000);
-		}, time_to_next_minute);
+				current_time.set(new Date())
+			}, 60_000)
+		}, time_to_next_minute)
 
 		return () => {
-			clearTimeout(timeout);
-			if (interval) clearInterval(interval);
-		};
+			clearTimeout(timeout)
+			if (interval) clearInterval(interval)
+		}
 	}
 
 	function is_current_time_within_bounds() {
-		const time = get(current_time);
-		const hour = time.getHours();
-		return hour >= 8 && hour < 22;
+		const time = get(current_time)
+		const hour = time.getHours()
+		return hour >= 8 && hour < 22
 	}
 
 	function center_current_time() {
-		if (!grid_wrapper) return;
-		const wrapper_width = grid_wrapper.clientWidth;
-		const scroll_width = grid_wrapper.scrollWidth;
-		const hour_decimal = get_current_hour_decimal();
-		const time_progress = (hour_decimal - 8) / 14;
-		const scroll_to = (scroll_width - 100) * time_progress - wrapper_width / 2;
-		grid_wrapper.scrollLeft = Math.max(scroll_to, 0);
+		if (!grid_wrapper) return
+		const wrapper_width = grid_wrapper.clientWidth
+		const scroll_width = grid_wrapper.scrollWidth
+		const hour_decimal = get_current_hour_decimal()
+		const time_progress = (hour_decimal - 8) / 14
+		const scroll_to = (scroll_width - 100) * time_progress - wrapper_width / 2
+		grid_wrapper.scrollLeft = Math.max(scroll_to, 0)
 	}
 
 	function arrays_are_equal(a: string[], b: string[]): boolean {
-		if (a.length !== b.length) return false;
-		return a.every((v, i) => v === b[i]);
+		if (a.length !== b.length) return false
+		return a.every((v, i) => v === b[i])
 	}
 
 	function get_current_time_left_px(): number {
-		if (!grid_el || !grid_wrapper) return 0;
-		const hour_decimal = get_current_hour_decimal();
-		if (hour_decimal < 8 || hour_decimal >= 22) return 0;
-		const first_cell = grid_el.querySelector('.grid-cell:first-child') as HTMLElement;
-		const room_col_width = first_cell ? first_cell.offsetWidth : 100;
-		const time_progress = (hour_decimal - 8) / 14;
-		const total_grid_width = grid_el.offsetWidth;
-		const time_columns_width = total_grid_width - room_col_width;
-		return room_col_width + time_progress * time_columns_width;
+		if (!grid_el || !grid_wrapper) return 0
+		const hour_decimal = get_current_hour_decimal()
+		if (hour_decimal < 8 || hour_decimal >= 22) return 0
+		const first_cell = grid_el.querySelector('.grid-cell:first-child') as HTMLElement
+		const room_col_width = first_cell ? first_cell.offsetWidth : 100
+		const time_progress = (hour_decimal - 8) / 14
+		const total_grid_width = grid_el.offsetWidth
+		const time_columns_width = total_grid_width - room_col_width
+		return room_col_width + time_progress * time_columns_width
 	}
 
 	$effect(() => {
@@ -135,44 +135,44 @@
 			on_message: (data) => (Array.isArray(data) ? data : []),
 			target_store: schedule_data,
 			log_prefix: 'schedule'
-		});
-	});
+		})
+	})
 
 	$effect(() => {
 		const unique_rooms = Array.from(
 			new Set($schedule_data.map((item) => normalize_room_code(item.room_code)))
-		).filter((c) => c !== '' && c !== 'null' && c !== 'undefined');
+		).filter((c) => c !== '' && c !== 'null' && c !== 'undefined')
 		if (!arrays_are_equal(rooms, unique_rooms)) {
-			rooms.length = 0;
-			rooms.push(...unique_rooms);
+			rooms.length = 0
+			rooms.push(...unique_rooms)
 		}
-	});
+	})
 
 	$effect(() => {
-		const today = new Date().getDay();
-		selected_day_state = days[today === 0 ? 6 : today - 1] || 'MON';
-		const cleanup = track_current_time();
-		center_current_time();
-		return cleanup;
-	});
+		const today = new Date().getDay()
+		selected_day_state = days[today === 0 ? 6 : today - 1] || 'MON'
+		const cleanup = track_current_time()
+		center_current_time()
+		return cleanup
+	})
 
 	$effect(() => {
 		return current_time.subscribe(() => {
-			const time = get(current_time);
-			const today = time.getDay();
+			const time = get(current_time)
+			const today = time.getDay()
 
 			if (today !== last_day) {
-				selected_day_state = days[today === 0 ? 6 : today - 1] || 'MON';
-				center_current_time();
-				last_day = today;
+				selected_day_state = days[today === 0 ? 6 : today - 1] || 'MON'
+				center_current_time()
+				last_day = today
 			}
 			if (grid_el && is_current_time_within_bounds()) {
-				current_position = get_current_time_left_px();
+				current_position = get_current_time_left_px()
 			} else {
-				current_position = 0;
+				current_position = 0
 			}
-		});
-	});
+		})
+	})
 </script>
 
 <section id="schedule">
@@ -182,8 +182,8 @@
 				<button
 					class:selected={day === selected_day_state}
 					onclick={() => {
-						selected_day_state = day;
-						center_current_time();
+						selected_day_state = day
+						center_current_time()
 					}}
 				>
 					<!-- <span class="full">{day}</span> -->

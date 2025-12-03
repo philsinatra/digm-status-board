@@ -1,5 +1,5 @@
 <script lang="ts">
-	let { parent_component } = $props();
+	let { parent_component } = $props()
 </script>
 
 <div class="bubbles" id="bubbles">
