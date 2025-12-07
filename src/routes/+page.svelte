@@ -5,7 +5,8 @@
 	import Countdown from '$lib/components/countdown/Countdown.svelte'
 	import Faculty from '$lib/components/faculty/Faculty.svelte'
 	import Footer from '$lib/components/footer/Footer.svelte'
-	import Marquee from '$lib/components/marquee/Marquee.svelte'
+	// import Marquee from '$lib/components/marquee/Marquee.svelte'
+	import Placeholder from '$lib/components/placeholder/Placeholder.svelte'
 	import AnimatedQuote from '$lib/components/quote/AnimatedQuote.svelte'
 	import Quote from '$lib/components/quote/Quote.svelte'
 	import Reel from '$lib/components/reel/Reel.svelte'
@@ -14,17 +15,17 @@
 	import Today from '$lib/components/today/Today.svelte'
 	import Weather from '$lib/components/weather/Weather.svelte'
 
-	type Props = {
-		data: {
-			posts: any[] //eslint-disable-line
-			success: boolean
-			total_posts: number
-			current_page: number
-			total_pages: number
-		}
-	}
+	// type Props = {
+	// 	data: {
+	// 		posts: any[] //eslint-disable-line
+	// 		success: boolean
+	// 		total_posts: number
+	// 		current_page: number
+	// 		total_pages: number
+	// 	}
+	// }
 
-	let { data }: Props = $props()
+	// let { data }: Props = $props()
 
 	const db_refresh_interval = 3_600_000 // One hour
 	const max_retries = 3
@@ -95,6 +96,8 @@
 
 {#if (innerWidth.current ?? 0) >= 1920}
 	<AnimatedQuote />
-	<Marquee gallery_data={data} />
+	<!-- TODO: enable marquee -->
+	<!-- <Marquee gallery_data={data} /> -->
+	<Placeholder />
 	<Today />
 {/if}

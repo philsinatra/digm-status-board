@@ -1,0 +1,98 @@
+[
+	{
+		"name": "Ari Gass",
+		"title": "GDAP: Assistant Professor",
+		"office": "URBN 220G",
+		"email": "abg52@drexel.edu"
+	},
+	{
+		"name": "Christiana Kugel",
+		"title": "DIGM: Administrative Assistant",
+		"office": "URBN 220",
+		"email": "cok23@drexel.edu"
+	},
+	{
+		"name": "Dan Rose",
+		"title": "GDAP: Associate Teaching Professor",
+		"office": "URBN 220H",
+		"email": "dpr55@drexel.edu"
+	},
+	{
+		"name": "Dave Mauriello",
+		"title": "ANFX: Assistant Professor",
+		"office": "URBN 230E",
+		"email": "dam89@drexel.edu"
+	},
+	{
+		"name": "Emil Polyak",
+		"title": "DIGM: Graduate Program Director",
+		"office": "URBN 220C",
+		"email": "ep557@drexel.edu"
+	},
+	{
+		"name": "Frank Lee",
+		"title": "GDAP: Associate Professor",
+		"office": "URBN 220A",
+		"email": "fjl24@drexel.edu"
+	},
+	{
+		"name": "Glen Muschio",
+		"title": "DIGM: Associate Professor",
+		"office": "URBN 220E",
+		"email": "gjm26@drexel.edu"
+	},
+	{
+		"name": "Jervis Thompson",
+		"title": "UXID: Teaching Professor",
+		"office": "URBN 230A",
+		"email": "st966rc2@drexel.edu"
+	},
+	{
+		"name": "Michael Wagner",
+		"title": "DIGM: Department Head",
+		"office": "URBN 220D",
+		"email": "mwg38@drexel.edu"
+	},
+	{
+		"name": "Milady Bridges",
+		"title": "ANFX: Program Director",
+		"office": "URBN 230F",
+		"email": "msb369@drexel.edu"
+	},
+	{
+		"name": "Nick Jushchyshyn",
+		"title": "ANFX: Associate Professor",
+		"office": "URBN 230D",
+		"email": "nj399@drexel.edu"
+	},
+	{
+		"name": "Paul Diefenbach",
+		"title": "GDAP: Associate Professor",
+		"office": "URBN 220F",
+		"email": "pjd37@drexel.edu"
+	},
+	{
+		"name": "Phil Sinatra 🤘🏻",
+		"title": "UXID: Assistant Teaching Professor",
+		"office": "URBN 241",
+		"email": "ps42@drexel.edu"
+	},
+	{
+		"name": "Robert Lloyd",
+		"title": "GDAP: Program Director",
+		"office": "URBN 230D",
+		"email": "rel663@drexel.edu"
+	},
+	{
+		"name": "Tony Rowe",
+		"title": "GDAP: Assistant Teaching Director",
+		"office": "URBN 230B",
+		"email": "tar774@drexel.edu"
+	},
+	{
+		"name": "Troy Finamore",
+		"title": "UXID: Program Director",
+		"office": "URBN 230C",
+		"email": "twf23@drexel.edu"
+	}
+]

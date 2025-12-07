@@ -1,0 +1,57 @@
+[
+	{
+		"category": "resources",
+		"href": "https://drexel.edu/westphal/",
+		"title": "Drexel's Westphal Website"
+	},
+	{
+		"category": "resources",
+		"href": "https://digm.drexel.edu",
+		"title": "Digital Media Department Website"
+	},
+	{
+		"category": "resources",
+		"href": "https://drexel.edu/westphal/westphal-experience/technology/",
+		"title": "Westphal IT Department Information"
+	},
+	{
+		"category": "resources",
+		"href": "https://drexel.edu/academics/support-advising",
+		"title": "Academic Advising"
+	},
+	{
+		"category": "resources",
+		"href": "https://digm.drexel.edu/gallery?category=alumni#gallery",
+		"title": "DIGM Alumni"
+	},
+	{
+		"category": "clubs",
+		"href": "https://dragonlink.drexel.edu/organization/chi-ux",
+		"title": "Drexel CHI UX"
+	},
+	{
+		"category": "clubs",
+		"href": "https://dragonlink.drexel.edu/organization/drexel_siggraph",
+		"title": "SIGGRAPH"
+	},
+	{
+		"category": "clubs",
+		"href": "https://dragonlink.drexel.edu/organization/dga",
+		"title": "Drexel Gaming Association"
+	},
+	{
+		"category": "clubs",
+		"href": "https://dragonlink.drexel.edu/organization/drexelanimate",
+		"title": "D'Animate"
+	},
+	{
+		"category": "clubs",
+		"href": "https://dragonlink.drexel.edu/organization/tped",
+		"title": "Drexel Theme Park Engineering & Design Group"
+	},
+	{
+		"category": "clubs",
+		"href": "#",
+		"title": "Drexel VR Club"
+	}
+]
