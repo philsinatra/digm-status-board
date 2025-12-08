@@ -6,6 +6,7 @@
 	import Faculty from '$lib/components/faculty/Faculty.svelte'
 	import Footer from '$lib/components/footer/Footer.svelte'
 	import Marquee from '$lib/components/marquee/Marquee.svelte'
+	import Message from '$lib/components/message/Message.svelte'
 	import AnimatedQuote from '$lib/components/quote/AnimatedQuote.svelte'
 	import Quote from '$lib/components/quote/Quote.svelte'
 	import Reel from '$lib/components/reel/Reel.svelte'
@@ -97,4 +98,5 @@
 	<AnimatedQuote />
 	<Marquee gallery_data={data} />
 	<Today />
+	<Message />
 {/if}

@@ -131,7 +131,8 @@
 				'brand brand brand brand brand faculty faculty faculty faculty countdown countdown countdown'
 				'today today weather weather weather faculty faculty faculty faculty countdown countdown countdown'
 				'reel reel reel reel reel faculty faculty faculty faculty marquee marquee marquee'
-				'schedule schedule schedule schedule schedule schedule schedule schedule schedule marquee marquee marquee';
+				/* 'schedule schedule schedule schedule schedule schedule schedule schedule schedule marquee marquee marquee'; */
+				'message message message message message message message message message marquee marquee marquee';
 			grid-template-rows: 100px 100px 437px 368px;
 			margin-inline: auto;
 			max-height: 1080px;

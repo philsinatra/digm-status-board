@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { reel_status } from '$lib/stores/reel'
+
 	const video_poster = 'https://digmcms.westphal.drexel.edu/dswmedia/poster-black.webp'
 	const video_url =
 		'https://digmcms.westphal.drexel.edu/dswmedia/status_board/2019-DIGM-StatusBoard.mp4'
@@ -6,9 +8,10 @@
 	let video_element: HTMLVideoElement | null = $state(null)
 </script>
 
-<section id="reel">
+<section class:reposition={$reel_status === 'hidden'} id="reel">
 	<div class="reel">
 		<video
+			autoplay
 			bind:this={video_element}
 			controls
 			loop
@@ -28,6 +31,14 @@
 		grid-area: reel;
 		overflow: hidden;
 		position: relative;
+
+		&.reposition {
+			@media screen and (width >= 1920px) {
+				left: -100vw;
+				position: fixed;
+				top: -100vh;
+			}
+		}
 	}
 
 	.reel {

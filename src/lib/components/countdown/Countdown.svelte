@@ -1,15 +1,23 @@
 <script lang="ts">
 	import { innerWidth } from 'svelte/reactivity/window'
-	import { writable, type Writable } from 'svelte/store'
 	import type { CountdownItem } from '$lib/types'
 	import Details from '$lib/components/details/Details.svelte'
-	import { init_event_source } from '$lib/scripts/eventSource'
+	import countdown_data from '$lib/data/countdown.json'
 	import { get_days_until, get_simple_date, slugify } from '$lib/scripts/utils'
 	import '$lib/styles/components/_tables.css'
 
-	const { data_source = 'static/data/countdown.json' } = $props()
-	const countdown_data: Writable<CountdownItem[]> = writable([])
 	const current_time = $state<Date>(new Date())
+
+	const future_countdown_items = $derived(() => {
+		const now = current_time
+
+		return countdown_data
+			.filter((item: CountdownItem) => new Date(item.date_time) > now)
+			.sort(
+				(a: CountdownItem, b: CountdownItem) =>
+					new Date(a.date_time).getTime() - new Date(b.date_time).getTime()
+			)
+	})
 
 	function format_date_key(iso_date: string): string {
 		return iso_date.slice(0, 10).replace(/-/g, '')
@@ -35,25 +43,6 @@
 
 		return () => clearInterval(interval)
 	})
-
-	$effect(() => {
-		return init_event_source({
-			data_source,
-			on_message: (data) => {
-				if (!Array.isArray(data)) return []
-				const future_items = data.filter((item: CountdownItem) => {
-					return new Date(item.date_time) > new Date()
-				})
-
-				return future_items.sort((a: CountdownItem, b: CountdownItem) => {
-					return new Date(a.date_time).getTime() - new Date(b.date_time).getTime()
-				})
-			},
-			target_store: countdown_data,
-			log_prefix: 'countdown',
-			debug: true
-		})
-	})
 </script>
 
 {#snippet countdown_table()}
@@ -75,7 +64,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			{#each $countdown_data as { date_time, title } (`countdown-item-${format_date_key(date_time)}-${slugify(title)}`)}
+			{#each future_countdown_items() as { date_time, title } (`countdown-item-${format_date_key(date_time)}-${slugify(title)}`)}
 				<tr>
 					{#if (innerWidth.current ?? 0) < 665}
 						<td>

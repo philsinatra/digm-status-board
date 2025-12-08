@@ -113,6 +113,22 @@ export type ScheduleItem = {
 	sapr_desc: string | null
 	process_date: string
 }
+
+export type ModalData =
+	| ScheduleItem
+	| {
+			subj_code: string
+			crse_numb: string | number
+			seq_numb?: number
+			course_title: string
+			all_instructors?: string
+			room_code?: number | null
+			begin_time?: number | null
+			end_time?: number | null
+			day?: string | null
+			color_override?: string
+	  }
+
 export type ResourceLink = {
 	category: 'resources' | 'clubs'
 	href: string

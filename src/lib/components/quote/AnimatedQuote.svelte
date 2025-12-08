@@ -1,12 +1,10 @@
 <script lang="ts">
-	import { writable, type Writable } from 'svelte/store'
 	import { fade } from 'svelte/transition'
 	import type { Quote } from '$lib/types'
-	import { init_event_source } from '$lib/scripts/eventSource'
+	import quote_data from '$lib/data/quotes.json'
+	import { reel_status } from '$lib/stores/reel'
 
-	const { data_source = 'static/data/quotes.json' } = $props()
-	const quote_data: Writable<Quote[]> = writable([])
-	const animation_duration = 500 // Duration of animation (matches --duration-long CSS variable)
+	const animation_duration = 500 // Duration of animation (matches --duration-long)
 	const initial_delay = 180_000 // 3 minutes between quote cycles
 	const visible_duration = 10_000 // How long the quote is visible
 
@@ -16,20 +14,12 @@
 	let is_visible = $state(false)
 
 	$effect(() => {
-		return init_event_source({
-			data_source,
-			on_message: (data) => {
-				return Array.isArray(data) ? data : []
-			},
-			target_store: quote_data,
-			log_prefix: 'quotes',
-			debug: true
-		})
+		reel_status.set(is_visible ? 'hidden' : 'visible')
 	})
 
 	function get_random_quote(): Quote {
-		const random_index = Math.floor(Math.random() * $quote_data.length)
-		return $quote_data[random_index] ?? { quote: '', author: '' }
+		const random_index = Math.floor(Math.random() * quote_data.length)
+		return quote_data[random_index] ?? { quote: '', author: '' }
 	}
 
 	function animate_quote_cycle() {

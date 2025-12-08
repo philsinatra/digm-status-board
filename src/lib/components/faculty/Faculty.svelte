@@ -1,15 +1,10 @@
 <script lang="ts">
 	import { innerWidth } from 'svelte/reactivity/window'
-	import { writable, type Writable } from 'svelte/store'
-	import type { FacultyItem } from '$lib/types'
 	import Details from '$lib/components/details/Details.svelte'
-	import { init_event_source } from '$lib/scripts/eventSource'
+	import faculty_data from '$lib/data/faculty.json'
 	import { slugify } from '$lib/scripts/utils'
 	import '$lib/styles/components/_tables.css'
 	import './faculty.css'
-
-	const { data_source = 'static/data/faculty.json' } = $props()
-	const faculty_data: Writable<FacultyItem[]> = writable([])
 
 	function replace_emoji(text: string): string {
 		return text.replace(/[\p{Emoji_Presentation}\p{Extended_Pictographic}]+/gu, (match) => {
@@ -24,23 +19,11 @@
 	}
 
 	let faculty_with_emoji = $derived(
-		$faculty_data.map((item) => ({
+		faculty_data.map((item) => ({
 			...item,
 			name_html: replace_emoji(item.name)
 		}))
 	)
-
-	$effect(() => {
-		return init_event_source({
-			data_source,
-			on_message: (data) => {
-				return Array.isArray(data) ? data : []
-			},
-			target_store: faculty_data,
-			log_prefix: 'faculty',
-			debug: true
-		})
-	})
 </script>
 
 {#snippet faculty_table()}

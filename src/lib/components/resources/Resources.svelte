@@ -1,33 +1,17 @@
 <script lang="ts">
 	import { innerWidth } from 'svelte/reactivity/window'
-	import { writable, type Writable } from 'svelte/store'
-	import type { ResourceLink } from '$lib/types'
 	import Details from '$lib/components/details/Details.svelte'
-	import { init_event_source } from '$lib/scripts/eventSource'
+	import resource_data from '$lib/data/resources.json'
 	import { slugify } from '$lib/scripts/utils'
 
-	const { data_source = 'static/data/resources.json' } = $props()
-	const resource_data: Writable<ResourceLink[]> = writable([])
 	const categories: { name: 'resources' | 'clubs'; label: string }[] = [
 		{ name: 'resources', label: 'Form more DIGM resources, check out the links below:' },
 		{ name: 'clubs', label: 'Student Clubs' }
 	]
 
-	$effect(() => {
-		return init_event_source({
-			data_source,
-			on_message: (data) => {
-				return Array.isArray(data) ? data : []
-			},
-			target_store: resource_data,
-			log_prefix: 'resources',
-			debug: true
-		})
-	})
-
 	const grouped_items = $derived({
-		resources: $resource_data.filter((item) => item.category === 'resources'),
-		clubs: $resource_data.filter((item) => item.category === 'clubs')
+		resources: resource_data.filter((item) => item.category === 'resources'),
+		clubs: resource_data.filter((item) => item.category === 'clubs')
 	})
 </script>
 

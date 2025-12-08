@@ -1,15 +1,13 @@
 <script lang="ts">
 	import { writable, get } from 'svelte/store'
-	import type { ScheduleItem } from '$lib/types'
+	import type { ModalData } from '$lib/types'
 	import Modal from '$lib/components/modal/Modal.svelte'
-	import { init_event_source } from '$lib/scripts/eventSource'
+	import schedule_data from '$lib/data/schedule.json'
 
-	const { data_source = 'static/data/schedule.json' } = $props()
 	const days = ['MON', 'TUE', 'WED', 'R', 'FRI', 'SAT', 'SUN']
-	const modal_data = writable<ScheduleItem | null>(null)
+	const modal_data = writable<ModalData | null>(null)
 	const rooms = $state<string[]>([])
 	const sorted_rooms = $derived(rooms.slice().sort((a, b) => a.localeCompare(b)))
-	const schedule_data = writable<ScheduleItem[]>([])
 	const current_time = writable(new Date())
 	const schedule_hours: {
 		full: string
@@ -129,18 +127,18 @@
 		return room_col_width + time_progress * time_columns_width
 	}
 
-	$effect(() => {
-		return init_event_source({
-			data_source,
-			on_message: (data) => (Array.isArray(data) ? data : []),
-			target_store: schedule_data,
-			log_prefix: 'schedule'
-		})
-	})
+	// $effect(() => {
+	// 	return init_event_source({
+	// 		data_source,
+	// 		on_message: (data) => (Array.isArray(data) ? data : []),
+	// 		target_store: schedule_data,
+	// 		log_prefix: 'schedule'
+	// 	})
+	// })
 
 	$effect(() => {
 		const unique_rooms = Array.from(
-			new Set($schedule_data.map((item) => normalize_room_code(item.room_code)))
+			new Set(schedule_data.map((item) => normalize_room_code(item.room_code)))
 		).filter((c) => c !== '' && c !== 'null' && c !== 'undefined')
 		if (!arrays_are_equal(rooms, unique_rooms)) {
 			rooms.length = 0
@@ -220,7 +218,7 @@
 						></div>
 					{/each}
 				{/each}
-				{#each $schedule_data as item (item)}
+				{#each schedule_data as item (item)}
 					{#if item.day && selected_day_state && item.day[0] === selected_day_state[0]}
 						{@const room_index = sorted_rooms.indexOf(normalize_room_code(item.room_code))}
 						{@const column = get_grid_column(item.begin_time)}
