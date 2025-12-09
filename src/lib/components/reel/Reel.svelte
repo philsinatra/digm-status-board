@@ -8,12 +8,13 @@
 	let video_element: HTMLVideoElement | null = $state(null)
 </script>
 
-<section class:reposition={$reel_status === 'hidden'} id="reel">
+<section id="reel">
 	<div class="reel">
 		<video
 			autoplay
 			bind:this={video_element}
 			controls
+			class:reposition={$reel_status === 'hidden'}
 			loop
 			muted
 			poster={video_poster}
@@ -26,19 +27,13 @@
 <style>
 	#reel {
 		aspect-ratio: 16/9;
+		backface-visibility: hidden;
 		background: var(--color-white);
 		border-radius: var(--radius);
 		grid-area: reel;
 		overflow: hidden;
 		position: relative;
-
-		&.reposition {
-			@media screen and (width >= 1920px) {
-				left: -100vw;
-				position: fixed;
-				top: -100vh;
-			}
-		}
+		transform: translateZ(0);
 	}
 
 	.reel {
@@ -46,13 +41,23 @@
 		display: flex;
 		height: 100%;
 		justify-content: center;
+		position: relative;
+		transform: translateZ(0);
 		width: 100%;
 	}
 
 	video {
 		height: 100%;
 		object-fit: cover;
+		position: relative;
+		transform: translateZ(0);
 		width: 100%;
+
+		&.reposition {
+			@media screen and (width >= 1920px) {
+				height: 0;
+			}
+		}
 	}
 
 	@media (width >= 1920px) {

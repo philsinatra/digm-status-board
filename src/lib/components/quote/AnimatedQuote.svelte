@@ -5,7 +5,7 @@
 	import { reel_status } from '$lib/stores/reel'
 
 	const animation_duration = 500 // Duration of animation (matches --duration-long)
-	const initial_delay = 5_000
+	const initial_delay = 180_000
 	const visible_duration = 10_000
 
 	let current_quote: Quote | null = $state(null)
@@ -96,14 +96,12 @@
 	}
 
 	.quote-section.entering {
-		/* opacity: 1; */
-		opacity: 0.5;
+		opacity: 1;
 		transform: translateY(0);
 	}
 
 	.quote-section.visible {
-		/* opacity: 1; */
-		opacity: 0.5;
+		opacity: 1;
 		transform: translateY(0);
 	}
 
