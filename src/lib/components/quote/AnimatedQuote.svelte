@@ -5,7 +5,7 @@
 	import { reel_status } from '$lib/stores/reel'
 
 	const animation_duration = 500 // Duration of animation (matches --duration-long)
-	const initial_delay = 180_000
+	const initial_delay = 5_000
 	const visible_duration = 10_000
 
 	let current_quote: Quote | null = $state(null)
@@ -84,38 +84,40 @@
 		grid-area: quote;
 		height: 100vh;
 		left: 0;
+		opacity: 0;
 		position: fixed;
 		top: 0;
-		width: 100vw;
-		z-index: 9999;
 		transform: translateY(100vh);
-		opacity: 0;
 		transition:
 			transform 500ms cubic-bezier(0.78, 0, 0.22, 1),
 			opacity 500ms cubic-bezier(0.78, 0, 0.22, 1);
+		width: 100vw;
+		z-index: 9999;
 	}
 
 	.quote-section.entering {
+		/* opacity: 1; */
+		opacity: 0.5;
 		transform: translateY(0);
-		opacity: 1;
 	}
 
 	.quote-section.visible {
+		/* opacity: 1; */
+		opacity: 0.5;
 		transform: translateY(0);
-		opacity: 1;
 	}
 
 	.quote-section.exiting {
-		transform: translateY(-100vh);
 		opacity: 0;
+		transform: translateY(-100vh);
 	}
 
 	.quote-container {
 		container-type: size;
 		display: grid;
 		height: 100%;
-		place-content: center;
 		padding: var(--space-large, 2rem);
+		place-content: center;
 		width: 100%;
 	}
 
@@ -125,13 +127,13 @@
 		flex-direction: column;
 		font-size: clamp(1.5rem, 8vw, 4rem);
 		font-weight: 700;
+		gap: var(--space-medium, 1rem);
 		justify-content: center;
 		letter-spacing: var(--letter-spacing-loose, 0.02em);
 		line-height: var(--line-height, 1.4);
 		margin: 0;
 		max-width: min(80vw, 50rem);
 		padding: 0;
-		gap: var(--space-medium, 1rem);
 		text-align: center;
 	}
 
@@ -143,10 +145,10 @@
 	}
 
 	.quote-author {
+		font-size: 0.8em;
+		font-weight: 400;
 		line-height: 1.3;
 		margin: 0;
-		font-size: 0.8em;
 		opacity: 0.9;
-		font-weight: 400;
 	}
 </style>
