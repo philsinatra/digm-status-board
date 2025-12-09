@@ -5,165 +5,148 @@
 	import { reel_status } from '$lib/stores/reel'
 
 	const animation_duration = 500 // Duration of animation (matches --duration-long)
-	const initial_delay = 180_000 // 3 minutes between quote cycles
-	const visible_duration = 10_000 // How long the quote is visible
+	const initial_delay = 180_000
+	const visible_duration = 10_000
 
 	let current_quote: Quote | null = $state(null)
-	let is_animating_in = $state(false)
-	let is_animating_out = $state(false)
-	let is_visible = $state(false)
+	let show_component = $state(false) // Controls overall component visibility
+	let show_quote = $state(false) // Controls inner quote visibility
+	let animation_phase: 'entering' | 'visible' | 'exiting' | 'hidden' = $state('hidden')
 
 	$effect(() => {
-		reel_status.set(is_visible ? 'hidden' : 'visible')
+		reel_status.set(show_component ? 'hidden' : 'visible')
 	})
 
 	function get_random_quote(): Quote {
 		const random_index = Math.floor(Math.random() * quote_data.length)
-		return quote_data[random_index] ?? { quote: '', author: '' }
+		return quote_data[random_index] ?? { quote: 'Default quote', author: 'Unknown' }
 	}
 
-	function animate_quote_cycle() {
-		// Step 1: Wait for initial delay before starting
+	function start_quote_cycle() {
+		current_quote = get_random_quote()
+
+		animation_phase = 'entering'
+		show_component = true
+
 		setTimeout(() => {
-			// Step 2: Update the quote while off-screen and animate in
-			current_quote = get_random_quote()
-			is_animating_in = true
-			is_visible = true
+			show_quote = true
+			animation_phase = 'visible'
+		}, 50)
 
-			// Step 3: Wait for animation in to complete + visible duration
-			// animation_duration for the animation to complete + visible_duration for display time
+		setTimeout(() => {
+			animation_phase = 'exiting'
+			show_quote = false
+
 			setTimeout(() => {
-				// Step 4: Animate out
-				is_animating_out = true
-				is_animating_in = false
+				show_component = false
+				animation_phase = 'hidden'
 
-				// Step 5: Wait for animation out to complete, then reset states
 				setTimeout(() => {
-					is_visible = false
-					is_animating_out = false
-
-					// Step 6: Start the cycle again
-					animate_quote_cycle()
-				}, animation_duration + 100) // Add a small buffer to ensure animation completes
-			}, visible_duration + animation_duration)
-		}, initial_delay)
+					start_quote_cycle()
+				}, initial_delay)
+			}, animation_duration + 100)
+		}, visible_duration)
 	}
 
 	$effect(() => {
-		animate_quote_cycle()
-		return () => {}
+		const timer = setTimeout(() => {
+			start_quote_cycle()
+		}, initial_delay)
+
+		return () => clearTimeout(timer)
 	})
 </script>
 
-<section class:animating-in={is_animating_in} class:animating-out={is_animating_out} id="quote">
-	<div class="quote">
-		{#if is_visible && current_quote}
-			<blockquote class="text-animate" transition:fade={{ duration: 500 }}>
-				<p>{current_quote.quote ?? ''}</p>
-				<p>{current_quote.author ?? ''}</p>
-			</blockquote>
-		{/if}
-	</div>
-</section>
+{#if show_component && current_quote}
+	<section
+		id="quote"
+		class="quote-section"
+		class:entering={animation_phase === 'entering'}
+		class:visible={animation_phase === 'visible'}
+		class:exiting={animation_phase === 'exiting'}
+	>
+		<div class="quote-container">
+			{#if show_quote}
+				<blockquote transition:fade={{ duration: 300 }}>
+					<p class="quote-text">{current_quote.quote}</p>
+					<p class="quote-author">— {current_quote.author}</p>
+				</blockquote>
+			{/if}
+		</div>
+	</section>
+{/if}
 
 <style>
-	@keyframes animating-in {
-		from {
-			bottom: -100dvh;
-			opacity: 0;
-		}
-
-		to {
-			bottom: 0;
-			opacity: 1;
-		}
-	}
-
-	@keyframes animating-out {
-		from {
-			bottom: 0;
-			opacity: 1;
-		}
-
-		to {
-			bottom: 100dvh;
-			opacity: 0;
-		}
-	}
-
-	@keyframes text-fade-slide {
-		from {
-			opacity: 0;
-			transform: translateY(5px);
-		}
-
-		to {
-			opacity: 1;
-			transform: translateY(0);
-		}
-	}
-
-	#quote {
+	.quote-section {
 		background: linear-gradient(to bottom, var(--color-drexel-blue), var(--color-drexel-blue-dark));
-		bottom: -100dvh;
 		color: var(--color-white);
 		display: grid;
 		grid-area: quote;
-		height: 100%;
+		height: 100vh;
 		left: 0;
-		opacity: 0;
-		position: absolute;
-		width: 100%;
+		position: fixed;
+		top: 0;
+		width: 100vw;
 		z-index: 9999;
-
-		.quote {
-			container-type: size;
-			display: grid;
-			height: 100%;
-			place-content: center;
-			position: relative;
-			width: 100%;
-
-			blockquote {
-				align-items: center;
-				display: flex;
-				flex-direction: column;
-				font-size: clamp(var(--font-size-large), 14cqw, var(--font-size-xx-large));
-				font-weight: 700;
-				justify-content: center;
-				letter-spacing: var(--letter-spacing-loose);
-				line-height: var(--line-height);
-				margin: 0;
-				max-width: 50cqw;
-				padding: 0;
-				row-gap: var(--space-medium);
-
-				p {
-					line-height: 1.3;
-					margin: 0;
-					text-align: center;
-					text-wrap: balance;
-					width: 100%;
-
-					&:last-of-type {
-						font-size: 80%;
-					}
-				}
-			}
-		}
-	}
-
-	.animating-in {
-		animation: animating-in var(--duration-long) cubic-bezier(0.78, 0, 0.22, 1) forwards;
-	}
-
-	.animating-out {
-		animation: animating-out var(--duration-long) cubic-bezier(0.78, 0, 0.22, 1) forwards;
-	}
-
-	.text-animate {
-		animation: text-fade-slide 300ms ease-out forwards;
-		animation-delay: calc(var(--duration-long) + 0ms);
+		transform: translateY(100vh);
 		opacity: 0;
+		transition:
+			transform 500ms cubic-bezier(0.78, 0, 0.22, 1),
+			opacity 500ms cubic-bezier(0.78, 0, 0.22, 1);
+	}
+
+	.quote-section.entering {
+		transform: translateY(0);
+		opacity: 1;
+	}
+
+	.quote-section.visible {
+		transform: translateY(0);
+		opacity: 1;
+	}
+
+	.quote-section.exiting {
+		transform: translateY(-100vh);
+		opacity: 0;
+	}
+
+	.quote-container {
+		container-type: size;
+		display: grid;
+		height: 100%;
+		place-content: center;
+		padding: var(--space-large, 2rem);
+		width: 100%;
+	}
+
+	blockquote {
+		align-items: center;
+		display: flex;
+		flex-direction: column;
+		font-size: clamp(1.5rem, 8vw, 4rem);
+		font-weight: 700;
+		justify-content: center;
+		letter-spacing: var(--letter-spacing-loose, 0.02em);
+		line-height: var(--line-height, 1.4);
+		margin: 0;
+		max-width: min(80vw, 50rem);
+		padding: 0;
+		gap: var(--space-medium, 1rem);
+		text-align: center;
+	}
+
+	.quote-text {
+		line-height: 1.3;
+		margin: 0;
+		text-wrap: balance;
+		width: 100%;
+	}
+
+	.quote-author {
+		line-height: 1.3;
+		margin: 0;
+		font-size: 0.8em;
+		opacity: 0.9;
+		font-weight: 400;
 	}
 </style>
