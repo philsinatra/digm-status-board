@@ -124,7 +124,7 @@
 	--transition-slow: var(--duration-200) ease;
 	/* #endregion */
 
-	--radius: 8px;
+	--radius: 0;
 
 	@media (width >= 1024px) {
 		--font-size-medium: 125%;

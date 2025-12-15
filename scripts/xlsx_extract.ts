@@ -7,7 +7,7 @@ import XLSX from 'xlsx'
 
 type OutputData = {
 	subj_code: string
-	crse_numb: number
+	crse_numb: string | number
 	seq_numb: number
 	course_title: string
 	all_instructors: string
@@ -24,7 +24,7 @@ program
 		'Comma-separated column letters (e.g., B,C,E,F',
 		'I,K,L,O,AP,AW,AX,AZ,BM'
 	)
-	.option('--output <path>', 'Path to output .json file', 'static/data/schedule.json')
+	.option('--output <path>', 'Path to output .json file', 'src/lib/data/schedule.json')
 	.parse(process.argv)
 
 const { input, columns, output } = program.opts<{
@@ -49,9 +49,12 @@ function build_json(source_data) {
 	const output_data: OutputData[] = []
 
 	source_data.forEach((course) => {
+		const crse_numb_raw = String(course[1]).trim()
+		const crse_numb = isNaN(parseInt(crse_numb_raw)) ? crse_numb_raw : parseInt(crse_numb_raw)
+
 		output_data.push({
 			subj_code: course[0],
-			crse_numb: parseInt(course[1]),
+			crse_numb: crse_numb,
 			seq_numb: trim_leading_zeros(course[2]),
 			course_title: course[3],
 			all_instructors: course[8],
@@ -98,7 +101,6 @@ try {
 		const course_number_str = (course_number == null ? '' : String(course_number)).trim()
 
 		if (course_number_str === '' || course_number_str === 'Crse Numb') return false
-		if (isNaN(parseInt(course_number_str))) return false
 
 		const room_code_str = (room_code == null ? '' : String(room_code)).trim()
 

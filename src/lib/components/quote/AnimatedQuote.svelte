@@ -69,7 +69,7 @@
 			{#if show_quote}
 				<blockquote transition:fade={{ duration: 300 }}>
 					<p class="quote-text">{current_quote.quote}</p>
-					<p class="quote-author">— {current_quote.author}</p>
+					<p class="quote-author">{current_quote.author}</p>
 				</blockquote>
 			{/if}
 		</div>
