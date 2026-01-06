@@ -1,21 +1,5 @@
 [
 	{
-		"date_time": "2025-12-09T00:00:00.000Z",
-		"title": "Term Examinations Begin"
-	},
-	{
-		"date_time": "2025-12-14T00:00:00.000Z",
-		"title": "Term Examinations End"
-	},
-	{
-		"date_time": "2025-12-23T00:00:00.000Z",
-		"title": "Administrative Offices Closed"
-	},
-	{
-		"date_time": "2026-01-05T00:00:00.000Z",
-		"title": "Classes and Co-op Begin"
-	},
-	{
 		"date_time": "2026-01-19T00:00:00.000Z",
 		"title": "Martin Luther King Day (No classes)"
 	},
@@ -34,5 +18,53 @@
 	{
 		"date_time": "2026-03-27T00:00:00.000Z",
 		"title": "Last day of Co-op for Winter Term"
+	},
+	{
+		"date_time": "2026-03-30T00:00:00.000Z",
+		"title": "Classes and Co-op Begin"
+	},
+	{
+		"date_time": "2026-05-01T00:00:00.000Z",
+		"title": "Last day to submit Application for Degree"
+	},
+	{
+		"date_time": "2026-05-02T00:00:00.000Z",
+		"title": "Classes End (Part of Term A)"
+	},
+	{
+		"date_time": "2026-05-04T00:00:00.000Z",
+		"title": "Classes Begin (Part of Term B)"
+	},
+	{
+		"date_time": "2026-05-25T00:00:00.000Z",
+		"title": "Memorial Day (University Holiday)"
+	},
+	{
+		"date_time": "2026-06-06T00:00:00.000Z",
+		"title": "Classes End"
+	},
+	{
+		"date_time": "2026-06-08T00:00:00.000Z",
+		"title": "Term Examinations Begin"
+	},
+	{
+		"date_time": "2026-06-10T00:00:00.000Z",
+		"title": "College/School Graduation Ceremonies"
+	},
+	{
+		"date_time": "2026-06-11T00:00:00.000Z",
+		"title": "University Commencement"
+	},
+	{
+		"date_time": "2026-06-13T00:00:00.000Z",
+		"title": "Term Examinations End"
+	},
+	{
+		"date_time": "2026-06-19T00:00:00.000Z",
+		"title": "Juneteenth (University Holiday)"
+	},
+	{
+		"date_time": "2026-06-19T00:00:00.000Z",
+		"title": "Last day of Co-op for Spring Term"
 	}
 ]

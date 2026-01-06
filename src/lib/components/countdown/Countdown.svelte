@@ -141,7 +141,7 @@
 				tbody {
 					tr {
 						td {
-							padding: calc(var(--space-small) + 0.05rem) var(--space-small);
+							padding: calc(var(--space-small) + 0.17rem) var(--space-small);
 							text-wrap: pretty;
 						}
 
