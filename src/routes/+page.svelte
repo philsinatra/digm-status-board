@@ -14,6 +14,7 @@
 	import Schedule from '$lib/components/schedule/Schedule.svelte'
 	import Today from '$lib/components/today/Today.svelte'
 	import Weather from '$lib/components/weather/Weather.svelte'
+	import WhiteRabbit from '$lib/components/whiterabbit/WhiteRabbit.svelte'
 
 	type Props = {
 		data: {
@@ -99,4 +100,5 @@
 	<Marquee gallery_data={data} />
 	<Today />
 	<Message />
+	<WhiteRabbit />
 {/if}

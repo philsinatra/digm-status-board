@@ -66,6 +66,8 @@
 	--color-red-900: #7f1d1d;
 	--color-black: #010101;
 	--color-white: #fff;
+	--color-black-pure: #000;
+	--color-matrix-green: #00ff41;
 	--color-table-head: var(--color-neutral-300);
 	--color-table-alt: var(--color-neutral-200);
 	--color-dialog-backdrop: hsl(200deg 20% 5% / 0.75);
