@@ -1,8 +1,10 @@
 <script lang="ts">
 	import { writable, get } from 'svelte/store'
-	import type { ModalData } from '$lib/types'
+	import type { ModalData, ScheduleItem } from '$lib/types'
 	import Modal from '$lib/components/modal/Modal.svelte'
-	import schedule_data from '$lib/data/schedule.json'
+	import schedule_data_raw from '$lib/data/schedule.json'
+
+	const schedule_data = schedule_data_raw as unknown as ScheduleItem[]
 
 	const days = ['MON', 'TUE', 'WED', 'R', 'FRI', 'SAT', 'SUN']
 	const modal_data = writable<ModalData | null>(null)
@@ -243,13 +245,20 @@
 								aria-label={`${item.subj_code} ${item.crse_numb} with ${item.all_instructors?.split(', ').reverse().join(' ')} from ${item.begin_time} to ${item.end_time}`}
 								onclick={() => modal_data?.set(item)}
 							>
-								<span>{`${item.subj_code} ${item.crse_numb}`}</span>
-								{#if item.all_instructors && (item.end_time ?? 0) - (item.begin_time ?? 0) >= 200}
-									<span>
-										{(item.end_time ?? 0) - (item.begin_time ?? 0) >= 200
-											? `(${item.all_instructors?.split(', ')[0]})`
-											: ''}
+								{#if item.all_instructors && (item.end_time ?? 0) - (item.begin_time ?? 0) < 200}
+									<span class="event-cycling">
+										<span class="cycle-primary">{item.subj_code}</span>
+										<span class="cycle-secondary">{item.crse_numb}</span>
+										<span class="cycle-tertiary">{String(item.seq_numb).padStart(3, '0')}</span>
+										<span class="cycle-quaternary">{item.all_instructors?.split(', ')[0]}</span>
 									</span>
+								{:else}
+									<span
+										>{`${item.subj_code} ${item.crse_numb}-${String(item.seq_numb).padStart(3, '0')}`}</span
+									>
+									{#if item.all_instructors}
+										<span>({item.all_instructors?.split(', ')[0]})</span>
+									{/if}
 								{/if}
 							</button>
 						</div>
@@ -439,6 +448,109 @@
 
 		&.program-digm {
 			background-color: var(--color-emerald-600);
+		}
+	}
+
+	.event-cycling {
+		overflow: hidden;
+		position: relative;
+		width: 100%;
+	}
+
+	.cycle-primary {
+		animation: cycle-fade-primary 12s linear infinite;
+		display: block;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.cycle-secondary,
+	.cycle-tertiary,
+	.cycle-quaternary {
+		inset: 0;
+		overflow: hidden;
+		position: absolute;
+		text-align: center;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.cycle-secondary {
+		animation: cycle-fade-secondary 12s linear infinite;
+	}
+
+	.cycle-tertiary {
+		animation: cycle-fade-tertiary 12s linear infinite;
+	}
+
+	.cycle-quaternary {
+		animation: cycle-fade-quaternary 12s linear infinite;
+	}
+
+	@keyframes cycle-fade-primary {
+		0%,
+		22% {
+			opacity: 1;
+		}
+
+		26%,
+		98% {
+			opacity: 0;
+		}
+
+		100% {
+			opacity: 1;
+		}
+	}
+
+	@keyframes cycle-fade-secondary {
+		0%,
+		22% {
+			opacity: 0;
+		}
+
+		26%,
+		47% {
+			opacity: 1;
+		}
+
+		51%,
+		100% {
+			opacity: 0;
+		}
+	}
+
+	@keyframes cycle-fade-tertiary {
+		0%,
+		47% {
+			opacity: 0;
+		}
+
+		51%,
+		72% {
+			opacity: 1;
+		}
+
+		76%,
+		100% {
+			opacity: 0;
+		}
+	}
+
+	@keyframes cycle-fade-quaternary {
+		0%,
+		72% {
+			opacity: 0;
+		}
+
+		76%,
+		97% {
+			opacity: 1;
+		}
+
+		100% {
+			opacity: 0;
 		}
 	}
 
