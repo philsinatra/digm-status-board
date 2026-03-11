@@ -324,7 +324,9 @@
 		}
 
 		@media screen and (width >= 1920px) {
-			min-height: 322px;
+			grid-template-rows: 34px repeat(9, 1fr);
+			height: calc(34px + (9 * 1fr));
+			/* min-height: 362px; */
 		}
 	}
 
@@ -361,7 +363,7 @@
 		box-sizing: border-box;
 		min-height: 0;
 		min-width: 0;
-		padding: var(--space-small);
+		padding: 0.4156rem var(--space-small);
 	}
 
 	.grid-cell:first-child {

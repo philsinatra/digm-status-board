@@ -647,5 +647,60 @@
 		"begin_time": 1530,
 		"end_time": 1820,
 		"day": "R"
+	},
+	{
+		"subj_code": "DIGM",
+		"crse_numb": 490,
+		"seq_numb": 1,
+		"course_title": "DIGM Sr. Proj.",
+		"all_instructors": "Lloyd, Robert",
+		"room_code": "ANX",
+		"begin_time": 1200,
+		"end_time": 1450,
+		"day": "F"
+	},
+	{
+		"subj_code": "DIGM",
+		"crse_numb": 490,
+		"seq_numb": 2,
+		"course_title": "DIGM Sr. Proj.",
+		"all_instructors": "Mauriello, Dave",
+		"room_code": "ANX",
+		"begin_time": 900,
+		"end_time": 1020,
+		"day": "T"
+	},
+	{
+		"subj_code": "DIGM",
+		"crse_numb": 490,
+		"seq_numb": 2,
+		"course_title": "DIGM Sr. Proj.",
+		"all_instructors": "Mauriello, Dave",
+		"room_code": "ANX",
+		"begin_time": 900,
+		"end_time": 1020,
+		"day": "R"
+	},
+	{
+		"subj_code": "DIGM",
+		"crse_numb": 491,
+		"seq_numb": 5,
+		"course_title": "DIGM Sr. Proj. Studio",
+		"all_instructors": "Bridges, Milady",
+		"room_code": "ANX",
+		"begin_time": 1030,
+		"end_time": 1120,
+		"day": "T"
+	},
+	{
+		"subj_code": "GMAP",
+		"crse_numb": 123,
+		"seq_numb": 1,
+		"course_title": "Basic Portfolio",
+		"all_instructors": "Lloyd, Robert",
+		"room_code": "ANX",
+		"begin_time": 1530,
+		"end_time": 1620,
+		"day": "T"
 	}
 ]
