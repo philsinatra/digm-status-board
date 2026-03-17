@@ -11,7 +11,7 @@
 	import Quote from '$lib/components/quote/Quote.svelte'
 	import Reel from '$lib/components/reel/Reel.svelte'
 	import Resources from '$lib/components/resources/Resources.svelte'
-	import Schedule from '$lib/components/schedule/Schedule.svelte'
+	// import Schedule from '$lib/components/schedule/Schedule.svelte'
 	import Today from '$lib/components/today/Today.svelte'
 	import Weather from '$lib/components/weather/Weather.svelte'
 	import WhiteRabbit from '$lib/components/whiterabbit/WhiteRabbit.svelte'
@@ -83,7 +83,8 @@
 <Countdown />
 <Faculty />
 <Reel />
-<Schedule />
+<!-- <Schedule /> -->
+<Message />
 
 {#if (innerWidth.current ?? 0) >= 340}
 	<Weather />
@@ -99,6 +100,5 @@
 	<AnimatedQuote />
 	<Marquee gallery_data={data} />
 	<Today />
-	<Message />
 	<WhiteRabbit />
 {/if}

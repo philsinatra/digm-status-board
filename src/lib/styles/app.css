@@ -51,7 +51,7 @@
 *::after {
 	box-sizing: inherit;
 	min-width: 0;
-	text-box: trim-both caps alphabetic;
+	/* text-box: trim-both caps alphabetic; */
 }
 
 html:has(dialog[open]) {

@@ -52,7 +52,7 @@
 		"declaration-property-value-no-unknown": [
 			true,
 			{
-				"ignoreProperties": { "grid-area": "/.+/" }
+				"ignoreProperties": { "grid-area": "/.+/", "text-box": "/.+/" }
 			}
 		],
 		"font-family-no-missing-generic-family-keyword": null,
