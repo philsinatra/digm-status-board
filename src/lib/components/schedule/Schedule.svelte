@@ -372,7 +372,9 @@
 		box-sizing: border-box;
 		min-height: 0;
 		min-width: 0;
-		padding: 0.4156rem var(--space-small);
+		/* ANX support */
+		/* padding: 0.4156rem var(--space-small); */
+		padding: 0.56rem var(--space-small);
 	}
 
 	.grid-cell:first-child {

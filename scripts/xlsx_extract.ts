@@ -11,7 +11,7 @@ type OutputData = {
 	seq_numb: number
 	course_title: string
 	all_instructors: string
-	room_code: number
+	room_code: number | string
 	begin_time: number
 	end_time: number
 	day: string
@@ -58,7 +58,7 @@ function build_json(source_data) {
 			seq_numb: trim_leading_zeros(course[2]),
 			course_title: course[3],
 			all_instructors: course[8],
-			room_code: parseInt(course[7]),
+			room_code: isNaN(parseInt(course[7])) ? String(course[7]).trim() : parseInt(course[7]),
 			begin_time: trim_leading_zeros(course[5]),
 			end_time: trim_leading_zeros(course[6]),
 			day: course[4]
@@ -90,7 +90,7 @@ try {
 	const data = XLSX.utils.sheet_to_json<string[]>(sheet, { header: 1 })
 	const extracted_data = data.map((row) => column_indices.map((index) => row[index] ?? null))
 	const filtered_data = extracted_data.filter((row, index) => {
-		const priority_rooms = [242, 206, 239, 246, 247, 248, 250, 252, 345]
+		const priority_rooms: (number | string)[] = [242, 206, 239, 246, 247, 248, 250, 252, 345, 'ANX']
 		const course_number = row[1]
 		const room_code = row[7]
 		const instructor = row[8]
@@ -105,7 +105,8 @@ try {
 		const room_code_str = (room_code == null ? '' : String(room_code)).trim()
 
 		if (room_code_str === '') return false
-		if (!priority_rooms.includes(parseInt(room_code))) return false
+		const parsed_room = parseInt(room_code_str)
+		if (!priority_rooms.includes(isNaN(parsed_room) ? room_code_str : parsed_room)) return false
 
 		if (index === 0 && room_code && course_number && instructor) return true
 
