@@ -32,6 +32,21 @@
 	let grid_el: HTMLDivElement
 	let last_day = $state(new Date().getDay())
 
+	const showcase_target = new Date('2026-05-30T14:00:00-04:00')
+	const countdown = writable({ days: 0, hours: 0, minutes: 0, seconds: 0 })
+	let showcase_active = $state(Date.now() < showcase_target.getTime())
+
+	function calc_countdown() {
+		const diff = showcase_target.getTime() - Date.now()
+		if (diff <= 0) return { days: 0, hours: 0, minutes: 0, seconds: 0 }
+		return {
+			days: Math.floor(diff / (1000 * 60 * 60 * 24)),
+			hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
+			minutes: Math.floor((diff / (1000 * 60)) % 60),
+			seconds: Math.floor((diff / 1000) % 60)
+		}
+	}
+
 	function format_time(time: number): string {
 		const hour = Math.floor(time / 100)
 		const min = time % 100
@@ -157,6 +172,17 @@
 	})
 
 	$effect(() => {
+		const tick = () => {
+			countdown.set(calc_countdown())
+			showcase_active = Date.now() < showcase_target.getTime()
+			if (!showcase_active) clearInterval(interval)
+		}
+		tick()
+		const interval = setInterval(tick, 1000)
+		return () => clearInterval(interval)
+	})
+
+	$effect(() => {
 		return current_time.subscribe(() => {
 			const time = get(current_time)
 			const today = time.getDay()
@@ -191,6 +217,32 @@
 					<span class="short">{day === 'SUN' ? 'U' : day[0]}</span>
 				</button>
 			{/each}
+			{#if showcase_active}
+				<div class="showcase-countdown" aria-label="Countdown to Senior Showcase 2026">
+				<span class="showcase-countdown-label">Senior Showcase 2026</span>
+				<span class="showcase-countdown-time">
+					<span class="showcase-countdown-unit"
+						><strong>{$countdown.days}</strong><span class="showcase-countdown-suffix">d</span
+						></span
+					>
+					<span class="showcase-countdown-unit"
+						><strong>{String($countdown.hours).padStart(2, '0')}</strong><span
+							class="showcase-countdown-suffix">h</span
+						></span
+					>
+					<span class="showcase-countdown-unit"
+						><strong>{String($countdown.minutes).padStart(2, '0')}</strong><span
+							class="showcase-countdown-suffix">m</span
+						></span
+					>
+					<span class="showcase-countdown-unit"
+						><strong>{String($countdown.seconds).padStart(2, '0')}</strong><span
+							class="showcase-countdown-suffix">s</span
+						></span
+					>
+				</span>
+				</div>
+			{/if}
 		</nav>
 
 		<div class="schedule-grid-wrapper" bind:this={grid_wrapper}>
@@ -560,6 +612,7 @@
 		background-color: var(--color-drexel-blue);
 		display: flex;
 		overflow-y: auto;
+		position: relative;
 		width: 100%;
 
 		&::-webkit-scrollbar {
@@ -605,6 +658,71 @@
 			@media screen and (width >= 768px) {
 				display: block;
 			}
+		}
+	}
+
+	.showcase-countdown {
+		display: none;
+
+		@media screen and (width >= 1920px) {
+			align-items: center;
+			animation: showcase-countdown-pulse 2s ease-in-out infinite;
+			background-color: var(--color-drexel-red-dark);
+			box-shadow: 0 0 12px var(--color-drexel-red-dark);
+			color: var(--color-white);
+			display: flex;
+			gap: var(--space-small);
+			height: 100%;
+			padding: 0 var(--space-medium);
+			position: absolute;
+			right: 0;
+			top: 0;
+		}
+	}
+
+	.showcase-countdown-label {
+		font-size: var(--font-size-small);
+		font-weight: 800;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+	}
+
+	.showcase-countdown-time {
+		align-items: baseline;
+		display: flex;
+		font-variant-numeric: tabular-nums;
+		gap: calc(var(--space-small) / 2);
+	}
+
+	.showcase-countdown-unit {
+		align-items: baseline;
+		display: inline-flex;
+
+		strong {
+			font-size: var(--font-size-medium);
+			font-weight: 800;
+			min-width: 1.4ch;
+			text-align: right;
+		}
+	}
+
+	.showcase-countdown-suffix {
+		font-size: var(--font-size-xx-small);
+		font-weight: 600;
+		margin-left: 1px;
+		opacity: 0.85;
+	}
+
+	@keyframes showcase-countdown-pulse {
+		0%,
+		100% {
+			box-shadow: 0 0 12px var(--color-drexel-red-dark);
+			filter: brightness(1);
+		}
+
+		50% {
+			box-shadow: 0 0 20px var(--color-drexel-red-light);
+			filter: brightness(1.15);
 		}
 	}
 
