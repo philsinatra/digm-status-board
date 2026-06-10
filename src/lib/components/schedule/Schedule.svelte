@@ -219,28 +219,28 @@
 			{/each}
 			{#if showcase_active}
 				<div class="showcase-countdown" aria-label="Countdown to Senior Showcase 2026">
-				<span class="showcase-countdown-label">Senior Showcase 2026</span>
-				<span class="showcase-countdown-time">
-					<span class="showcase-countdown-unit"
-						><strong>{$countdown.days}</strong><span class="showcase-countdown-suffix">d</span
-						></span
-					>
-					<span class="showcase-countdown-unit"
-						><strong>{String($countdown.hours).padStart(2, '0')}</strong><span
-							class="showcase-countdown-suffix">h</span
-						></span
-					>
-					<span class="showcase-countdown-unit"
-						><strong>{String($countdown.minutes).padStart(2, '0')}</strong><span
-							class="showcase-countdown-suffix">m</span
-						></span
-					>
-					<span class="showcase-countdown-unit"
-						><strong>{String($countdown.seconds).padStart(2, '0')}</strong><span
-							class="showcase-countdown-suffix">s</span
-						></span
-					>
-				</span>
+					<span class="showcase-countdown-label">Senior Showcase 2026</span>
+					<span class="showcase-countdown-time">
+						<span class="showcase-countdown-unit"
+							><strong>{$countdown.days}</strong><span class="showcase-countdown-suffix">d</span
+							></span
+						>
+						<span class="showcase-countdown-unit"
+							><strong>{String($countdown.hours).padStart(2, '0')}</strong><span
+								class="showcase-countdown-suffix">h</span
+							></span
+						>
+						<span class="showcase-countdown-unit"
+							><strong>{String($countdown.minutes).padStart(2, '0')}</strong><span
+								class="showcase-countdown-suffix">m</span
+							></span
+						>
+						<span class="showcase-countdown-unit"
+							><strong>{String($countdown.seconds).padStart(2, '0')}</strong><span
+								class="showcase-countdown-suffix">s</span
+							></span
+						>
+					</span>
 				</div>
 			{/if}
 		</nav>

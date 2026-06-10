@@ -69,11 +69,6 @@
 		"openmeteo": "^1.2.0",
 		"qrcode": "^1.5.4"
 	},
-	"pnpm": {
-		"onlyBuiltDependencies": [
-			"esbuild"
-		]
-	},
 	"engines": {
 		"node": ">=22",
 		"packageManager": "pnpm@>=8.15"
