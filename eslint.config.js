@@ -80,7 +80,7 @@ export default ts.config(
 					selector: ['parameter'],
 					format: null,
 					custom: {
-						regex: '^[a-z][a-z0-9]*(_[a-z0-9]+)*$',
+						regex: '^(_[a-z0-9_]*|[a-z][a-z0-9]*(_[a-z0-9]+)*)$',
 						match: true
 					},
 					filter: {
