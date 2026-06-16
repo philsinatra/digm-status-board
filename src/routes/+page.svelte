@@ -11,7 +11,7 @@
 	import Quote from '$lib/components/quote/Quote.svelte'
 	import Reel from '$lib/components/reel/Reel.svelte'
 	import Resources from '$lib/components/resources/Resources.svelte'
-	// import Schedule from '$lib/components/schedule/Schedule.svelte'
+	import Schedule from '$lib/components/schedule/Schedule.svelte'
 	import Today from '$lib/components/today/Today.svelte'
 	import Weather from '$lib/components/weather/Weather.svelte'
 	import WhiteRabbit from '$lib/components/whiterabbit/WhiteRabbit.svelte'
@@ -29,6 +29,7 @@
 	let { data }: Props = $props()
 
 	const db_refresh_interval = 3_600_000 // One hour
+	const display_message = false
 	const max_retries = 3
 
 	let is_refreshing = $state(false)
@@ -83,8 +84,11 @@
 <Countdown />
 <Faculty />
 <Reel />
-<!-- <Schedule /> -->
-<Message />
+{#if display_message}
+	<Message />
+{:else}
+	<Schedule />
+{/if}
 
 {#if (innerWidth.current ?? 0) >= 340}
 	<Weather />
